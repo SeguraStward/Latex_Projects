@@ -1,0 +1,94 @@
+% =============================================================================
+% Marco Conceptual
+% =============================================================================
+\section{Marco Conceptual}
+
+\subsection{Conceptos Fundamentales}
+
+\subsubsection{Aprendizaje Automático y Deep Learning}
+
+Deep learning se define como el subcampo del aprendizaje automático (machine learning) en donde se utilizan redes neuronales artificiales estructuradas en diferentes capas para modelar y comprender patrones complejos.
+
+\subsubsection{Redes Neuronales Convolucionales (CNN)}
+
+Arquitectura específica que ha revolucionado el área. Las CNN están diseñadas para imitar la corteza visual humana y procesar datos tipo matriz en donde el orden y posición son fundamentales, como en una imagen. Su importancia técnica radica en:
+
+\begin{itemize}
+    \item Eliminación de la necesidad de extraer características manualmente
+    \item Aprendizaje de jerarquías de patrones (bordes, líneas, formas, texturas y patologías)
+    \item Procesamiento eficiente de datos espaciales
+\end{itemize}
+
+\paragraph{Arquitectura y Capas Principales}
+
+El funcionamiento de las CNN está compuesto por varias capas especializadas:
+
+\begin{enumerate}
+    \item \textbf{Capa de entrada}: Recibe la imagen. Los píxeles se consideran neuronas.
+    
+    \item \textbf{Capa de convolución}: Utiliza filtros o kernels (pequeñas ventanas matemáticas) que se deslizan sobre la imagen. Después de varias multiplicaciones y sumas, el resultado es una cuadrícula bidimensional conocida como mapa de características.
+    
+    \item \textbf{Función de Activación (ReLU)}: Se aplica generalmente una unidad lineal rectificada (ReLU) después de cada convolución. Esta capa introduce no linealidad al sistema, convirtiendo los valores negativos en cero, permitiendo a la red aprender patrones mucho más complejos.
+    
+
+    \item \textbf{Capa de agrupacion(Pooling layer)}: Se encarga del down-sampling o reducción de dimensionalidad. El método más común es el Max Pooling, que selecciona solo el valor máximo de una región, conservando las características más importantes mientras reduce el costo computacional y el riesgo de sobreajuste.
+
+
+    \item \textbf{Capas totalmente conectadas}: Unifican la información de las capas anteriores. Cada neurona se conecta con todas las de la capa anterior para realizar razonamiento de alto nivel.
+    
+    \item \textbf{Capa de salida}: Utiliza funciones como ``Softmax'' para asignar una probabilidad a cada categoría diagnóstica.
+\end{enumerate}
+
+\paragraph{Extracción Jerárquica y Automática de Características}
+
+Las CNN logran su efectividad a través de la extracción jerárquica de características. Como lo describe la literatura especializada:
+
+\begin{quote}
+``En el aprendizaje profundo, la computadora tiene muchas capas, como capas de detectives. Los primeros detectives observan cosas simples, como líneas rectas y curvas. Luego, los siguientes detectives observan cosas más complicadas, como bucles o líneas inclinadas. Finalmente, los últimos detectives juntan todas sus pistas y pueden decir qué número es'' (Seeram \& Kanade, 2024, p. 28, traducción propia).
+\end{quote}
+  
+\paragraph{Proceso de Entrenamiento}
+El proceso de entrenamiento sucede cuando la imagen pasa por todas las capas, generando la salida (prediccion) que se compara con el resultado esperado, proporcionado por radiologos expertos, seguidamente los errores encontrados se pasan de nuevo en la red para asi ir ajustando la salida hasta que el error sea minimo.
+
+\subsubsection{Diagnóstico Asistido por Computadora (CADe/CADx)}
+
+Es el marco operativo donde se aplica la IA en los hospitales. Los sistemas CAD actuales han evolucionado de esquemas rígidos a plataformas basadas en Deep Learning que actúan como ``segunda opinión'' para el radiólogo, ayudando a:
+
+\begin{itemize}
+    \item Reducir errores de observación
+    \item Mejorar la eficiencia del flujo de trabajo
+    \item Aumentar la precisión diagnóstica
+\end{itemize}
+
+\subsection{Arquitecturas Relevantes}
+
+\begin{description}
+    \item[AlexNet] La red que inició el interés masivo al superar a todos los algoritmos en la competencia ImageNet.
+    
+    \item[U-Net] La base perfecta para la segmentación de imágenes médicas debido a su estructura simétrica y ``conexiones de salto'' que recuperan información espacial precisa.
+    
+    \item[ResNet] Introdujo conexiones residuales que permiten entrenar redes extremadamente profundas sin pérdida de precisión.
+\end{description}
+
+\subsection{Métricas}
+ La precision en el caso de diagnosticos medicos utilizando Deep learning puede ser enganosa, por ejemplo, pensemos en un modelo CNN que siempre marca a los pacientes como sanos sin importar si estan enfermos, si el 95 porciento de los pacientes son sanos entonces el modelo tendria un 95 porciento de precision pero tambien marcaria ese 5 porciento restante como sano, seria preciso pero fallaria en detectar a los pacientes enfermos, para evitar este problema se explicaran conceptos como la sensibilidad, especificidad, Curva ROC (Receiver Operating Characteristic), AUC(Area under de curve). Primeramente se mostrara como se clasifica si un modelo CNN clasifica correctamente o incorrectamente pacientes.
+
+\begin{itemize}
+    \item \textbf{Verdadero positivo (VP)}: El modelo correctamente predijo que el paciente esta enfermo.
+    \item \textbf{Verdadero negativo (VN)}: El modelo correctamente predijo que el paciente no esta enfermo. 
+    \item \textbf{Falso positivo (FP)}: El modelo incorrectamente predijo que el paciente esta enfermo. 
+    \item \textbf{Falso negativo (FN)}: El modelo incorrectamente predijo que el paciente no esta enfermo. 
+  
+\end{itemize}
+
+\paragraph{Sensibilidad} Es la medida de que tan bien el modelo puede identificar todos los casos verdaderos positivos y su formula es esta:  
+ \[
+\text{Sensibilidad} = \frac{\text{VP}}{\text{VP} + \text{FN}}
+\]
+
+\paragraph{Especificidad} Es la capacidad del clasificador de etiquetar correctamente a pacientes como sanos:  
+ \[
+\text{Sensibilidad} = \frac{\text{VN}}{\text{VN} + \text{FP}}
+\]
+
+La sensibilidad y especificidad son utilizados para ROC (receiver operating characteristic) que es una representacion grafica del rendimiento de un modelo en todos los valores posibles de especificidad y sensibilidad y esto hace posible encontrar el AUC (Area under the curve), valor unico entre 0 y 1 que resume la eficiencia del modelo. Un AUC de 1.0 representa la clasificacion perfecta.

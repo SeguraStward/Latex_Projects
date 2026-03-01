@@ -1,0 +1,42 @@
+\section{Figures and Tables}
+\label{sec:figures-tables}
+
+\subsection{Tables}
+
+\Cref{tab:engines} compares the \LaTeX{} engines available in this environment.
+
+\begin{table}[H]
+    \centering
+    \caption{Comparison of \LaTeX{} engines}
+    \label{tab:engines}
+    \begin{tabular}{@{}llll@{}}
+        \toprule
+        \textbf{Engine} & \textbf{Font Support} & \textbf{Speed} & \textbf{Best For} \\
+        \midrule
+        pdfLaTeX  & Type1, OTF (limited) & Fast    & Most documents \\
+        XeLaTeX   & OpenType, TrueType   & Medium  & Custom fonts, Unicode \\
+        LuaLaTeX  & OpenType, TrueType   & Slower  & Lua scripting, fonts \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Figures}
+
+To include a figure, place your image in the \texttt{figures/} directory:
+
+\begin{verbatim}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/my-image.pdf}
+    \caption{Description of figure}
+    \label{fig:example}
+\end{figure}
+\end{verbatim}
+
+% Uncomment when you have an actual figure:
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{figures/my-image.pdf}
+%     \caption{An example figure}
+%     \label{fig:example}
+% \end{figure}

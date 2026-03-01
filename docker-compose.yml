@@ -1,0 +1,48 @@
+# =============================================================================
+# Docker Compose for LaTeX Projects
+# =============================================================================
+# Usage:
+#   docker compose run --rm latex latexmk -pdf main.tex
+#   docker compose run --rm latex pdflatex main.tex
+#   docker compose up latex-watch   (auto-recompile on changes)
+# =============================================================================
+
+services:
+  latex:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: "${UID:-1000}:${GID:-1000}"
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    # Override entrypoint to allow passing commands directly
+    entrypoint: ["/bin/bash", "-c"]
+    command: ["echo 'LaTeX environment ready. Use: docker compose run --rm latex <command>'"]
+
+  # Auto-watch service: recompiles on file changes
+  latex-watch:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: "${UID:-1000}:${GID:-1000}"
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        echo "=== LaTeX Watch Mode ==="
+        echo "Watching for .tex file changes in /workspace..."
+        while true; do
+          inotifywait -r -e modify,create --include '\.tex$$' /workspace 2>/dev/null
+          echo "[$(date '+%H:%M:%S')] Change detected, recompiling..."
+          for dir in /workspace/*/; do
+            if [ -f "$${dir}main.tex" ]; then
+              cd "$$dir"
+              latexmk -pdf -interaction=nonstopmode main.tex 2>&1 | tail -5
+              cd /workspace
+            fi
+          done
+        done
+    restart: unless-stopped

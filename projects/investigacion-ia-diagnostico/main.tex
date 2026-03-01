@@ -1,0 +1,89 @@
+% =============================================================================
+% Proyecto de Investigación — Plantilla
+% Universidad Nacional — Sede Regional Brunca, Campus Pérez Zeledón
+% Curso: Inteligencia Artificial
+% =============================================================================
+\documentclass[12pt,a4paper]{article}
+
+% --- Encoding & Language ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+
+% --- Typography ---
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{setspace}
+\onehalfspacing
+
+% --- Page Layout (standard margins) ---
+\usepackage{geometry}
+\geometry{top=2.54cm, bottom=2.54cm, left=2.54cm, right=2.54cm, headheight=14pt}
+
+% --- Math ---
+\usepackage{amsmath,amssymb}
+
+% --- Graphics & Figures ---
+\usepackage{graphicx}
+\usepackage{caption}
+
+% --- Tables ---
+\usepackage{booktabs}
+\usepackage{tabularx}
+
+% --- Colors ---
+\usepackage{xcolor}
+
+% --- Lists ---
+\usepackage{enumitem}
+
+% --- Bibliography: APA 7th Edition ---
+\usepackage[style=apa,backend=biber,sortcites=true,sorting=nyt,language=spanish]{biblatex}
+\DeclareLanguageMapping{spanish}{spanish-apa}
+\addbibresource{references/references.bib}
+
+% --- Hyperlinks ---
+\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+
+% --- Headers/Footers ---
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textit{IA en Diagnóstico Médico}}
+\fancyhead[R]{\small\textit{Universidad Nacional}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% --- Section formatting ---
+\usepackage{titlesec}
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection.}{0.5em}{}
+
+% =============================================================================
+\begin{document}
+
+% --- Portada ---
+\input{sections/portada}
+
+\newpage
+\tableofcontents
+\newpage
+
+% --- Secciones ---
+\input{sections/introduccion}
+\newpage
+\input{sections/marco-conceptual}
+\newpage
+\input{sections/estado-del-arte}
+\newpage
+\input{sections/aplicaciones-reales}
+\newpage
+\input{sections/limitaciones-etica}
+\newpage
+\input{sections/conclusiones}
+
+% --- Referencias ---
+\newpage
+\printbibliography[title={Referencias}]
+
+\end{document}

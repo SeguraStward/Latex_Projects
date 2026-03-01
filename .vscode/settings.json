@@ -1,0 +1,143 @@
+{
+    // =========================================================================
+    // LaTeX Workshop Configuration — Docker-based compilation
+    // =========================================================================
+
+    // --- LaTeX Workshop: Recipes ---
+    // Define compilation recipes using Docker
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "latexmk (Docker)",
+            "tools": ["docker-latexmk-pdf"]
+        },
+        {
+            "name": "xelatex (Docker)",
+            "tools": ["docker-latexmk-xelatex"]
+        },
+        {
+            "name": "lualatex (Docker)",
+            "tools": ["docker-latexmk-lualatex"]
+        },
+        {
+            "name": "pdflatex only (Docker)",
+            "tools": ["docker-pdflatex"]
+        }
+    ],
+
+    // --- LaTeX Workshop: Tools ---
+    // Define the Docker commands for each tool
+    "latex-workshop.latex.tools": [
+        {
+            "name": "docker-latexmk-pdf",
+            "command": "docker",
+            "args": [
+                "compose",
+                "-f", "%WORKSPACE_FOLDER%/docker-compose.yml",
+                "run", "--rm",
+                "-w", "/workspace/%RELATIVE_DIR%",
+                "latex",
+                "latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf %DOCFILE%.tex"
+            ],
+            "env": {}
+        },
+        {
+            "name": "docker-latexmk-xelatex",
+            "command": "docker",
+            "args": [
+                "compose",
+                "-f", "%WORKSPACE_FOLDER%/docker-compose.yml",
+                "run", "--rm",
+                "-w", "/workspace/%RELATIVE_DIR%",
+                "latex",
+                "latexmk -synctex=1 -interaction=nonstopmode -file-line-error -xelatex %DOCFILE%.tex"
+            ],
+            "env": {}
+        },
+        {
+            "name": "docker-latexmk-lualatex",
+            "command": "docker",
+            "args": [
+                "compose",
+                "-f", "%WORKSPACE_FOLDER%/docker-compose.yml",
+                "run", "--rm",
+                "-w", "/workspace/%RELATIVE_DIR%",
+                "latex",
+                "latexmk -synctex=1 -interaction=nonstopmode -file-line-error -lualatex %DOCFILE%.tex"
+            ],
+            "env": {}
+        },
+        {
+            "name": "docker-pdflatex",
+            "command": "docker",
+            "args": [
+                "compose",
+                "-f", "%WORKSPACE_FOLDER%/docker-compose.yml",
+                "run", "--rm",
+                "-w", "/workspace/%RELATIVE_DIR%",
+                "latex",
+                "pdflatex -synctex=1 -interaction=nonstopmode -file-line-error %DOCFILE%.tex"
+            ],
+            "env": {}
+        }
+    ],
+
+    // --- LaTeX Workshop: Build ---
+    "latex-workshop.latex.autoBuild.run": "onSave",
+    "latex-workshop.latex.autoClean.run": "onBuilt",
+    "latex-workshop.latex.clean.fileTypes": [
+        "*.aux", "*.bbl", "*.blg", "*.idx", "*.ind", "*.lof",
+        "*.lot", "*.out", "*.toc", "*.acn", "*.acr", "*.alg",
+        "*.glg", "*.glo", "*.gls", "*.fls", "*.log", "*.fdb_latexmk",
+        "*.snm", "*.nav", "*.run.xml", "*.bcf"
+    ],
+
+    // --- LaTeX Workshop: Viewer ---
+    "latex-workshop.view.pdf.viewer": "tab",
+
+    // --- LaTeX Workshop: SyncTeX ---
+    // Enables forward/inverse search between source and PDF
+    "latex-workshop.synctex.afterBuild.enabled": true,
+
+    // --- LaTeX Workshop: Intellisense ---
+    "latex-workshop.intellisense.package.enabled": true,
+
+    // --- Editor settings for .tex files ---
+    "[latex]": {
+        "editor.formatOnSave": false,
+        "editor.wordWrap": "on",
+        "editor.tabSize": 2,
+        "editor.suggestSelection": "recentlyUsedByPrefix"
+    },
+    "[bibtex]": {
+        "editor.tabSize": 2
+    },
+
+    // --- File associations ---
+    "files.associations": {
+        "*.tex": "latex",
+        "*.bib": "bibtex",
+        "*.cls": "latex",
+        "*.sty": "latex"
+    },
+
+    // --- Exclude build artifacts from explorer ---
+    "files.exclude": {
+        "**/*.aux": true,
+        "**/*.bbl": true,
+        "**/*.blg": true,
+        "**/*.fdb_latexmk": true,
+        "**/*.fls": true,
+        "**/*.log": true,
+        "**/*.out": true,
+        "**/*.synctex.gz": true,
+        "**/*.toc": true,
+        "**/*.nav": true,
+        "**/*.snm": true,
+        "**/*.run.xml": true,
+        "**/*.bcf": true
+    },
+
+    // --- AI Autocomplete Settings ---
+    "github.copilot.editor.enableAutoCompletions": false,
+    "editor.inlineSuggest.enabled": false
+}
