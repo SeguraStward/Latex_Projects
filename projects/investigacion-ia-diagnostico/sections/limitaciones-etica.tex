@@ -2,10 +2,29 @@
 % Limitaciones y Desafíos Éticos
 % =============================================================================
 \section{Limitaciones y Desafíos Éticos}
-% Riesgos técnicos \subsection{Riesgos Técnicos}
-\begin{description} \item[Caja Negra (Black Box):] Se refiere a la dificultad de interpretar el razonamiento interno del modelo, lo que impulsa la necesidad de IA Explicable (XAI) para generar confianza clínica. \item[Sesgo Algorítmico:] El riesgo de que la IA perpetúe desigualdades si los datos de entrenamiento no son diversos. \item[Deriva de la IA (AI Drift):] La posible degradación del rendimiento del modelo con el tiempo debido a cambios en los equipos o protocolos médicos. \end{description}
-  Sesgo algorítmico \subsection{Sesgo Algorítmico} El sesgo algorítmico surge cuando los sistemas de IA favorecen sistemáticamente a ciertos grupos sobre otros debido a deficiencias en los datos de entrenamiento. En radiología, esto se manifiesta principalmente a través del sesgo de recolección de datos, donde los modelos entrenados exclusivamente en una demografía específica (ej. hombres blancos de mediana edad) pueden omitir signos de enfermedad en mujeres o personas de otros orígenes étnicos. Asimismo, existe un sesgo geográfico, donde algoritmos con alta precisión en hospitales urbanos con tecnología de punta fallan al ser implementados en áreas rurales con equipos diferentes. El sesgo también puede originarse en la anotación, si los radiólogos que etiquetan las imágenes tienen criterios subjetivos divergentes que el modelo acaba heredando.
- Problemas de escalabilidad \subsection{Problemas de Escalabilidad} Escalar estas soluciones presenta desafíos estructurales y económicos significativos. Técnicamente, el entrenamiento de redes profundas requiere una inmensa potencia computacional, dependiendo fuertemente de procesadores gráficos (GPU) de alto costo. Existe un cuello de botella crítico en la disponibilidad de datasets masivos y bien anotados, ya que el etiquetado médico es una tarea laboriosa que requiere expertos experimentados. Además, la heterogeneidad de los sistemas digitales hospitalarios dificulta la integración; muchas instituciones operan con infraestructuras obsoletas o sistemas legados que no interactúan fácilmente con las plataformas modernas de IA. Finalmente, para las clínicas pequeñas, los costos de implementación (adquisición, integración y capacitación) pueden ser prohibitivos, creando una brecha digital en la atención sanitaria.
- Consideraciones regulatorias o éticas \subsection{Consideraciones Regulatorias y Éticas} La regulación y la ética constituyen los pilares para una implementación responsable. Organismos como la FDA regulan la IA como "Software como Dispositivo Médico" (SaMD), exigiendo validaciones rigurosas a través de vías como la autorización 510(k) o la aprobación pre-mercado (PMA). Un aspecto ético fundamental es la privacidad de los datos, obligando a cumplir estrictamente con normativas como HIPAA y GDPR para proteger la información sensible del paciente mediante protocolos de anonimización y cifrado.
+
+% Riesgos técnicos
+\subsection{Riesgos Técnicos}
+
+\begin{description}
+    \item[Caja Negra (Black Box):] Se refiere a la dificultad de interpretar el razonamiento interno del modelo, lo que impulsa la necesidad de IA Explicable para generar confianza clínica.
+    \item[Deriva de la IA (AI Drift):] La posible degradación del rendimiento del modelo con el tiempo debido a cambios en los equipos o protocolos médicos.
+\end{description}
+
+% Sesgo algorítmico
+\subsection{Sesgo Algorítmico}
+
+El sesgo algorítmico surge cuando los sistemas de IA favorecen sistemáticamente a ciertos grupos sobre otros debido a deficiencias en los datos de entrenamiento. En radiología, esto se manifiesta principalmente a través del sesgo de recolección de datos, donde los modelos entrenados exclusivamente en una demografía específica (ej. hombres blancos de mediana edad) pueden omitir signos de enfermedad en mujeres o personas de otros orígenes étnicos. Asimismo, existe un sesgo geográfico, donde algoritmos con alta precisión en hospitales urbanos con tecnología de punta fallan al ser implementados en áreas rurales con equipos diferentes. El sesgo también puede originarse en la anotación, si los radiólogos que etiquetan las imágenes tienen criterios subjetivos divergentes que el modelo acaba heredando.
+
+% Problemas de escalabilidad
+\subsection{Problemas de Escalabilidad}
+
+Escalar estas soluciones presenta desafíos estructurales y económicos significativos. Técnicamente, el entrenamiento de redes profundas requiere una inmensa potencia computacional, dependiendo fuertemente de procesadores gráficos (GPU) de alto costo. Existe un cuello de botella crítico en la disponibilidad de datasets masivos y bien anotados, ya que el etiquetado médico es una tarea laboriosa que requiere expertos experimentados. Además, la heterogeneidad de los sistemas digitales hospitalarios dificulta la integración; muchas instituciones operan con infraestructuras obsoletas o sistemas legados que no interactúan fácilmente con las plataformas modernas de IA. Finalmente, para las clínicas pequeñas, los costos de implementación (adquisición, integración y capacitación) pueden ser prohibitivos, creando una brecha digital en la atención sanitaria.
+
+% Consideraciones regulatorias o éticas
+\subsection{Consideraciones Regulatorias y Éticas}
+
+La regulación y la ética constituyen los pilares para una implementación responsable. Organismos como la FDA regulan la IA como ``Software como Dispositivo Médico'' (SaMD), exigiendo validaciones rigurosas a través de vías como la autorización 510(k) o la aprobación pre-mercado (PMA). Un aspecto ético fundamental es la privacidad de los datos, obligando a cumplir estrictamente con normativas como HIPAA y GDPR para proteger la información sensible del paciente mediante protocolos de anonimización y cifrado.
+
 En cuanto a la responsabilidad legal, persiste el dilema sobre quién asume el error en caso de un diagnóstico fallido: si el clínico que usó la herramienta o la empresa desarrolladora del software. Por ello, se promueve el concepto de Inteligencia Aumentada, donde la IA actúa como un copiloto que complementa, pero no reemplaza, la autonomía y el juicio del médico. Finalmente, es imperativo garantizar el consentimiento informado, asegurando que los pacientes comprendan cómo y por qué se utiliza la IA en su proceso diagnóstico.
 
