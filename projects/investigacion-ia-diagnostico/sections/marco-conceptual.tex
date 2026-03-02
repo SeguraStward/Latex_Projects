@@ -31,7 +31,7 @@ El funcionamiento de las CNN está compuesto por varias capas especializadas:
     \item \textbf{Función de Activación (ReLU)}: Se aplica generalmente una unidad lineal rectificada (ReLU) después de cada convolución. Esta capa introduce no linealidad al sistema, convirtiendo los valores negativos en cero, permitiendo a la red aprender patrones mucho más complejos.
     
 
-    \item \textbf{Capa de agrupacion(Pooling layer)}: Se encarga del down-sampling o reducción de dimensionalidad. El método más común es el Max Pooling, que selecciona solo el valor máximo de una región, conservando las características más importantes mientras reduce el costo computacional y el riesgo de sobreajuste.
+    \item \textbf{Capa de agrupación (Pooling layer)}: Se encarga del down-sampling o reducción de dimensionalidad. El método más común es el Max Pooling, que selecciona solo el valor máximo de una región, conservando las características más importantes mientras reduce el costo computacional y el riesgo de sobreajuste.
 
 
     \item \textbf{Capas totalmente conectadas}: Unifican la información de las capas anteriores. Cada neurona se conecta con todas las de la capa anterior para realizar razonamiento de alto nivel.
@@ -44,11 +44,11 @@ El funcionamiento de las CNN está compuesto por varias capas especializadas:
 Las CNN logran su efectividad a través de la extracción jerárquica de características. Como lo describe la literatura especializada:
 
 \begin{quote}
-``En el aprendizaje profundo, la computadora tiene muchas capas, como capas de detectives. Los primeros detectives observan cosas simples, como líneas rectas y curvas. Luego, los siguientes detectives observan cosas más complicadas, como bucles o líneas inclinadas. Finalmente, los últimos detectives juntan todas sus pistas y pueden decir qué número es'' (Seeram \& Kanade, 2024, p. 28, traducción propia).
+``En el aprendizaje profundo, la computadora tiene muchas capas, como capas de detectives. Los primeros detectives observan cosas simples, como líneas rectas y curvas. Luego, los siguientes detectives observan cosas más complicadas, como bucles o líneas inclinadas. Finalmente, los últimos detectives juntan todas sus pistas y pueden decir qué número es'' \parencite[p.~28, traducción propia]{Seeram2024}.
 \end{quote}
   
 \paragraph{Proceso de Entrenamiento}
-El proceso de entrenamiento sucede cuando la imagen pasa por todas las capas, generando la salida (prediccion) que se compara con el resultado esperado, proporcionado por radiologos expertos, seguidamente los errores encontrados se pasan de nuevo en la red para asi ir ajustando la salida hasta que el error sea minimo.
+El proceso de entrenamiento sucede cuando la imagen pasa por todas las capas, generando la salida (predicción) que se compara con el resultado esperado, proporcionado por radiólogos expertos, seguidamente los errores encontrados se pasan de nuevo en la red para así ir ajustando la salida hasta que el error sea mínimo.
 
 \subsubsection{Diagnóstico Asistido por Computadora (CADe/CADx)}
 
@@ -71,24 +71,24 @@ Es el marco operativo donde se aplica la IA en los hospitales. Los sistemas CAD 
 \end{description}
 
 \subsection{Métricas}
- La precision en el caso de diagnosticos medicos utilizando Deep learning puede ser enganosa, por ejemplo, pensemos en un modelo CNN que siempre marca a los pacientes como sanos sin importar si estan enfermos, si el 95 porciento de los pacientes son sanos entonces el modelo tendria un 95 porciento de precision pero tambien marcaria ese 5 porciento restante como sano, seria preciso pero fallaria en detectar a los pacientes enfermos, para evitar este problema se explicaran conceptos como la sensibilidad, especificidad, Curva ROC (Receiver Operating Characteristic), AUC(Area under de curve). Primeramente se mostrara como se clasifica si un modelo CNN clasifica correctamente o incorrectamente pacientes.
+La precisión en el caso de diagnósticos médicos utilizando Deep Learning puede ser engañosa, por ejemplo, pensemos en un modelo CNN que siempre marca a los pacientes como sanos sin importar si están enfermos, si el 95 por ciento de los pacientes son sanos entonces el modelo tendría un 95 por ciento de precisión pero también marcaría ese 5 por ciento restante como sano, sería preciso pero fallaría en detectar a los pacientes enfermos, para evitar este problema se explicarán conceptos como la sensibilidad, especificidad, Curva ROC (Receiver Operating Characteristic), AUC (Area Under the Curve). Primeramente se mostrará cómo se clasifica si un modelo CNN clasifica correctamente o incorrectamente pacientes.
 
 \begin{itemize}
-    \item \textbf{Verdadero positivo (VP)}: El modelo correctamente predijo que el paciente esta enfermo.
-    \item \textbf{Verdadero negativo (VN)}: El modelo correctamente predijo que el paciente no esta enfermo. 
-    \item \textbf{Falso positivo (FP)}: El modelo incorrectamente predijo que el paciente esta enfermo. 
-    \item \textbf{Falso negativo (FN)}: El modelo incorrectamente predijo que el paciente no esta enfermo. 
+    \item \textbf{Verdadero positivo (VP)}: El modelo correctamente predijo que el paciente está enfermo.
+    \item \textbf{Verdadero negativo (VN)}: El modelo correctamente predijo que el paciente no está enfermo.
+    \item \textbf{Falso positivo (FP)}: El modelo incorrectamente predijo que el paciente está enfermo.
+    \item \textbf{Falso negativo (FN)}: El modelo incorrectamente predijo que el paciente no está enfermo. 
   
 \end{itemize}
 
-\paragraph{Sensibilidad} Es la medida de que tan bien el modelo puede identificar todos los casos verdaderos positivos y su formula es esta:  
+\paragraph{Sensibilidad} Es la medida de qué tan bien el modelo puede identificar todos los casos verdaderos positivos y su fórmula es esta:
  \[
 \text{Sensibilidad} = \frac{\text{VP}}{\text{VP} + \text{FN}}
 \]
 
-\paragraph{Especificidad} Es la capacidad del clasificador de etiquetar correctamente a pacientes como sanos:  
- \[
-\text{Sensibilidad} = \frac{\text{VN}}{\text{VN} + \text{FP}}
+\paragraph{Especificidad} Es la capacidad del clasificador de etiquetar correctamente a pacientes como sanos:
+\[
+\text{Especificidad} = \frac{\text{VN}}{\text{VN} + \text{FP}}
 \]
 
-La sensibilidad y especificidad son utilizados para ROC (receiver operating characteristic) que es una representacion grafica del rendimiento de un modelo en todos los valores posibles de especificidad y sensibilidad y esto hace posible encontrar el AUC (Area under the curve), valor unico entre 0 y 1 que resume la eficiencia del modelo. Un AUC de 1.0 representa la clasificacion perfecta.
+La sensibilidad y especificidad son utilizados para ROC (Receiver Operating Characteristic) que es una representación gráfica del rendimiento de un modelo en todos los valores posibles de especificidad y sensibilidad y esto hace posible encontrar el AUC (Area Under the Curve), valor único entre 0 y 1 que resume la eficiencia del modelo. Un AUC de 1.0 representa la perfección.

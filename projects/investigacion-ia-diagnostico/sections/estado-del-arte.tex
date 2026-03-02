@@ -5,38 +5,51 @@
 
 % Análisis de los artículos consultados
 \subsection{Análisis de Literatura}
-% TODO: Resumir y analizar cada uno de los artículos científicos consultados.
-%       Usar \textcite{} o \parencite{} para citar.
 
+El análisis de la literatura científica reciente muestra una evolución clara hacia la optimización de arquitecturas y la eficiencia operativa:
 
+\begin{itemize}
+\item \textcite{Shin2016} evaluaron el uso de arquitecturas como AlexNet y GoogLeNet en radiología torácica, demostrando que el aprendizaje por transferencia desde bases de datos generales (ImageNet) compensa eficazmente la escasez de imágenes médicas etiquetadas.
+
+\item \textcite{MenchuLopez2025} realizó una revisión sistemática que sitúa a la radiología como la especialidad líder en adopción de IA, con un 88.2\% de las autorizaciones de la FDA, destacando que los algoritmos de deep learning ya igualan o superan la precisión de especialistas en tareas de cribado de cáncer de mama y gliomas.
+
+\item \textcite{PerezPelegri2023} profundizaron en la segmentación cardíaca, validando la arquitectura U-Net como el estándar para delimitar estructuras anatómicas y resaltando que el uso de modelos de conjunto (ensembles) es la mejor estrategia para evitar el sobreajuste (overfitting) en datos clínicos limitados.
+\end{itemize}
 % Comparación de enfoques metodológicos
 \subsection{Comparación de Enfoques}
-% TODO: Comparar los enfoques, modelos o metodologías de los artículos.
-%       Considerar usar una tabla comparativa:
-%
-% \begin{table}[H]
-%     \centering
-%     \caption{Comparación de enfoques metodológicos}
-%     \label{tab:comparacion}
-%     \begin{tabularx}{\textwidth}{@{}lXXX@{}}
-%         \toprule
-%         \textbf{Criterio} & \textbf{Artículo 1} & \textbf{Artículo 2} & \textbf{Artículo 3} \\
-%         \midrule
-%         Modelo       &  &  &  \\
-%         Dataset      &  &  &  \\
-%         Precisión    &  &  &  \\
-%         Limitaciones &  &  &  \\
-%         \bottomrule
-%     \end{tabularx}
-% \end{table}
 
+La siguiente tabla compara los enfoques de los estudios fundamentales analizados:
+
+\begin{table}[ht]
+\centering
+\caption{Comparación de enfoques metodológicos en la literatura consultada}
+\label{tab:comparacion}
+\begin{tabularx}{\textwidth}{@{}lXXX@{}}
+\toprule
+\textbf{Criterio} & \textbf{Shin et al. (2016)} & \textbf{Menchú López (2025)} & \textbf{Pérez-Pelegrí et al. (2023)} \\
+\midrule
+\textbf{Modelo} & GoogLeNet / AlexNet (Transfer Learning) & CNN / IA Generativa / NLP & U-Net y Modelos de Conjunto (Ensembles) \\
+\textbf{Dataset} & ILD (Pulmón) y ganglios linfáticos & Revisión de 1,016 dispositivos autorizados & MRI Cardíaca (Eje corto) \\
+\textbf{Precisión} & 90.2\% de precisión en clasificación & AUC: 93.2\% (Gliomas) y 89.6\% (Mama) & Alto coeficiente Dice en segmentación \\
+\textbf{Limitaciones} & Escasez de datos médicos anotados & Sesgos algorítmicos y \enquote{AI drift} (deriva) & Sobreajuste en bases de datos pequeñas \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 % Discusión de resultados reportados
 \subsection{Discusión de Resultados}
-% TODO: Discutir los resultados más relevantes encontrados en la literatura.
 
+Los resultados reportados confirman que la IA no solo es precisa, sino también operativamente transformadora. Estudios clínicos en entornos reales, como el de Northwestern Medicine, han demostrado mejoras de productividad de hasta un 40\% en la generación de informes radiológicos sin pérdida de calidad diagnóstica. Además, se ha probado que las CNN pueden identificar patologías críticas, como el neumotórax, en tiempo real antes de que el radiólogo abra el estudio, priorizando el triaje clínico.
 
 % Tendencias actuales del área
 \subsection{Tendencias Actuales}
-% TODO: Identificar las tendencias recientes en IA para diagnóstico médico.
 
+Las fronteras actuales de la investigación se centran en tres pilares para facilitar la adopción hospitalaria:
+
+\begin{enumerate}
+\item \textbf{IA Explicable (XAI):} Uso de mapas de atención para que el médico comprenda qué regiones de la imagen influyeron en el diagnóstico, eliminando el efecto de ``caja negra''.
+
+\item \textbf{Modelos Fundacionales:} Desarrollo de modelos versátiles entrenados en múltiples modalidades (rayos X, CT y MRI simultáneamente) para tareas generales de diagnóstico.
+
+\item \textbf{Aprendizaje Federado:} Entrenamiento de algoritmos en redes de hospitales que permite mejorar los modelos sin que los datos privados de los pacientes salgan de su institución de origen.
+\end{enumerate}
