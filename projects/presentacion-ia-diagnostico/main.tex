@@ -1,209 +1,142 @@
 % =============================================================================
-% Presentación — Inteligencia Artificial en Diagnóstico Médico
-% Beamer (15 minutos + 5 min preguntas)
+% Presentación — Inteligencia Artificial en Diagnóstico Médico por Imagen
+% Diseño estructurado · Paleta oscura médica (azul profundo + teal)
 % =============================================================================
 \documentclass[aspectratio=169,12pt]{beamer}
-
-% --- Theme ---
-\usetheme{Madrid}
-\usecolortheme{whale}
-\setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{footline}{%
-    \leavevmode%
-    \hbox{%
-        \begin{beamercolorbox}[wd=.33\paperwidth,ht=2.5ex,dp=1ex,center]{author in head/foot}%
-            \usebeamerfont{author in head/foot}\insertshortauthor
-        \end{beamercolorbox}%
-        \begin{beamercolorbox}[wd=.34\paperwidth,ht=2.5ex,dp=1ex,center]{title in head/foot}%
-            \usebeamerfont{title in head/foot}\insertshorttitle
-        \end{beamercolorbox}%
-        \begin{beamercolorbox}[wd=.33\paperwidth,ht=2.5ex,dp=1ex,right]{date in head/foot}%
-            \usebeamerfont{date in head/foot}\insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
-        \end{beamercolorbox}%
-    }%
-}
 
 % --- Encoding & Language ---
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[spanish]{babel}
+\usepackage{csquotes}
 
 % --- Packages ---
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{amsmath}
-\usepackage{xcolor}
+\usepackage{fontawesome5}
+\usepackage{tikz}
+\usetikzlibrary{calc,positioning}
+
+% =============================================================================
+% PALETA OSCURA — MÉDICA
+% Azul quirúrgico profundo + teal (color clínico por excelencia)
+% =============================================================================
+\usetheme{default}
+\usecolortheme{default}
+
+% --- 3 colores base ---
+\definecolor{bgDark}{HTML}{091520}       % fondo principal — azul-negro profundo
+\definecolor{bgCard}{HTML}{0F2133}       % paneles / bloques — azul quirúrgico
+\definecolor{teal}{HTML}{00B4A0}         % acento primario — teal médico
+\definecolor{tealSoft}{HTML}{5CDEC8}     % acento claro
+\definecolor{blanco}{HTML}{EAF0F5}       % texto principal
+\definecolor{muted}{HTML}{5B7D99}        % texto secundario
+\definecolor{alertRed}{HTML}{E85D5D}     % advertencias
+\definecolor{lineGray}{HTML}{1E3A52}     % líneas sutiles
+
+% --- Beamer color mapping ---
+\setbeamercolor{normal text}{fg=blanco,bg=bgDark}
+\setbeamercolor{alerted text}{fg=teal}
+\setbeamercolor{structure}{fg=teal}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{subtitle}{fg=teal}
+\setbeamercolor{frametitle}{fg=white,bg=bgDark}
+\setbeamercolor{framesubtitle}{fg=muted}
+\setbeamercolor{block title}{fg=white,bg=bgCard}
+\setbeamercolor{block body}{fg=blanco,bg=bgCard}
+\setbeamercolor{block title alerted}{fg=bgDark,bg=teal}
+\setbeamercolor{block body alerted}{fg=blanco,bg=bgCard}
+\setbeamercolor{item}{fg=teal}
+\setbeamercolor{subitem}{fg=muted}
+\setbeamercolor{description item}{fg=teal}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{subsection in toc}{fg=blanco}
+
+% --- Beamer fonts ---
+\setbeamerfont{title}{size=\Huge,series=\bfseries}
+\setbeamerfont{subtitle}{size=\large}
+\setbeamerfont{frametitle}{size=\Large,series=\bfseries}
+\setbeamerfont{framesubtitle}{size=\small}
+\setbeamerfont{block title}{size=\normalsize,series=\bfseries}
+\setbeamerfont{footnote}{size=\tiny}
+
+% --- Templates ---
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{enumerate items}[default]
+\setbeamertemplate{section in toc}[circle]
+
+% --- Frametitle con línea teal ---
+\setbeamertemplate{frametitle}{%
+    \vskip8pt%
+    \usebeamerfont{frametitle}\insertframetitle%
+    \ifx\insertframesubtitle\empty\else%
+        \\[1pt]{\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle}%
+    \fi%
+    \vskip3pt%
+    {\color{teal}\hrule height 0.7pt}%
+    \vskip4pt%
+}
+
+% --- Footer limpio ---
+\setbeamertemplate{footline}{%
+    \leavevmode%
+    \hbox{%
+        \begin{beamercolorbox}[wd=.45\paperwidth,ht=2.2ex,dp=1ex,left]{}%
+            \hspace*{1.5em}{\tiny\color{muted}\insertshortauthor}%
+        \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd=.25\paperwidth,ht=2.2ex,dp=1ex,center]{}%
+            {\tiny\color{muted}\insertshorttitle}%
+        \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd=.3\paperwidth,ht=2.2ex,dp=1ex,right]{}%
+            {\tiny\color{teal}\insertframenumber}\,{\tiny\color{muted}/\,\inserttotalframenumber}\hspace*{1.5em}%
+        \end{beamercolorbox}%
+    }%
+    \vskip2pt%
+}
 
 % --- Metadata ---
-\title[IA en Diagnóstico Médico]{Inteligencia Artificial en Diagnóstico Médico}
-\subtitle{Proyecto de Investigación --- Inteligencia Artificial}
+\title[IA en Diagnóstico Médico]{IA en Diagnóstico Médico}
+\subtitle{Proyecto de Investigación}
 \author[A. Segura]{Angel Stward Segura Méndez}
-\institute[UNA]{Universidad Nacional\\Sede Regional Brunca --- Campus Pérez Zeledón}
+\institute[UNA]{Universidad Nacional\\Sede Regional Brunca --- Campus Pérez Zeledón\\[3pt]{\small Curso: Inteligencia Artificial}}
 \date{Marzo, 2026}
 
 % =============================================================================
 \begin{document}
 
-% ------ PORTADA ------
-\begin{frame}
-    \titlepage
-\end{frame}
+% --- Portada y Agenda ---
+\input{sections/01-portada}
+\input{sections/02-agenda}
 
-% ------ CONTENIDO ------
-\begin{frame}{Contenido}
-    \tableofcontents
-\end{frame}
-
-% =====================================================================
+% --- Introducción ---
 \section{Introducción}
-% =====================================================================
+\input{sections/03-problema}
+\input{sections/04-objetivos}
 
-\begin{frame}{Introducción}
-    % TODO: Contextualización del tema
-    \begin{itemize}
-        \item Contextualización del tema
-        \item Justificación técnica
-        \item Relevancia científica e industrial
-        \item Objetivo de la investigación
-    \end{itemize}
-\end{frame}
-
-% =====================================================================
+% --- Marco Conceptual ---
 \section{Marco Conceptual}
-% =====================================================================
+\input{sections/05-cnn}
+\input{sections/06-arquitecturas}
+\input{sections/07-metricas}
 
-\begin{frame}{Marco Conceptual --- Definiciones}
-    % TODO: Definiciones clave
-    \begin{itemize}
-        \item Inteligencia Artificial
-        \item Aprendizaje Automático / Deep Learning
-        \item Diagnóstico Asistido por Computadora (CAD)
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Marco Conceptual --- Modelos y Arquitecturas}
-    % TODO: Modelos relevantes
-    \begin{itemize}
-        \item Redes Neuronales Convolucionales (CNN)
-        \item Arquitecturas relevantes (ResNet, U-Net, etc.)
-        \item Transformers en imágenes médicas
-    \end{itemize}
-\end{frame}
-
-% =====================================================================
-\section{Estado del Arte}
-% =====================================================================
-
-\begin{frame}{Estado del Arte --- Artículos Analizados}
-    % TODO: Resumen de artículos consultados
-    \begin{enumerate}
-        \item Artículo 1: \textit{Título} --- Resumen breve
-        \item Artículo 2: \textit{Título} --- Resumen breve
-        \item Artículo 3: \textit{Título} --- Resumen breve
-    \end{enumerate}
-\end{frame}
-
-\begin{frame}{Estado del Arte --- Comparación de Enfoques}
-    % TODO: Tabla comparativa
-    \begin{table}
-        \centering
-        \small
-        \begin{tabular}{@{}lccc@{}}
-            \toprule
-            \textbf{Criterio} & \textbf{Art. 1} & \textbf{Art. 2} & \textbf{Art. 3} \\
-            \midrule
-            Modelo       & --- & --- & --- \\
-            Dataset      & --- & --- & --- \\
-            Precisión    & --- & --- & --- \\
-            Limitaciones & --- & --- & --- \\
-            \bottomrule
-        \end{tabular}
-    \end{table}
-\end{frame}
-
-\begin{frame}{Estado del Arte --- Tendencias Actuales}
-    % TODO: Tendencias recientes
-    \begin{itemize}
-        \item Tendencia 1
-        \item Tendencia 2
-        \item Tendencia 3
-    \end{itemize}
-\end{frame}
-
-% =====================================================================
+% --- Aplicaciones Reales ---
 \section{Aplicaciones Reales}
-% =====================================================================
+\input{sections/08-aplicaciones}
 
-\begin{frame}{Aplicaciones Reales}
-    % TODO: Casos concretos de implementación
-    \begin{itemize}
-        \item \textbf{Caso 1:} Descripción breve
-        \item \textbf{Caso 2:} Descripción breve
-        \item \textbf{Caso 3:} Descripción breve
-    \end{itemize}
-    \vspace{0.5cm}
-    % TODO: Sectores e impacto práctico
-\end{frame}
+% --- Limitaciones y Ética ---
+\section{Limitaciones y Ética}
+\input{sections/09-desafios}
+\input{sections/10-etica}
 
-% =====================================================================
-\section{Limitaciones y Desafíos Éticos}
-% =====================================================================
-
-\begin{frame}{Limitaciones y Desafíos Éticos}
-    % TODO: Riesgos, sesgo, escalabilidad, regulación
-    \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
-            \textbf{Limitaciones Técnicas}
-            \begin{itemize}
-                \item Riesgos técnicos
-                \item Sesgo algorítmico
-                \item Escalabilidad
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.48\textwidth}
-            \textbf{Desafíos Éticos}
-            \begin{itemize}
-                \item Privacidad de datos
-                \item Regulación (FDA/CE)
-                \item Responsabilidad legal
-            \end{itemize}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-% =====================================================================
+% --- Conclusiones ---
 \section{Conclusiones}
-% =====================================================================
+\input{sections/11-hallazgos}
+\input{sections/12-futuro}
 
-\begin{frame}{Conclusiones}
-    % TODO: Síntesis, valoración crítica, perspectivas futuras
-    \begin{itemize}
-        \item Síntesis de hallazgos principales
-        \item Valoración crítica
-        \item Perspectivas futuras del área
-    \end{itemize}
-\end{frame}
-
-% ------ REFERENCIAS ------
-\begin{frame}{Referencias}
-    % TODO: Lista de artículos consultados (formato APA 7)
-    \small
-    \begin{enumerate}
-        \item Apellido, N. (Año). \textit{Título del artículo 1}. Revista, vol(num), pp. DOI
-        \item Apellido, N. (Año). \textit{Título del artículo 2}. Revista, vol(num), pp. DOI
-        \item Apellido, N. (Año). \textit{Título del artículo 3}. Revista, vol(num), pp. DOI
-    \end{enumerate}
-\end{frame}
-
-% ------ CIERRE ------
-\begin{frame}
-    \centering
-    \vspace{1cm}
-    {\Huge\textbf{¿Preguntas?}}\\[1cm]
-    {\large Angel Stward Segura Méndez}\\[0.3cm]
-    {\small Universidad Nacional --- Campus Pérez Zeledón}\\[0.3cm]
-    {\small Marzo, 2026}
-\end{frame}
+% --- Cierre ---
+\input{sections/13-cierre}
 
 \end{document}
