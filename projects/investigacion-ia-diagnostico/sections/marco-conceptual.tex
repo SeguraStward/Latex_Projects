@@ -7,11 +7,11 @@
 
 \subsubsection{Redes neuronales artificiales (ANN)}
 
- Modelos computacionales inspirados en el funcionamiento del cerebro humano, su elemento principal son las neuronas. Las ANN se caracterizan por una asamblea de cientos de estas neuronas artificiales(unidades de computacion basicas). El entrenamiento consiste en un par de senales como input y tambien se les presentan una serie de salidas deseadas, imitando como el cerebro depende de estimulos externos para aprender.
+ Modelos computacionales inspirados en el funcionamiento del cerebro humano, su elemento principal son las neuronas. Las ANN se caracterizan por una asamblea de cientos de estas neuronas artificiales (unidades de computación básicas). El entrenamiento consiste en un par de señales como entrada y también se les presentan una serie de salidas deseadas, imitando como el cerebro depende de estímulos externos para aprender.
  
 \subsubsection{Redes Neuronales Convolucionales (CNN)}
  
-Las CNN están diseñadas para imitar la corteza visual humana, procesar datos bidimensionales o tridimensionales. Las CNN son la evolucion de las ANN para procesamiento de imagenes. Su importancia técnica radica en:
+Las CNN están diseñadas para imitar la corteza visual humana y procesar datos bidimensionales o tridimensionales. Las CNN son la evolución de las ANN para procesamiento de imágenes. Su importancia técnica radica en:
 
 \begin{itemize}
     \item Eliminación de la necesidad de extraer características manualmente
@@ -29,29 +29,32 @@ El funcionamiento de las CNN está compuesto por varias capas especializadas \pa
     \item \textbf{Función de Activación (ReLU)}: Introduce no linealidad convirtiendo valores negativos en cero.
     \item \textbf{Capa de agrupación (Pooling)}: Reduce la dimensionalidad conservando las características más importantes.
     \item \textbf{Capas totalmente conectadas}: Unifican la información para razonamiento de alto nivel.
-    \item \textbf{Capa de salida}: Asigna una probabilidad a cada categoría diagnóstica mediante funciones como ``Softmax''.
+    \item \textbf{Capa de salida}: Asigna una probabilidad a cada categoría diagnóstica mediante funciones como \enquote{Softmax}.
 \end{enumerate}
 
 Durante el entrenamiento, la imagen pasa por todas las capas generando una predicción que se compara con el resultado esperado, proporcionado por radiólogos expertos; los errores se propagan de nuevo en la red para ir ajustando la salida hasta que el error sea mínimo.
 
-\subsubsection{Diagnóstico Asistido por Computadora (CADe/CADx)}
+\subsection{ImageNet}
+La base de datos más grande del mundo para el entrenamiento de redes neuronales convolucionales, contiene más de 1.2 millones de imágenes naturales clasificadas en más de 1000 categorías. ImageNet es la base para una competición anual ImageNet Large Scale Visual Recognition Challenge (ILSVRC), la cual se ha convertido en el estándar para evaluar el rendimiento de los algoritmos de reconocimiento de objetos a gran escala.
 
-Es el marco operativo donde se aplica la IA en los hospitales. Los sistemas CAD actuales han evolucionado de esquemas rígidos a plataformas basadas en Deep Learning que actúan como ``segunda opinión'' para el radiólogo, ayudando a:
+Los investigadores utilizan ImageNet para una técnica llamada transferencia de aprendizaje (transfer learning), que consiste en utilizar un modelo ya entrenado con el millón de imágenes de ImageNet. Como este modelo ya ha aprendido a detectar bastantes características fundamentales como bordes, texturas y formas, este modelo ya inteligente se adapta a una tarea médica específica (detectar tumores, neumonía, etc.), todo esto ahorra tiempo y recursos computacionales.
 
-\begin{itemize}
-    \item Reducir errores de observación
-    \item Mejorar la eficiencia del flujo de trabajo
-    \item Aumentar la precisión diagnóstica
-\end{itemize}
 
+\subsubsection{Detección Asistida por Computadora (CADe)}
+
+Su objetivo principal es identificar y localizar anomalías en imágenes médicas. Se enfoca especialmente en reducir las tasas de falsos negativos, es decir, identificar tumores o lesiones que podrían pasar desapercibidos para el ojo humano.
+  
+\subsubsection{Diagnóstico Asistido por Computadora (CADx)}
+Esto va un paso más allá de la simple detección, enfocándose en la evaluación y caracterización de las patologías ya identificadas. Por ejemplo, analiza la salida radiográfica para evaluar la probabilidad de que una lesión sea benigna o maligna. También intenta especificar el tipo de enfermedad, su severidad, estadio o la intervención recomendada.
+ 
 \subsection{Arquitecturas Relevantes}
 
 \begin{description}
-    \item[AlexNet] La red que inició el interés masivo al superar a todos los algoritmos en la competencia ImageNet.
+    \item[AlexNet] La red que inició el interés masivo al superar a todos los algoritmos en la competencia ImageNet. Se considera una arquitectura poco profunda comparada con las actuales, pero fue la que demostró que entre más capas, mayor precisión (hasta cierto punto). Se utiliza mayormente para clasificación de imágenes, donde se asigna una etiqueta a la imagen (¿hay tumor o no?).
     
-    \item[U-Net] La base perfecta para la segmentación de imágenes médicas debido a su estructura simétrica y ``conexiones de salto'' que recuperan información espacial precisa.
+    \item[U-Net] La base perfecta para la segmentación de imágenes médicas debido a su estructura simétrica en forma de U y \enquote{conexiones de salto} que recuperan información espacial precisa. A diferencia de AlexNet, que predice una etiqueta para toda la imagen, U-Net realiza una predicción píxel por píxel, lo que permite delinear el contorno exacto de un objeto. Es la preferida para segmentación (proceso de identificar y delimitar con precisión píxeles) de imágenes. 
     
-    \item[ResNet] Introdujo conexiones residuales que permiten entrenar redes extremadamente profundas sin pérdida de precisión.
+    \item[ResNet] AlexNet probó que entre más capas (más profundidad) mayor sería la precisión. Sin embargo, con modelos como VGGNet o GoogLeNet se observó que al aumentar la profundidad surgieron dos problemas: el desvanecimiento del gradiente y la degradación de la precisión. ResNet introdujo conexiones residuales que permiten que la información \enquote{salte} capas. Esto permitió entrenar redes extremadamente profundas sin pérdida de precisión. Se utiliza en tareas de alta precisión y reconocimiento de patrones complejos (reconocimiento de melanoma, radiografías de tórax, etc.).
 \end{description}
 
 \subsection{Métricas}
