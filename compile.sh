@@ -38,15 +38,21 @@ usage() {
     echo "  watch        Watch for changes and auto-recompile"
     echo "  xelatex      Compile with XeLaTeX engine"
     echo "  lualatex     Compile with LuaLaTeX engine"
+    echo "  manim        List scenes in animations/scenes.py"
+    echo "  manim <Scene> Render scene in low quality (preview)"
+    echo "  manim-hq <Scene> Render scene in 1080p60 (final)"
     echo ""
     echo "Special commands:"
     echo "  new <name>   Create a new project from template"
     echo "  list         List all projects"
     echo ""
     echo "Examples:"
-    echo "  $0 my-paper                # Compile my-paper/main.tex"
-    echo "  $0 my-paper clean          # Clean build artifacts"
-    echo "  $0 new thesis              # Create new project 'thesis'"
+    echo "  $0 my-paper                      # Compile my-paper/main.tex"
+    echo "  $0 my-paper clean                # Clean build artifacts"
+    echo "  $0 my-paper manim                # List available scenes"
+    echo "  $0 my-paper manim TitleScene     # Preview render"
+    echo "  $0 my-paper manim-hq TitleScene  # High quality render"
+    echo "  $0 new thesis                    # Create new project 'thesis'"
     exit 1
 }
 
@@ -80,7 +86,7 @@ if [[ "${1:-}" == "new" ]]; then
     fi
 
     info "Creating new project: $PROJECT_NAME"
-    mkdir -p "$PROJECT_PATH"/{figures,sections,references}
+    mkdir -p "$PROJECT_PATH"/{figures,sections,references,animations}
 
     # Copy template if it exists, otherwise create minimal main.tex
     if [ -f "$PROJECTS_DIR/_template/main.tex" ]; then
@@ -139,9 +145,32 @@ LATEX
         ok "Created with default template"
     fi
 
+    # Create Manim animations template
+    cat > "$PROJECT_PATH/animations/scenes.py" << 'PYTHON'
+from manim import *
+
+class TitleScene(Scene):
+    def construct(self):
+        title = Text("Your Research Title", font_size=48)
+        subtitle = Text("Your Name", font_size=32, color=GRAY)
+        subtitle.next_to(title, DOWN)
+        self.play(Write(title))
+        self.play(FadeIn(subtitle))
+        self.wait(2)
+
+
+class FormulaScene(Scene):
+    def construct(self):
+        formula = MathTex(r"E = mc^2")
+        self.play(Write(formula))
+        self.wait(2)
+PYTHON
+    ok "Created animations/scenes.py template"
+
     ok "Project created at: $PROJECT_PATH"
     echo "  Edit: $PROJECT_PATH/main.tex"
     echo "  Compile: $0 $PROJECT_NAME"
+    echo "  Animate: $0 $PROJECT_NAME manim TitleScene"
     exit 0
 fi
 
@@ -201,6 +230,47 @@ case "$COMMAND" in
                 echo \"[\$(date '+%H:%M:%S')] Recompiling...\"; \
                 latexmk -pdf -interaction=nonstopmode main.tex 2>&1 | tail -3; \
             done"
+        ;;
+    manim)
+        SCENE="${3:-}"
+        ANIMATIONS_DIR="$PROJECT_PATH/animations"
+        if [ ! -d "$ANIMATIONS_DIR" ]; then
+            err "No existe la carpeta animations/ en $PROJECT_PATH"
+            exit 1
+        fi
+        if [ -z "$SCENE" ]; then
+            info "Escenas disponibles en $PROJECT_NAME/animations/:"
+            grep -rh "^class S" "$ANIMATIONS_DIR"/*.py 2>/dev/null \
+                | sed 's/class \(S[^(]*\).*/  \1/'
+        else
+            # Buscar en que archivo esta la clase
+            SCENE_FILE=$(grep -rl "^class $SCENE" "$ANIMATIONS_DIR"/*.py 2>/dev/null | head -1)
+            if [ -z "$SCENE_FILE" ]; then
+                err "Escena '$SCENE' no encontrada en ningun archivo .py de animations/"
+                exit 1
+            fi
+            SCENE_BASENAME=$(basename "$SCENE_FILE")
+            info "Renderizando '$SCENE' desde $SCENE_BASENAME (baja calidad)..."
+            docker compose -f "$SCRIPT_DIR/docker-compose.yml" run --rm \
+                -w "/workspace/projects/$PROJECT_NAME/animations" manim \
+                manim -ql "$SCENE_BASENAME" "$SCENE"
+            ok "Output: $ANIMATIONS_DIR/media/videos/${SCENE_BASENAME%.py}/480p15/${SCENE}.mp4"
+        fi
+        ;;
+    manim-hq)
+        SCENE="${3:?Error: indica el nombre de la escena. Uso: $0 $PROJECT_NAME manim-hq <Escena>}"
+        ANIMATIONS_DIR="$PROJECT_PATH/animations"
+        SCENE_FILE=$(grep -rl "^class $SCENE" "$ANIMATIONS_DIR"/*.py 2>/dev/null | head -1)
+        if [ -z "$SCENE_FILE" ]; then
+            err "Escena '$SCENE' no encontrada en ningun archivo .py de animations/"
+            exit 1
+        fi
+        SCENE_BASENAME=$(basename "$SCENE_FILE")
+        info "Renderizando '$SCENE' desde $SCENE_BASENAME (1080p60)..."
+        docker compose -f "$SCRIPT_DIR/docker-compose.yml" run --rm \
+            -w "/workspace/projects/$PROJECT_NAME/animations" manim \
+            manim -qh "$SCENE_BASENAME" "$SCENE"
+        ok "Output: $ANIMATIONS_DIR/media/videos/${SCENE_BASENAME%.py}/1080p60/${SCENE}.mp4"
         ;;
     *)
         err "Unknown command: $COMMAND"

@@ -11,7 +11,9 @@ El análisis de la literatura científica reciente muestra una evolución clara 
 \begin{itemize}
 \item \textcite{Shin2016} evaluaron el uso de arquitecturas como AlexNet y GoogLeNet en radiología torácica, demostrando que el aprendizaje por transferencia desde bases de datos generales (ImageNet) compensa eficazmente la escasez de imágenes médicas etiquetadas.
 
-\item \textcite{MenchuLopez2025} realizó una revisión sistemática que sitúa a la radiología como la especialidad líder en adopción de IA, con un 88.2\% de las autorizaciones de la FDA, destacando que los algoritmos de deep learning ya igualan o superan la precisión de especialistas en tareas de cribado de cáncer de mama y gliomas.
+\item \textcite{MenchuLopez2025} realizó una revisión sistemática que sitúa a la radiología como la especialidad líder en adopción de IA, destacando que los algoritmos de deep learning ya igualan o superan la precisión de especialistas en tareas de cribado de cáncer de mama y gliomas.
+
+\item \textcite{Laurent2025} documenta que a mediados de 2025 existen 873 algoritmos de IA autorizados por la FDA en radiología, con una velocidad de aprobación de aproximadamente 115 nuevos algoritmos por año. Según una encuesta de la ESR (2024) con 572 radiólogos europeos, el 48\% ya utiliza herramientas de IA (frente al 20\% en 2018), aunque solo el 2\% de las prácticas radiológicas estadounidenses han integrado plenamente lecturas asistidas por IA.
 
 \item \textcite{PerezPelegri2023} profundizaron en la segmentación cardíaca, validando la arquitectura U-Net como el estándar para delimitar estructuras anatómicas y resaltando que el uso de modelos de conjunto (ensembles) es la mejor estrategia para evitar el sobreajuste (overfitting) en datos clínicos limitados.
 \end{itemize}
@@ -24,14 +26,14 @@ La siguiente tabla compara los enfoques de los estudios fundamentales analizados
 \centering
 \caption{Comparación de enfoques metodológicos en la literatura consultada}
 \label{tab:comparacion}
-\begin{tabularx}{\textwidth}{@{}lXXX@{}}
+\begin{tabularx}{\textwidth}{@{}lXXXX@{}}
 \toprule
-\textbf{Criterio} & \textbf{Shin et al. (2016)} & \textbf{Menchú López (2025)} & \textbf{Pérez-Pelegrí et al. (2023)} \\
+\textbf{Criterio} & \textbf{Shin et al. (2016)} & \textbf{Menchú López (2025)} & \textbf{Pérez-Pelegrí et al. (2023)} & \textbf{Laurent (2025)} \\
 \midrule
-\textbf{Modelo} & GoogLeNet / AlexNet (Transfer Learning) & CNN / IA Generativa / NLP & U-Net y Modelos de Conjunto (Ensembles) \\
-\textbf{Dataset} & ILD (Pulmón) y ganglios linfáticos & Revisión de 1,016 dispositivos autorizados & MRI Cardíaca (Eje corto) \\
-\textbf{Precisión} & 90.2\% de precisión en clasificación & AUC: 93.2\% (Gliomas) y 89.6\% (Mama) & Alto coeficiente Dice en segmentación \\
-\textbf{Limitaciones} & Escasez de datos médicos anotados & Sesgos algorítmicos y \enquote{AI drift} (deriva) & Sobreajuste en bases de datos pequeñas \\
+\textbf{Modelo} & GoogLeNet / AlexNet (Transfer Learning) & CNN / IA Generativa / NLP & U-Net y Modelos de Conjunto (Ensembles) & Viz.ai, Mirai, Aidoc, GPT-4V \\
+\textbf{Dataset} & ILD (Pulmón) y ganglios linfáticos & Revisión de 1,016 dispositivos autorizados & MRI Cardíaca (Eje corto) & 873 algoritmos FDA; encuesta ESR (572 radiólogos) \\
+\textbf{Precisión} & 90.2\% de precisión en clasificación & AUC: 93.2\% (Gliomas) y 89.6\% (Mama) & Alto coeficiente Dice en segmentación & AUC $>$0.90 (Viz.ai); Sensibilidad $>$90\% (Aidoc) \\
+\textbf{Limitaciones} & Escasez de datos médicos anotados & Sesgos algorítmicos y \enquote{AI drift} (deriva) & Sobreajuste en bases de datos pequeñas & Solo 2\% de adopción plena en EE.UU.; 80\% desconoce regulaciones \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -40,3 +42,5 @@ La siguiente tabla compara los enfoques de los estudios fundamentales analizados
 \subsection{Discusión de Resultados}
 
 Los resultados reportados confirman que la IA no solo es precisa, sino también operativamente transformadora. Estudios clínicos en entornos reales, como el de Northwestern Medicine, han demostrado mejoras de productividad de hasta un 40\% en la generación de informes radiológicos sin pérdida de calidad diagnóstica. Además, se ha probado que las CNN pueden identificar patologías críticas, como el neumotórax, en tiempo real antes de que el radiólogo abra el estudio, priorizando el triaje clínico.
+
+\textcite{Laurent2025} aporta evidencia adicional sobre el impacto clínico: Viz.ai reduce el tiempo de tratamiento en accidentes cerebrovasculares en 66 minutos, y GPT-4V alcanzó un 61\% de precisión en 936 casos del NEJM Image Challenge frente al 49\% de los médicos. Sin embargo, el mismo autor señala que ningún LLM ha sido aprobado por la FDA para uso clínico en radiología, y que el 80\% de los radiólogos europeos desconocen las regulaciones para dispositivos de IA médica, lo que resalta la brecha entre el avance tecnológico y la preparación profesional.
