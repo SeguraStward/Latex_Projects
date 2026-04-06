@@ -1,0 +1,293 @@
+% ============================================================
+%  PRUEBAS DE ALCANCE  (CP-A001 – CP-A016)
+% ============================================================
+\clearpage
+\section{Pruebas de Alcance (User Stories)}
+
+\subsection{CP-A001: US-1 --- Gestión de productos (CRUD completo)}
+\def\cpPasos{%
+  \item Crear el producto con los datos indicados.
+  \item Editar el precio del producto.
+  \item Eliminar el producto (sin ventas asociadas).}
+\def\cpResultadoE{%
+  \item CRUD completo funciona: crear, editar y eliminar.}
+\def\cpResultadoO{El producto se creó, editó y eliminó correctamente. El sistema
+  también previene eliminar productos con ventas asociadas (verificado en CP-I005).}
+\casoprueba
+  {CP-A001}{2026-04-03}{Productos}
+  {US-1: Registrar, editar y eliminar productos}
+  {Alcance}{\estadoAprobado}
+  {\item Usuario autenticado con permiso Administración.}
+  {\item Producto: nombre \texttt{Producto Eliminar}, código \texttt{PRD-DEL-01},
+    precio \CRC{}100.}
+  {Angel Segura Méndez}
+
+\subsection{CP-A002: US-2 --- Gestión de categorías (CRUD completo)}
+\def\cpPasos{%
+  \item Crear categoría ``Prueba''.
+  \item Eliminar la categoría.}
+\def\cpResultadoE{%
+  \item CRUD de categorías funciona correctamente.}
+\def\cpResultadoO{La categoría se creó y eliminó correctamente. Al ingresar un
+  código existente, el sistema actualiza en lugar de duplicar.}
+\casoprueba
+  {CP-A002}{2026-04-03}{Categorías}
+  {US-2: Crear, editar y eliminar categorías}
+  {Alcance}{\estadoAprobado}
+  {\item Usuario autenticado con permiso Administración.}
+  {\item Categoría: nombre \texttt{Prueba}, código \texttt{PRB-001}.}
+  {Angel Segura Méndez}
+
+\subsection{CP-A003: US-3 --- Búsqueda de productos}
+\def\cpPasos{%
+  \item Navegar a Productos.
+  \item Buscar ``pulsera'' por nombre; verificar resultados.
+  \item Buscar ``ARE'' en el buscador.
+  \item Buscar código completo ``ARE-001''.
+  \item Filtrar por categoría ``Artesanías''.}
+\def\cpResultadoE{%
+  \item La búsqueda funciona por nombre y código.}
+\def\cpResultadoO{La búsqueda por nombre y el filtro por categoría funcionan.
+  Sin embargo, \textcolor{rojo}{la búsqueda no encuentra productos por código} ---
+  al buscar ``ARE'' o ``ARE-001'' no retorna resultados. El buscador solo filtra por
+  nombre. (Ver HAL-002)}
+\casoprueba
+  {CP-A003}{2026-04-03}{Productos}
+  {US-3: Buscar productos por nombre y otros filtros}
+  {Alcance}{\estadoParcial}
+  {\item Existen productos en el sistema.}
+  {\item Búsqueda por nombre: ``pulsera'' \arr{} encuentra ``Pulsera Artesanal''.
+   \item Búsqueda por código: ``ARE-001'' \arr{} no encuentra ``Aretes de plata''.
+   \item Filtro por categoría: ``Artesanías'' \arr{} funciona.}
+  {Angel Segura Méndez}
+
+\subsection{CP-A004: US-4 --- Registro de movimientos de inventario}
+\def\cpPasos{%
+  \item Navegar a Inventario.
+  \item Registrar entrada de mercadería.
+  \item Verificar que el stock aumenta.
+  \item Intentar ver el historial de movimientos registrados.}
+\def\cpResultadoE{%
+  \item Se pueden registrar ingresos y ver el historial de movimientos.}
+\def\cpResultadoO{El registro de entradas funciona y el stock se actualiza. Sin embargo,
+  \textcolor{rojo}{no existe opción para ver el historial de movimientos} en el módulo
+  de Inventario. (Ver HAL-003)}
+\casoprueba
+  {CP-A004}{2026-04-03}{Inventario}
+  {US-4: Registrar ingresos de mercadería}
+  {Alcance}{\estadoParcial}
+  {\item Existen productos en el sistema.}
+  {\item Entrada de 10 unidades para ``Aretes de plata''.}
+  {Angel Segura Méndez}
+
+\subsection{CP-A005: US-5 --- Generación de tiquetes de venta}
+\def\cpPasos{%
+  \item Navegar a Ventas \arr{} historial de ventas.
+  \item Seleccionar una venta.
+  \item Usar opción ``Imprimir factura'' o ``Descargar''.}
+\def\cpResultadoE{%
+  \item Se genera el comprobante de venta correctamente.}
+\def\cpResultadoO{El historial de ventas muestra opciones ``Imprimir factura'' y
+  ``Descargar''. El comprobante se generó correctamente con los datos de la venta.}
+\casoprueba
+  {CP-A005}{2026-04-03}{Ventas}
+  {US-5: Generar tiquetes de venta}
+  {Alcance}{\estadoAprobado}
+  {\item Existen ventas registradas en el sistema.}
+  {\item Venta existente en el historial.}
+  {Angel Segura Méndez}
+
+\subsection{CP-A006: US-6 --- Actualización automática del inventario por venta}
+\def\cpPasos{%
+  \item Anotar stock actual de un producto en Inventario.
+  \item Crear y confirmar una venta de 1 unidad de ese producto.
+  \item Verificar el stock en Inventario.}
+\def\cpResultadoE{%
+  \item El stock se reduce automáticamente sin intervención manual.}
+\def\cpResultadoO{El stock se redujo automáticamente al confirmar la venta.
+  No se requirió ninguna acción manual adicional.}
+\casoprueba
+  {CP-A006}{2026-04-03}{Ventas \arr{} Inventario}
+  {US-6: El inventario se actualiza automáticamente al registrar una venta}
+  {Alcance}{\estadoAprobado}
+  {\item Existe un producto con stock disponible.}
+  {\item Producto con stock conocido, venta de 1 unidad.}
+  {Angel Segura Méndez}
+
+\subsection{CP-A007: US-7 --- Registro de emprendimientos y asociación con emprendedoras}
+\def\cpPasos{%
+  \item Crear emprendedora nueva.
+  \item Crear emprendimiento y asociarlo a la emprendedora.
+  \item Verificar que el emprendimiento muestra la emprendedora asociada.
+  \item Editar el emprendimiento y cambiar la emprendedora.}
+\def\cpResultadoE{%
+  \item Los emprendimientos se registran y asocian correctamente con emprendedoras.}
+\def\cpResultadoO{La creación, asociación y edición de emprendimientos con emprendedoras
+  funcionan correctamente.}
+\casoprueba
+  {CP-A007}{2026-04-03}{Emprendimientos \arr{} Emprendedoras}
+  {US-7: Registrar emprendimientos y asociarlos con emprendedoras}
+  {Alcance}{\estadoAprobado}
+  {\item Usuario autenticado con permiso Administración.}
+  {\item Emprendedora creada previamente.
+   \item Emprendimiento nuevo asociado a esa emprendedora.}
+  {Angel Segura Méndez}
+
+\subsection{CP-A008: US-8 --- Consulta y edición de información de asociadas}
+\def\cpPasos{%
+  \item Navegar a Emprendedoras \arr{} editar una emprendedora.
+  \item Modificar el campo teléfono con letras y números mezclados.
+  \item Guardar.}
+\def\cpResultadoE{%
+  \item La edición funciona correctamente.
+  \item El campo teléfono solo acepta números.}
+\def\cpResultadoO{La edición se guardó correctamente. Sin embargo,
+  \textcolor{rojo}{el campo teléfono acepta letras}, lo que no es un formato válido
+  para un número de teléfono. Falta validación de formato. (Ver HAL-005)}
+\casoprueba
+  {CP-A008}{2026-04-03}{Emprendedoras}
+  {US-8: Consultar y editar información de emprendedoras}
+  {Alcance}{\estadoParcial}
+  {\item Existen emprendedoras registradas.}
+  {\item Campo teléfono modificado con valor ``abc123''.}
+  {Angel Segura Méndez}
+
+\subsection{CP-A009: US-9 --- Visualización del estado del inventario}
+\def\cpPasos{%
+  \item Navegar a Inventario.
+  \item Verificar que se ve el stock de todos los productos.
+  \item Buscar indicadores visuales de stock bajo o agotado.}
+\def\cpResultadoE{%
+  \item El inventario muestra el stock actual y destaca visualmente los productos
+        con poco stock.}
+\def\cpResultadoO{El inventario muestra el stock de todos los productos correctamente.
+  Sin embargo, \textcolor{rojo}{no existe indicador visual} para productos con stock
+  bajo dentro del módulo de Inventario. El Dashboard sí muestra ``Stock Bajo: 0'' pero
+  el módulo no diferencia visualmente los productos críticos. (Ver HAL-004)}
+\casoprueba
+  {CP-A009}{2026-04-03}{Inventario}
+  {US-9: Ver estado del inventario e identificar productos con bajo stock}
+  {Alcance}{\estadoParcial}
+  {\item Existen productos con diferentes niveles de stock.}
+  {\item Producto con stock 0 (reducido a 0 durante las pruebas).}
+  {Angel Segura Méndez}
+
+\subsection{CP-A010: US-10 --- Reporte de ventas por rango de fechas}
+\def\cpPasos{%
+  \item Navegar a Reportes.
+  \item Seleccionar fecha inicio y fecha fin libremente.
+  \item Generar reporte.}
+\def\cpResultadoE{%
+  \item El reporte muestra solo las ventas del rango seleccionado.}
+\def\cpResultadoO{Las fechas de inicio y fin son seleccionables libremente. El reporte
+  respetó el rango de fechas y mostró solo las ventas del período seleccionado.}
+\casoprueba
+  {CP-A010}{2026-04-03}{Reportes}
+  {US-10: Generar reportes de ventas por rango de fechas}
+  {Alcance}{\estadoAprobado}
+  {\item Existen ventas registradas en el sistema.}
+  {\item Rango de fechas: incluye 2026-04-03.}
+  {Angel Segura Méndez}
+
+\subsection{CP-A011: US-11 --- Identificación de productos con mayor demanda}
+\def\cpPasos{%
+  \item Navegar a Estadísticas.
+  \item Verificar sección de productos más/menos vendidos.
+  \item Verificar sección de emprendimientos por ingresos.}
+\def\cpResultadoE{%
+  \item Se muestran los productos más y menos vendidos con métricas de cantidad.}
+\def\cpResultadoO{Estadísticas muestra: productos más vendidos y menos vendidos con
+  cantidad vendida, emprendimientos con gráfico de ingresos, e indicador de productos
+  con stock bajo al final de la página.}
+\casoprueba
+  {CP-A011}{2026-04-03}{Estadísticas}
+  {US-11: Ver productos con mayor y menor demanda}
+  {Alcance}{\estadoAprobado}
+  {\item Existen ventas registradas con diferentes productos.}
+  {\item N/A}
+  {Angel Segura Méndez}
+
+\subsection{CP-A012: US-12 --- Reportes por emprendimiento}
+\def\cpPasos{%
+  \item Navegar a Reportes.
+  \item Seleccionar un emprendimiento específico en el filtro.
+  \item Generar el reporte.}
+\def\cpResultadoE{%
+  \item El reporte muestra solo las ventas del emprendimiento seleccionado.}
+\def\cpResultadoO{El módulo de Reportes permite filtrar por emprendimiento. El reporte
+  mostró correctamente solo los datos del emprendimiento seleccionado.}
+\casoprueba
+  {CP-A012}{2026-04-03}{Reportes}
+  {US-12: Filtrar reportes por emprendimiento}
+  {Alcance}{\estadoAprobado}
+  {\item Existen emprendimientos registrados con ventas.}
+  {\item Filtro por emprendimiento específico.}
+  {Francisco Mora Cabezas}
+
+\subsection{CP-A013: US-13 --- Gestión de cuentas de usuario}
+\def\cpPasos{%
+  \item Crear usuarios con diferentes permisos (probado en CP-M005 y CP-I002).
+  \item Editar usuario \texttt{ventas@test.com} --- modificar un dato.
+  \item Verificar lista de usuarios.}
+\def\cpResultadoE{%
+  \item CRUD completo de usuarios funciona incluyendo asignación de permisos.}
+\def\cpResultadoO{La creación, edición y visualización de usuarios funcionan
+  correctamente. Los permisos se aplican correctamente al iniciar sesión.}
+\casoprueba
+  {CP-A013}{2026-04-03}{Usuarios}
+  {US-13: Crear, editar y eliminar cuentas de usuario}
+  {Alcance}{\estadoAprobado}
+  {\item Usuario autenticado con permiso Administración.}
+  {\item Usuarios creados: \texttt{ventas@test.com}, \texttt{admin@test.com}.}
+  {Francisco Mora Cabezas}
+
+\subsection{CP-A014: US-14 --- Gestión por local}
+\def\cpPasos{%
+  \item Revisar todos los módulos del menú buscando gestión de locales.}
+\def\cpResultadoE{%
+  \item Existe un módulo para gestionar locales o puntos de venta.}
+\def\cpResultadoO{\textcolor{rojo}{No existe ningún módulo ni sección para gestión
+  de locales en la interfaz. La User Story US-14 no está implementada en esta versión.}
+  (Ver HAL-006)}
+\casoprueba
+  {CP-A014}{2026-04-03}{---}
+  {US-14: Gestionar información de diferentes locales}
+  {Alcance}{\estadoNoImpl}
+  {\item La aplicación está ejecutándose.}
+  {\item N/A}
+  {Francisco Mora Cabezas}
+
+\subsection{CP-A015: US-15 --- Gestión del contenido del sitio web}
+\def\cpPasos{%
+  \item Navegar a Asociación.
+  \item Verificar si existe sección para gestionar contenido web.}
+\def\cpResultadoE{%
+  \item Existe funcionalidad para gestionar el contenido del sitio web.}
+\def\cpResultadoO{En la sección de Asociación existe una subsección de
+  ``Carruseles Web'' que permite subir imágenes para mostrar en el sitio web.
+  La funcionalidad de gestión de contenido web está disponible.}
+\casoprueba
+  {CP-A015}{2026-04-03}{Asociación}
+  {US-15: Gestionar contenido mostrado en la página web}
+  {Alcance}{\estadoAprobado}
+  {\item Usuario autenticado con permiso Administración.}
+  {\item N/A}
+  {Francisco Mora Cabezas}
+
+\subsection{CP-A016: US-16 --- Destacar productos en la página principal}
+\def\cpPasos{%
+  \item Navegar a Productos.
+  \item Localizar el botón para marcar producto como destacado.
+  \item Activarlo y observar la respuesta del sistema.}
+\def\cpResultadoE{%
+  \item El producto se marca como destacado y se refleja en la página web.}
+\def\cpResultadoO{\textcolor{rojo}{El botón para marcar producto como destacado
+  existe en la interfaz, pero no funciona --- al presionarlo no se realiza ninguna
+  acción visible ni se guarda el cambio.} (Ver HAL-007)}
+\casoprueba
+  {CP-A016}{2026-04-03}{Productos}
+  {US-16: Marcar productos como destacados para la página web}
+  {Alcance}{\estadoFallido}
+  {\item Existen productos en el sistema.}
+  {\item Cualquier producto existente.}
+  {Francisco Mora Cabezas}

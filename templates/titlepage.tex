@@ -1,0 +1,39 @@
+% ==============================================================================
+% DEFAULT TITLEPAGE
+% ==============================================================================
+
+\begin{titlepage}
+    \begin{center}
+        \vspace*{1.5cm}
+        
+        % Logo (uncomment and adjust if you have one)
+        % \includegraphics[width=0.4\textwidth]{figures/logo}\par\vspace{1.5cm}
+        
+        % Main title
+        {\Huge \bfseries \textcolor{primarycolor}{\@title} \par}
+        \vspace{0.5cm}
+        
+        % Subtitle
+        {\Large \itshape \@subtitle \par}
+        \vspace{2cm}
+        
+        % Author block
+        {\Large \bfseries \@author \par}
+        \vspace{0.5cm}
+        
+        % Additional metadata (e.g. institution, course)
+        {\large \@institution \par}
+        \vspace{1cm}
+        
+        % Date
+        {\large \@date \par}
+        
+        \vfill
+        
+        % Bottom block - version or extra details
+        \rule{0.8\textwidth}{0.4pt} \\
+        \vspace{0.2cm}
+        \small{Document ID: \@docid \quad | \quad Version: \@version}
+        
+    \end{center}
+\end{titlepage}

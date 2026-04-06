@@ -1,0 +1,175 @@
+% ============================================================
+%  PRUEBAS MODULARES  (CP-M001 – CP-M009)
+% ============================================================
+\clearpage
+\section{Pruebas Modulares}
+
+\subsection{CP-M001: Categoría creada es asignable a producto}
+\def\cpPasos{%
+  \item Navegar a ``Categorías'' \arr{} nueva categoría.
+  \item Ingresar nombre y código; guardar.
+  \item Navegar a ``Productos'' \arr{} nuevo producto.
+  \item Verificar que la categoría aparece en el selector.}
+\def\cpResultadoE{%
+  \item La categoría recién creada aparece disponible en el formulario de producto.}
+\def\cpResultadoO{La categoría ``Artesanías'' ya existía. Al ingresar código nuevo el
+  sistema la actualizó (código único). Al ir a Productos, la categoría sí apareció
+  disponible en el selector. El sistema previene duplicados por código correctamente.}
+\casoprueba
+  {CP-M001}{2026-04-03}{Categorías \arr{} Productos}
+  {Categoría creada aparece disponible al crear producto}
+  {Modular}{\estadoAprobado}
+  {\item La aplicación está ejecutándose.
+   \item Usuario autenticado con \texttt{test@inventario.local / test123}.}
+  {\item Categoría: nombre \texttt{Artesanías}, código \texttt{ART-001}.}
+  {Francisco Mora Cabezas}
+
+\subsection{CP-M002: Emprendedora creada es asociable a emprendimiento}
+\def\cpPasos{%
+  \item Navegar a ``Emprendedoras'' \arr{} nueva emprendedora.
+  \item Ingresar datos y guardar.
+  \item Navegar a ``Emprendimientos'' \arr{} nuevo emprendimiento.
+  \item Verificar que la emprendedora aparece en el selector.}
+\def\cpResultadoE{%
+  \item La emprendedora recién creada está disponible para asociar al emprendimiento.}
+\def\cpResultadoO{La emprendedora creada apareció disponible en el formulario de
+  emprendimientos correctamente.}
+\casoprueba
+  {CP-M002}{2026-04-03}{Emprendedoras \arr{} Emprendimientos}
+  {Emprendedora creada aparece disponible al crear emprendimiento}
+  {Modular}{\estadoAprobado}
+  {\item La aplicación está ejecutándose.
+   \item Usuario autenticado.}
+  {\item Nueva emprendedora con nombre, apellidos, cédula y correo.}
+  {Francisco Mora Cabezas}
+
+\subsection{CP-M003: Venta registrada reduce stock automáticamente}
+\def\cpPasos{%
+  \item Verificar stock inicial en ``Inventario'': 20.
+  \item Navegar a ``Ventas'' \arr{} nueva venta.
+  \item Agregar ``Pulsera Artesanal'' con cantidad 7.
+  \item Confirmar la venta.
+  \item Volver a ``Inventario'' y verificar nuevo stock.}
+\def\cpResultadoE{%
+  \item Stock pasa de 20 a 13 automáticamente.}
+\def\cpResultadoO{El stock se redujo de 20 a 13 correctamente. La interrelación
+  Ventas \arr{} Inventario funciona.}
+\casoprueba
+  {CP-M003}{2026-04-03}{Ventas \arr{} Inventario}
+  {Registrar venta descuenta stock del producto}
+  {Modular}{\estadoAprobado}
+  {\item La aplicación está ejecutándose.
+   \item Existe producto ``Pulsera Artesanal'' con stock 20.}
+  {\item Producto: Pulsera Artesanal, stock inicial: 20.
+   \item Cantidad vendida: 7.}
+  {Francisco Mora Cabezas}
+
+\subsection{CP-M004: Ingreso de mercadería aumenta stock}
+\def\cpPasos{%
+  \item Navegar a ``Inventario'' \arr{} registrar entrada.
+  \item Seleccionar ``Pulsera Artesanal'', cantidad 10.
+  \item Confirmar el movimiento.
+  \item Verificar nuevo stock.}
+\def\cpResultadoE{%
+  \item Stock sube de 13 a 23.}
+\def\cpResultadoO{El stock subió correctamente de 13 a 23. El módulo de movimientos
+  de inventario actualiza el stock correctamente.}
+\casoprueba
+  {CP-M004}{2026-04-03}{Inventario \arr{} Stock}
+  {Registrar entrada de mercadería aumenta el stock}
+  {Modular}{\estadoAprobado}
+  {\item Producto ``Pulsera Artesanal'' con stock 13 (resultado de CP-M003).}
+  {\item Producto: Pulsera Artesanal.
+   \item Tipo movimiento: Entrada. Cantidad: 10.}
+  {Francisco Mora Cabezas}
+
+\subsection{CP-M005: Control de acceso --- rol Ventas solo ve módulos autorizados}
+\def\cpPasos{%
+  \item Crear usuario \texttt{ventas@test.com} con solo permiso ``Ventas''.
+  \item Cerrar sesión.
+  \item Iniciar sesión con \texttt{ventas@test.com / test123}.
+  \item Observar el menú lateral.}
+\def\cpResultadoE{%
+  \item Solo aparecen módulos de ventas: Inicio, Inventario, Ventas, Estadísticas, Reportes.}
+\def\cpResultadoO{El menú mostró exactamente 5 secciones: Inicio, Inventario, Ventas,
+  Estadísticas y Reportes. Los módulos Usuarios, Productos, Categorías, Emprendimientos,
+  Emprendedoras, Actividades y Asociación no son visibles.}
+\casoprueba
+  {CP-M005}{2026-04-03}{Usuarios \arr{} Permisos \arr{} Navegación}
+  {Control de acceso: rol Ventas solo ve módulos autorizados}
+  {Modular}{\estadoAprobado}
+  {\item La aplicación está ejecutándose.}
+  {\item Usuario nuevo: \texttt{ventas@test.com / test123}.
+   \item Permisos: solo ``Ventas''.}
+  {Francisco Mora Cabezas}
+
+\subsection{CP-M006: Producto inactivo sigue visible en módulo de Ventas}
+\def\cpPasos{%
+  \item Navegar a ``Productos'' \arr{} editar un producto \arr{} estado a inactivo.
+  \item Navegar a ``Ventas'' \arr{} nueva venta.
+  \item Buscar el producto inactivo en el selector.}
+\def\cpResultadoE{%
+  \item El producto inactivo NO aparece disponible para seleccionar en ventas.}
+\def\cpResultadoO{\textcolor{rojo}{El producto inactivo SÍ aparece disponible en el
+  selector de ventas. Bug: el filtro de productos activos no se aplica en el módulo
+  de ventas.} (Ver HAL-001)}
+\casoprueba
+  {CP-M006}{2026-04-03}{Productos \arr{} Ventas}
+  {Producto inactivo no debería estar disponible para venta}
+  {Modular}{\estadoFallido}
+  {\item La aplicación está ejecutándose.
+   \item Existe un producto activo en el sistema.}
+  {\item Producto marcado como inactivo.}
+  {Francisco Mora Cabezas}
+
+\subsection{CP-M007: Reporte filtra ventas por rango de fechas}
+\def\cpPasos{%
+  \item Navegar a ``Reportes''.
+  \item Seleccionar rango de fechas que incluya hoy.
+  \item Generar reporte.}
+\def\cpResultadoE{%
+  \item El reporte incluye las ventas realizadas hoy durante las pruebas.}
+\def\cpResultadoO{Las ventas realizadas durante las pruebas aparecieron correctamente
+  en el reporte del periodo seleccionado.}
+\casoprueba
+  {CP-M007}{2026-04-03}{Ventas \arr{} Reportes}
+  {Reporte muestra ventas del rango de fechas seleccionado}
+  {Modular}{\estadoAprobado}
+  {\item Existen ventas registradas hoy (2026-04-03) por las pruebas anteriores.}
+  {\item Rango de fechas: incluye 2026-04-03.}
+  {Francisco Mora Cabezas}
+
+\subsection{CP-M008: Estadísticas muestran productos más vendidos}
+\def\cpPasos{%
+  \item Navegar a ``Estadísticas''.
+  \item Verificar si aparece ``Pulsera Artesanal'' como producto vendido.}
+\def\cpResultadoE{%
+  \item Estadísticas reflejan la venta de Pulsera Artesanal.}
+\def\cpResultadoO{``Pulsera Artesanal'' apareció en estadísticas correctamente.
+  El módulo refleja las ventas realizadas.}
+\casoprueba
+  {CP-M008}{2026-04-03}{Ventas \arr{} Estadísticas}
+  {Estadísticas reflejan productos vendidos}
+  {Modular}{\estadoAprobado}
+  {\item Existen ventas registradas en el sistema.}
+  {\item Producto vendido: Pulsera Artesanal (7 unidades en CP-M003).}
+  {Francisco Mora Cabezas}
+
+\subsection{CP-M009: Sincronización exitosa con Supabase}
+\def\cpPasos{%
+  \item Localizar el botón de sincronización (barra superior).
+  \item Presionar el botón de sincronización.
+  \item Observar el mensaje resultante.}
+\def\cpResultadoE{%
+  \item El sistema indica que la sincronización fue exitosa.}
+\def\cpResultadoO{El sistema mostró el mensaje: ``la sincronización con la página web
+  fue exitosa''. La interrelación entre el sistema local y Supabase funciona correctamente.}
+\casoprueba
+  {CP-M009}{2026-04-03}{Sincronización \arr{} Supabase}
+  {Sincronización con página web se ejecuta correctamente}
+  {Modular}{\estadoAprobado}
+  {\item La aplicación está ejecutándose.
+   \item Usuario tiene permiso de sincronización.
+   \item Conexión a internet disponible.}
+  {\item N/A}
+  {Francisco Mora Cabezas}

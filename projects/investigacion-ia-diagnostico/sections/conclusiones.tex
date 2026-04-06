@@ -3,29 +3,21 @@
 % =============================================================================
 \section{Conclusiones}
 
-% Síntesis de hallazgos
 \subsection{Síntesis de hallazgos}
 
-El aprendizaje profundo ha pasado de ser experimental a una herramienta con evidencia sólida de eficacia clínica. Las CNN pueden igualar o superar el rendimiento humano en diagnóstico radiológico, alcanzando un AUC del 93.2\% en clasificación de gliomas y del 89.6\% en detección de cáncer de mama. U-Net se ha consolidado como estándar para segmentación y el aprendizaje por transferencia ha permitido superar la escasez de datos médicos anotados. A mediados de 2025, 873 algoritmos de IA en radiología han sido autorizados por la FDA, representando el 78\% de todas las autorizaciones de IA médica \parencite{Laurent2025}.
+Las CNN han demostrado eficacia clínica comprobada: AUC del 93.2\% en clasificación de gliomas, 89.6\% en detección de cáncer de mama y sensibilidad superior al 90\% en hemorragias intracraneales. U-Net se ha consolidado como estándar para segmentación y el aprendizaje por transferencia desde ImageNet ha permitido superar la escasez de datos médicos. A mediados de 2025, 873 algoritmos de IA en radiología han sido autorizados por la FDA \parencite{Laurent2025}.
 
-% Valoración crítica del equipo
-\subsection{Valoración crítica del equipo}
+\subsection{Valoración crítica}
 
-Pese a la alta precisión, la implementación masiva enfrenta desafíos críticos. El problema de la \enquote{Caja Negra} persiste como barrera para la confianza clínica, por lo que consideramos imperativo adoptar la IA como \enquote{Inteligencia Aumentada}: un copiloto que complementa al especialista sin reemplazar su autonomía diagnóstica.
+Pese a la alta precisión, la adopción plena apenas alcanza el 2\% en EE.UU. El problema de la ``Caja Negra'' persiste como barrera de confianza, y los sesgos algorítmicos por falta de diversidad en los datos podrían perpetuar desigualdades. La IA debe funcionar como Inteligencia Aumentada: un copiloto que complementa al especialista.
 
-Además, muchos modelos heredan sesgos algorítmicos por falta de diversidad en los datos, lo que podría perpetuar desigualdades en poblaciones marginadas. La \enquote{Deriva de la IA}, donde el rendimiento decae por cambios en equipos o protocolos, exige marcos de gobernanza con monitoreo continuo y recalibración periódica.
-
-% Perspectivas futuras del área
-\subsection{Perspectivas futuras del área}
-
-Las fronteras de investigación se centran en las siguientes tendencias:
+\subsection{Perspectivas futuras}
 
 \begin{enumerate}
-    \item \textbf{IA Explicable (XAI)}: Sistemas que permitan comprender qué regiones de la imagen influyeron en el diagnóstico, eliminando el efecto de caja negra.
-    \item \textbf{Modelos Fundacionales y Multimodales}: Transición hacia modelos generales (como MedSAM) entrenados en conjuntos multimodales que integran imagen, historial clínico y resultados de laboratorio para diagnósticos transversales \parencite{Laurent2025}.
-    \item \textbf{IA Adaptativa}: Marcos regulatorios como los planes de control de cambios predeterminados de la FDA permitirían que los modelos se actualicen sin requerir una nueva autorización completa.
-    \item \textbf{Aprendizaje Federado}: Entrenamiento en redes de múltiples hospitales sin que los datos privados salgan de su institución de origen.
-    \item \textbf{IA orientada al paciente}: Explicaciones personalizadas y recordatorios de seguimiento, así como planificación quirúrgica con reconstrucciones 3D y realidad virtual.
+    \item \textbf{IA Explicable (XAI)}: Comprender qué regiones de la imagen influyeron en el diagnóstico.
+    \item \textbf{Modelos Multimodales}: Integración de imagen, historial clínico y laboratorio para diagnósticos transversales \parencite{Laurent2025}.
+    \item \textbf{IA Adaptativa}: Marcos regulatorios que permitan actualizar modelos sin requerir una nueva autorización completa.
+    \item \textbf{Aprendizaje Federado}: Entrenamiento distribuido entre hospitales sin compartir datos privados.
 \end{enumerate}
 
-En conclusión, la IA en radiología se encuentra en fase de expansión donde la colaboración entre radiólogos, desarrolladores y reguladores será decisiva para una implementación equitativa, segura y efectiva.
+La colaboración entre radiólogos, desarrolladores y reguladores será decisiva para una implementación equitativa, segura y efectiva.

@@ -1,0 +1,202 @@
+% ============================================================
+%  PRUEBAS UNITARIAS  (CP-U001 – CP-U010)
+% ============================================================
+\clearpage
+\section{Pruebas Unitarias}
+
+\subsection{CP-U001: Login exitoso con credenciales válidas}
+\def\cpPasos{%
+  \item Abrir la aplicación.
+  \item Ingresar correo: \texttt{test@inventario.local}
+  \item Ingresar contraseña: \texttt{test123}
+  \item Hacer clic en ``Iniciar sesión''.}
+\def\cpResultadoE{%
+  \item El sistema autentica al usuario y muestra el Dashboard con el menú lateral completo.}
+\def\cpResultadoO{La app cargó correctamente. El menú lateral muestra todos los módulos:
+  Inicio, Inventario, Ventas, Estadísticas, Usuarios, Reportes, Productos,
+  Categorías, Emprendimientos, Emprendedoras, Actividades y Asociación.}
+\casoprueba
+  {CP-U001}{2026-04-03}{Autenticación}
+  {Login exitoso con credenciales válidas}
+  {Unitaria}{\estadoAprobado}
+  {\item La aplicación está ejecutándose.
+   \item El usuario \texttt{test@inventario.local} existe con contraseña \texttt{test123}.}
+  {\item Correo: \texttt{test@inventario.local}
+   \item Contraseña: \texttt{test123}}
+  {Angel Segura Méndez}
+
+\subsection{CP-U002: Login fallido --- contraseña incorrecta}
+\def\cpPasos{%
+  \item Cerrar sesión.
+  \item Ingresar correo: test@inventario.local
+  \item Ingresar contraseña: \texttt{wrongpassword}
+  \item Hacer clic en ``Iniciar sesión''.}
+\def\cpResultadoE{%
+  \item El sistema muestra un mensaje de error.
+  \item No redirige al dashboard.}
+\def\cpResultadoO{El sistema mostró el mensaje: ``el usuario o contraseña son incorrectos''.
+  No redirigió al dashboard.}
+\casoprueba
+  {CP-U002}{2026-04-03}{Autenticación}
+  {Login fallido --- contraseña incorrecta}
+  {Unitaria}{\estadoAprobado}
+  {\item La aplicación está ejecutándose.
+   \item El usuario \texttt{test@inventario.local} existe en la BD.}
+  {\item Correo: \texttt{test@inventario.local}
+   \item Contraseña: \texttt{wrongpassword}}
+  {Angel Segura Méndez}
+
+\subsection{CP-U003: Login fallido --- correo no registrado}
+\def\cpPasos{%
+  \item Cerrar sesión.
+  \item Ingresar correo: \texttt{noexiste@test.com}
+  \item Ingresar contraseña: \texttt{test123}
+  \item Hacer clic en ``Iniciar sesión''.}
+\def\cpResultadoE{%
+  \item El sistema muestra un mensaje de error.
+  \item No redirige al dashboard.}
+\def\cpResultadoO{El sistema mostró el mensaje: ``el usuario o contraseña son incorrectos''.
+  No redirigió al dashboard.}
+\casoprueba
+  {CP-U003}{2026-04-03}{Autenticación}
+  {Login fallido --- correo no registrado}
+  {Unitaria}{\estadoAprobado}
+  {\item La aplicación está ejecutándose.
+   \item El correo \texttt{noexiste@test.com} NO existe en la BD.}
+  {\item Correo: \texttt{noexiste@test.com}
+   \item Contraseña: \texttt{test123}}
+  {Angel Segura Méndez}
+
+\subsection{CP-U004: Validación de campos obligatorios en nueva categoría}
+\def\cpPasos{%
+  \item Navegar a ``Categorías''.
+  \item Hacer clic en ``Nueva categoría''.
+  \item Dejar todos los campos vacíos.
+  \item Intentar guardar.}
+\def\cpResultadoE{%
+  \item El formulario no se envía.
+  \item Muestra indicación de campos requeridos.}
+\def\cpResultadoO{El formulario mostró mensajes en los campos indicando que son requeridos.
+  No se envió el formulario.}
+\casoprueba
+  {CP-U004}{2026-04-03}{Categorías}
+  {Validación de campos obligatorios en nueva categoría}
+  {Unitaria}{\estadoAprobado}
+  {\item La aplicación está ejecutándose.
+   \item Usuario autenticado con \texttt{test@inventario.local / test123}.}
+  {\item Nombre: \textit{(vacío)}
+   \item Código: \textit{(vacío)}}
+  {Angel Segura Méndez}
+
+\subsection{CP-U005: Validación --- precio no puede ser negativo}
+\def\cpPasos{%
+  \item Navegar a ``Productos''.
+  \item Hacer clic en nuevo producto.
+  \item Ingresar nombre, código y precio $-500$.
+  \item Intentar guardar.}
+\def\cpResultadoE{%
+  \item El sistema rechaza el precio negativo con un mensaje de error.}
+\def\cpResultadoO{El sistema mostró el mensaje: ``intenta agregar un precio de venta válido''.
+  No se guardó el producto.}
+\casoprueba
+  {CP-U005}{2026-04-03}{Productos}
+  {Validación: precio no puede ser negativo}
+  {Unitaria}{\estadoAprobado}
+  {\item La aplicación está ejecutándose.
+   \item Usuario autenticado.
+   \item Existe al menos una categoría y un emprendimiento en el sistema.}
+  {\item Nombre: ``Producto Test Negativo''
+   \item Código: ``PRD-NEG-01''
+   \item Precio: $-500$}
+  {Angel Segura Méndez}
+
+\subsection{CP-U006: El stock se gestiona en Inventario, no en Productos}
+\def\cpPasos{%
+  \item Navegar a ``Productos'' \arr{} Nuevo producto.
+  \item Observar los campos disponibles en el formulario.}
+\def\cpResultadoE{%
+  \item Exploración del diseño del módulo.}
+\def\cpResultadoO{El formulario de productos no incluye campo de stock. El stock se
+  administra en el módulo de \textbf{Inventario} mediante movimientos. Corresponde a
+  un diseño correcto: el stock se controla mediante entradas y salidas, no editándolo
+  directamente.}
+\casoprueba
+  {CP-U006}{2026-04-03}{Productos / Inventario}
+  {El stock no se ingresa en el formulario de producto}
+  {Unitaria}{\estadoObs}
+  {\item La aplicación está ejecutándose.
+   \item Usuario autenticado.}
+  {\item Formulario de creación de nuevo producto.}
+  {Angel Segura Méndez}
+
+\subsection{CP-U007: Total de venta calculado correctamente}
+\def\cpPasos{%
+  \item Navegar a ``Ventas'' \arr{} Nueva venta.
+  \item Seleccionar un producto.
+  \item Ingresar cantidad 3.
+  \item Observar el total calculado automáticamente.}
+\def\cpResultadoE{%
+  \item Total = precio unitario $\times$ 3.}
+\def\cpResultadoO{El sistema calculó correctamente. Precio unitario \CRC{}12,
+  cantidad 3, total \CRC{}36.}
+\casoprueba
+  {CP-U007}{2026-04-03}{Ventas}
+  {Total de venta calculado correctamente con un producto}
+  {Unitaria}{\estadoAprobado}
+  {\item La aplicación está ejecutándose.
+   \item Existe al menos un producto con precio conocido.}
+  {\item Producto existente con precio conocido.
+   \item Cantidad: 3.}
+  {Angel Segura Méndez}
+
+\subsection{CP-U008: Cerrar sesión redirige al login}
+\def\cpPasos{%
+  \item Hacer clic en el botón de cerrar sesión.
+  \item Observar si redirige a la pantalla de login.}
+\def\cpResultadoE{%
+  \item La sesión se cierra y la app muestra la pantalla de login.}
+\def\cpResultadoO{Verificado durante las pruebas CP-U002 y CP-U003. El logout
+  funcionó correctamente y redirigió al login en ambas ocasiones.}
+\casoprueba
+  {CP-U008}{2026-04-03}{Autenticación}
+  {Cerrar sesión redirige al login}
+  {Unitaria}{\estadoAprobado}
+  {\item Usuario autenticado en la aplicación.}
+  {\item N/A}
+  {Angel Segura Méndez}
+
+\subsection{CP-U009: Pantalla de inicio carga correctamente}
+\def\cpPasos{%
+  \item Iniciar sesión.
+  \item Observar la pantalla de Inicio/Dashboard.
+  \item Verificar si muestra métricas (ventas, productos, stock bajo, etc.).}
+\def\cpResultadoE{%
+  \item El dashboard muestra métricas del sistema sin errores.}
+\def\cpResultadoO{El dashboard mostró: Total Productos: 5, Productos Activos: 5,
+  Ventas Mensuales: \CRC{}24,000, Stock Bajo: 0. También mostró sección de acciones
+  rápidas. Sin errores.}
+\casoprueba
+  {CP-U009}{2026-04-03}{Dashboard (Inicio)}
+  {Pantalla de inicio carga correctamente}
+  {Unitaria}{\estadoAprobado}
+  {\item Usuario autenticado.}
+  {\item N/A}
+  {Angel Segura Méndez}
+
+\subsection{CP-U010: No se puede guardar venta sin productos}
+\def\cpPasos{%
+  \item Navegar a ``Ventas'' \arr{} Nueva venta.
+  \item No agregar ningún producto.
+  \item Intentar guardar/confirmar la venta.}
+\def\cpResultadoE{%
+  \item El sistema muestra error indicando que la venta debe tener al menos un producto.}
+\def\cpResultadoO{El sistema mostró el mensaje: ``debemos agregar al menos una venta''.
+  No guardó la venta vacía.}
+\casoprueba
+  {CP-U010}{2026-04-03}{Ventas}
+  {No se puede guardar venta sin productos}
+  {Unitaria}{\estadoAprobado}
+  {\item La aplicación está ejecutándose.
+   \item Usuario autenticado.}
+  {\item Formulario de venta vacío (sin productos agregados).}
+  {Angel Segura Méndez}

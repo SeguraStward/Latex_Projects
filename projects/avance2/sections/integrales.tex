@@ -1,0 +1,171 @@
+% ============================================================
+%  PRUEBAS INTEGRALES  (CP-I001 – CP-I008)
+% ============================================================
+ 
+\section{Pruebas Integrales}
+
+\subsection{CP-I001: Flujo completo --- crear producto y venderlo}
+\def\cpPasos{%
+  \item Crear categoría ``Bisutería'' (código BIS-001).
+  \item Crear producto ``Aretes de plata'' asociado a la categoría, precio \CRC{}2500.
+  \item Intentar vender sin stock; observar respuesta.
+  \item Registrar entrada de 10 unidades en Inventario.
+  \item Crear venta de 2 unidades de ``Aretes de plata''.
+  \item Verificar stock final en Inventario.}
+\def\cpResultadoE{%
+  \item Stock final = 8 (10 entrada $-$ 2 venta).
+  \item Sistema bloquea venta sin stock.}
+\def\cpResultadoO{Al intentar vender con stock 0, el sistema mostró error ``stock
+  insuficiente para el movimiento''. Luego de registrar 10 unidades, la venta de 2
+  unidades se completó correctamente. Stock final = 8. Flujo completo funcionó.}
+\casoprueba
+  {CP-I001}{2026-04-03}{Categorías \arr{} Productos \arr{} Inventario \arr{} Ventas}
+  {Flujo completo de creación de producto hasta venta}
+  {Integral}{\estadoAprobado}
+  {\item La aplicación está ejecutándose.
+   \item Usuario autenticado con \texttt{test@inventario.local / test123}.}
+  {\item Categoría: Bisutería, código BIS-001.
+   \item Producto: Aretes de plata, código ARE-001, precio \CRC{}2500.
+   \item Entrada de stock: 10 unidades. Venta: 2 unidades.}
+  {Angel Segura Méndez}
+
+\subsection{CP-I002: Flujo completo --- crear usuario, asignar permisos y verificar acceso}
+\def\cpPasos{%
+  \item Navegar a ``Usuarios'' \arr{} crear nuevo usuario con los datos indicados.
+  \item Asignar solo permiso ``Administración''.
+  \item Guardar usuario.
+  \item Cerrar sesión.
+  \item Iniciar sesión con \texttt{admin@test.com / test123}.
+  \item Verificar módulos disponibles en el menú.}
+\def\cpResultadoE{%
+  \item Menú muestra solo módulos administrativos.
+  \item No muestra Ventas, Estadísticas ni Reportes.}
+\def\cpResultadoO{El menú mostró exactamente 7 módulos: Inicio, Productos, Categorías,
+  Emprendimientos, Emprendedoras, Actividades y Asociación. Los módulos de ventas no
+  aparecieron. El sistema aplicó correctamente los permisos asignados.}
+\casoprueba
+  {CP-I002}{2026-04-03}{Usuarios \arr{} Permisos \arr{} Autenticación \arr{} Navegación}
+  {Flujo completo de gestión de usuario con permisos}
+  {Integral}{\estadoAprobado}
+  {\item La aplicación está ejecutándose.
+   \item Usuario administrador autenticado.}
+  {\item Usuario: Ana Prueba, correo \texttt{admin@test.com}, contraseña \texttt{test123}.
+   \item Permiso asignado: solo Administración.}
+  {Angel Segura Méndez}
+
+\subsection{CP-I003: Flujo completo --- generación y exportación de reporte PDF}
+\def\cpPasos{%
+  \item Navegar a ``Reportes''.
+  \item Seleccionar rango de fechas que incluya hoy.
+  \item Generar el reporte.
+  \item Exportar a PDF.}
+\def\cpResultadoE{%
+  \item El PDF se genera correctamente con los datos de ventas del período.}
+\def\cpResultadoO{El reporte se generó y el PDF se exportó correctamente.}
+\casoprueba
+  {CP-I003}{2026-04-03}{Ventas \arr{} Reportes \arr{} PDF}
+  {Generación y exportación de reporte de ventas en PDF}
+  {Integral}{\estadoAprobado}
+  {\item La aplicación está ejecutándose.
+   \item Existen ventas registradas en el sistema.}
+  {\item Rango de fechas: incluye 2026-04-03.}
+  {Angel Segura Méndez}
+
+\subsection{CP-I004: Flujo completo --- crear actividad/taller}
+\def\cpPasos{%
+  \item Navegar a ``Actividades'' \arr{} nueva actividad.
+  \item Ingresar título ``Taller de tejido'', tipo y fecha inicio.
+  \item Guardar.
+  \item Verificar que aparece en la lista de actividades.}
+\def\cpResultadoE{%
+  \item La actividad ``Taller de tejido'' aparece en la lista.}
+\def\cpResultadoO{La actividad se creó y apareció correctamente en la lista de actividades.}
+\casoprueba
+  {CP-I004}{2026-04-03}{Actividades}
+  {Crear actividad y verificar que aparece en la lista}
+  {Integral}{\estadoAprobado}
+  {\item La aplicación está ejecutándose.
+   \item Usuario autenticado.}
+  {\item Título: Taller de tejido.
+   \item Tipo: Taller. Fecha inicio: 2026-04-03.}
+  {Angel Segura Méndez}
+
+\subsection{CP-I005: Editar producto y verificar protección de integridad al eliminar}
+\def\cpPasos{%
+  \item Navegar a ``Productos'' \arr{} editar ``Aretes de plata''.
+  \item Cambiar precio a \CRC{}3000.
+  \item Guardar y verificar que el precio se actualizó en la lista.
+  \item Intentar eliminar ``Aretes de plata''.}
+\def\cpResultadoE{%
+  \item La edición funciona correctamente.
+  \item La eliminación falla con mensaje por registros asociados.}
+\def\cpResultadoO{El precio se actualizó correctamente a \CRC{}3000. Al intentar
+  eliminar, el sistema mostró: ``no se puede eliminar porque tiene registros asociados''.
+  La integridad referencial funciona correctamente.}
+\casoprueba
+  {CP-I005}{2026-04-03}{Productos}
+  {Editar producto y verificar protección de integridad al eliminar}
+  {Integral}{\estadoAprobado}
+  {\item Existe el producto ``Aretes de plata'' con ventas asociadas.}
+  {\item Producto: Aretes de plata. Nuevo precio: \CRC{}3000.}
+  {Angel Segura Méndez}
+
+\subsection{CP-I006: Edición de información de la Asociación}
+\def\cpPasos{%
+  \item Navegar a ``Asociación''.
+  \item Verificar que hay información cargada.
+  \item Editar el campo de Misión.
+  \item Guardar los cambios.
+  \item Verificar que el cambio persiste.}
+\def\cpResultadoE{%
+  \item La información se actualiza y persiste correctamente.}
+\def\cpResultadoO{Había información cargada en el módulo. El cambio en la misión
+  se guardó correctamente.}
+\casoprueba
+  {CP-I006}{2026-04-03}{Asociación}
+  {Editar y guardar información de la asociación}
+  {Integral}{\estadoAprobado}
+  {\item La aplicación está ejecutándose.
+   \item Existe información de la asociación cargada.}
+  {\item Campo editado: Misión (texto modificado).}
+  {Angel Segura Méndez}
+
+\subsection{CP-I007: Búsqueda y filtro de productos}
+\def\cpPasos{%
+  \item Navegar a ``Productos''.
+  \item Buscar por texto ``pulsera''.
+  \item Verificar resultados.
+  \item Filtrar por categoría ``Artesanías''.
+  \item Verificar resultados del filtro.}
+\def\cpResultadoE{%
+  \item La búsqueda y el filtro muestran solo los productos que coinciden.}
+\def\cpResultadoO{Tanto la búsqueda por nombre ``pulsera'' como el filtro por
+  categoría ``Artesanías'' funcionaron correctamente, mostrando solo los productos
+  correspondientes.}
+\casoprueba
+  {CP-I007}{2026-04-03}{Productos}
+  {Búsqueda por nombre y filtro por categoría funcionan correctamente}
+  {Integral}{\estadoAprobado}
+  {\item Existen productos en el sistema, incluyendo ``Pulsera Artesanal''.
+   \item Existe la categoría ``Artesanías'' con productos asociados.}
+  {\item Búsqueda: ``pulsera''. Filtro por categoría: Artesanías.}
+  {Angel Segura Méndez}
+
+\subsection{CP-I008: Backup de la base de datos}
+\def\cpPasos{%
+  \item Localizar la opción de Backup en el menú.
+  \item Ejecutar el backup.
+  \item Seleccionar carpeta de destino.
+  \item Verificar que el archivo se generó.}
+\def\cpResultadoE{%
+  \item El sistema genera el archivo de respaldo SQLite en la carpeta seleccionada.}
+\def\cpResultadoO{El sistema solicitó la carpeta de destino y generó el respaldo de
+  la base de datos SQLite correctamente.}
+\casoprueba
+  {CP-I008}{2026-04-03}{Backup}
+  {Generación de respaldo de la base de datos SQLite}
+  {Integral}{\estadoAprobado}
+  {\item La aplicación está ejecutándose.
+   \item Usuario autenticado con permisos suficientes.}
+  {\item Carpeta de destino seleccionada por el usuario.}
+  {Angel Segura Méndez}

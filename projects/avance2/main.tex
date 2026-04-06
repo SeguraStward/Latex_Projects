@@ -1,0 +1,72 @@
+\documentclass[12pt,letterpaper]{article}
+
+%% ── Paquetes ──────────────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[spanish]{babel}
+\usepackage[top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm,headheight=15pt]{geometry}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{etoolbox}
+
+%% ── Macros, colores, longitudes y templates reutilizables ────────────────────
+\input{sections/macros}
+
+%% ═══════════════════════════════════════════════════════════════════════════════
+\begin{document}
+\setcounter{tocdepth}{1}
+%% ═══════════════════════════════════════════════════════════════════════════════
+
+%% ── PORTADA ───────────────────────────────────────────────────────────────────
+\thispagestyle{empty}
+\begin{center}
+  \vspace*{1cm}
+  \includegraphics[width=5cm]{pruebas/Logo-UNA-Rojo_FondoTransparente.png}
+  \vspace{1cm}
+
+  {\LARGE\bfseries Universidad Nacional}\\[0.3cm]
+  {\large Sede Región Brunca}\\[0.3cm]
+  {\large Ingeniería en Sistemas de Información}
+
+  \vspace{1.5cm}
+  {\LARGE\bfseries Seguimiento Parte II}\\[0.3cm]
+  {\Large Pruebas a Proyecto Asignado}
+
+  \vspace{1.8cm}
+  \renewcommand{\arraystretch}{1.6}
+  \begin{tabular}{rl}
+    \textbf{Curso:}        & Ingeniería en Sistemas III \\
+    \textbf{Profesora:}    & Saray Castro Mora \\[0.3cm]
+    \textbf{Responsables:} & Angel Segura Méndez \\
+                           & Francisco Mora Cabezas \\[0.3cm]
+    \textbf{Fecha:}        & 3 de abril de 2026 \\
+  \end{tabular}
+  \vfill
+\end{center}
+\newpage
+
+%% ── TABLA DE CONTENIDOS ───────────────────────────────────────────────────────
+\tableofcontents
+\newpage
+
+%% ── SECCIONES ─────────────────────────────────────────────────────────────────
+\input{sections/entorno}
+\input{sections/resumen}
+\input{sections/modulos}
+\input{sections/unitarias}
+\input{sections/modulares}
+\input{sections/integrales}
+\input{sections/alcance}
+\input{sections/hallazgos}
+
+\end{document}

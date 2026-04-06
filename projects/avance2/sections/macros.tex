@@ -1,0 +1,197 @@
+%% ════════════════════════════════════════════════════════════════════════════
+%%  macros.tex — Definiciones reutilizables para casos de prueba
+%%  Incluir en el preámbulo de main.tex con \input{sections/macros}
+%% ════════════════════════════════════════════════════════════════════════════
+
+%% ── Símbolo del colón costarricense ─────────────────────────────────────────
+\newcommand{\CRC}{\textit{c}/}
+
+%% ── Flecha modular ───────────────────────────────────────────────────────────
+\newcommand{\arr}{\ensuremath{\rightarrow}}
+
+%% ── Colores ──────────────────────────────────────────────────────────────────
+\definecolor{headerblue}{RGB}{31,73,125}
+\definecolor{grisheader}{RGB}{195,195,195}
+\definecolor{rowgray}{RGB}{235,235,235}
+\definecolor{verde}{RGB}{0,130,0}
+\definecolor{rojo}{RGB}{185,0,0}
+\definecolor{naranja}{RGB}{195,95,0}
+
+%% ── Estados de caso de prueba ────────────────────────────────────────────────
+\newcommand{\estadoAprobado}{\textcolor{verde}{\textbf{Aprobado}}}
+\newcommand{\estadoFallido}{\textcolor{rojo}{\textbf{Fallido}}}
+\newcommand{\estadoParcial}{\textcolor{naranja}{\textbf{Parcial}}}
+\newcommand{\estadoNoImpl}{\textcolor{gray}{\textbf{No implementado}}}
+\newcommand{\estadoObs}{\textcolor{blue}{\textbf{Observación}}}
+
+%% ── Severidad de hallazgos ───────────────────────────────────────────────────
+\newcommand{\sevAlta}{\textcolor{rojo}{\textbf{Alta}}}
+\newcommand{\sevMedia}{\textcolor{naranja}{\textbf{Media}}}
+\newcommand{\sevBaja}{\textcolor{olive}{\textbf{Baja}}}
+
+%% ── Configuración de hyperlinks ──────────────────────────────────────────────
+\hypersetup{colorlinks=true, linkcolor=headerblue, urlcolor=headerblue}
+
+%% ── Encabezado y pie de página ───────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Universidad Nacional --- Sede Región Brunca}
+\fancyhead[R]{\small Ingeniería en Sistemas III}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+%% ── Formato de secciones ─────────────────────────────────────────────────────
+\titleformat{\section}{\large\bfseries\color{headerblue}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{headerblue}}{}{0em}{}
+
+%% ── Espaciado global de tablas y listas ──────────────────────────────────────
+\setlength{\tabcolsep}{8pt}
+\renewcommand{\arraystretch}{1.65}
+\setlength{\emergencystretch}{3em}
+\setlist{topsep=3pt, itemsep=2pt, parsep=0pt, partopsep=0pt, leftmargin=1.8em}
+
+%% ── Longitudes calculadas para las tablas de casos de prueba ─────────────────
+%%
+%%  Tabla 3 columnas: |p{CPcolA}|p{CPcolB}|p{CPcolC}|
+%%    multicolumn(3) → CPmcw   = textwidth − 2×tabcolsep − 2×arrayrulewidth
+%%    multicolumn(2) → CPtipoW = CPcolA + CPcolB + 2×tabcolsep + arrayrulewidth
+%%    Pasos/Result   → CPhalfW ≈ CPmcw/2 − tabcolsep − arrayrulewidth/2
+%%  Tabla hallazgo 2 columnas: |p{CPcolA}|p{HALcolB}|
+%%
+\newlength{\CPcolA}\setlength{\CPcolA}{2.4cm}
+\newlength{\CPcolB}\setlength{\CPcolB}{3.3cm}
+\newlength{\CPcolC}
+\newlength{\CPmcw}
+\newlength{\CPtipoW}
+\newlength{\CPhalfW}
+\newlength{\HALcolB}
+
+\AtBeginDocument{%
+  \setlength{\CPcolC}{\textwidth}%
+    \addtolength{\CPcolC}{-\CPcolA}%
+    \addtolength{\CPcolC}{-\CPcolB}%
+    \addtolength{\CPcolC}{-6\tabcolsep}%
+    \addtolength{\CPcolC}{-4\arrayrulewidth}%
+  \setlength{\CPmcw}{\textwidth}%
+    \addtolength{\CPmcw}{-2\tabcolsep}%
+    \addtolength{\CPmcw}{-2\arrayrulewidth}%
+    \addtolength{\CPmcw}{-2pt}%
+  \setlength{\CPtipoW}{\CPcolA}%
+    \addtolength{\CPtipoW}{\CPcolB}%
+    \addtolength{\CPtipoW}{2\tabcolsep}%
+    \addtolength{\CPtipoW}{\arrayrulewidth}%
+  \setlength{\HALcolB}{\textwidth}%
+    \addtolength{\HALcolB}{-\CPcolA}%
+    \addtolength{\HALcolB}{-4\tabcolsep}%
+    \addtolength{\HALcolB}{-3\arrayrulewidth}%
+    \addtolength{\HALcolB}{-2pt}%
+  \setlength{\CPhalfW}{0.5\CPmcw}%
+    \addtolength{\CPhalfW}{-\tabcolsep}%
+    \addtolength{\CPhalfW}{-0.5\arrayrulewidth}%
+    \addtolength{\CPhalfW}{-3pt}%
+}
+
+%% ── Macro \casoprueba ────────────────────────────────────────────────────────
+%%
+%%  Definir ANTES de cada llamada:
+%%    \def\cpPasos{...}       ítems \item del enumerate de pasos
+%%    \def\cpResultadoE{...}  ítems \item del itemize de resultado esperado
+%%    \def\cpResultadoO{...}  texto libre del resultado obtenido
+%%
+%%  Sintaxis:
+%%    \casoprueba{ID}{Fecha}{Módulo}{Nombre}{Tipo}{Estado}
+%%               {ítems precondición}{ítems datos de prueba}{Ejecutado por}
+%%
+\def\cpPasos{}
+\def\cpResultadoE{}
+\def\cpResultadoO{}
+
+\newcommand{\casoprueba}[9]{%
+  \noindent
+  \begin{tabular}{|p{\CPcolA}|p{\CPcolB}|p{\CPcolC}|}
+  \hline
+  \rowcolor{grisheader}%
+  \multicolumn{3}{|p{\CPmcw}|}{\centering\bfseries\large Caso de prueba}\\[2pt]
+  \hline
+  \textbf{ID:}~#1 & \textbf{Fecha:}~#2 & \textbf{Módulo:}~#3 \\
+  \hline
+  \multicolumn{3}{|p{\CPmcw}|}{\textbf{Nombre:}~#4}\\
+  \hline
+  \multicolumn{2}{|p{\CPtipoW}|}{\textbf{Tipo de Prueba:}~#5} &
+    \textbf{Estado:}~#6\\
+  \hline
+  \multicolumn{3}{|p{\CPmcw}|}{%
+    \vspace{3pt}\textbf{Precondición:}\vspace{-4pt}%
+    \begin{itemize}#7\end{itemize}\vspace{2pt}%
+  }\\
+  \hline
+  \multicolumn{3}{|p{\CPmcw}|}{%
+    \vspace{3pt}\textbf{Datos de Prueba:}\vspace{-4pt}%
+    \begin{itemize}#8\end{itemize}\vspace{2pt}%
+  }\\
+  \hline
+  \multicolumn{3}{|p{\CPmcw}|}{%
+    \renewcommand{\arraystretch}{1.0}%
+    \begin{tabular}[t]{@{}p{\CPhalfW}|p{\CPhalfW}@{}}
+      \vspace{3pt}\textbf{Pasos:}\vspace{-4pt}%
+      \begin{enumerate}\cpPasos\end{enumerate}\vspace{2pt}%
+      &
+      \vspace{3pt}\textbf{Resultado Esperado:}\vspace{-4pt}%
+      \begin{itemize}\cpResultadoE\end{itemize}\vspace{2pt}%
+      \\
+    \end{tabular}%
+  }\\
+  \hline
+  \multicolumn{3}{|p{\CPmcw}|}{%
+    \vspace{3pt}\textbf{Resultado Obtenido:}\par\smallskip
+    \cpResultadoO\vspace{5pt}%
+  }\\
+  \hline
+  \multicolumn{3}{|p{\CPmcw}|}{%
+    \vspace{2pt}\textbf{Prueba ejecutada por:}~#9\vspace{2pt}%
+  }\\
+  \hline
+  \end{tabular}%
+  \par\vspace{1cm}%
+}
+
+%% ── Macro \hallazgo ──────────────────────────────────────────────────────────
+%%
+%%  Sintaxis:
+%%    \hallazgo{ID}{Título}{Severidad}{Módulo}{Tipo}{Caso relacionado}
+%%             {Descripción}{Impacto}{Recomendación}
+%%
+\newcommand{\hallazgo}[9]{%
+  \noindent
+  \begin{tabular}{|p{\CPcolA}|p{\HALcolB}|}
+  \hline
+  \rowcolor{grisheader}%
+  \multicolumn{2}{|p{\CPmcw}|}{\centering\bfseries\large #1 --- #2}\\[2pt]
+  \hline
+  \textbf{ID}               & #1 \\
+  \hline
+  \textbf{Severidad}        & #3 \\
+  \hline
+  \textbf{Módulo}           & #4 \\
+  \hline
+  \textbf{Tipo}             & #5 \\
+  \hline
+  \textbf{Caso relacionado} & #6 \\
+  \hline
+  \textbf{Estado}           & Confirmado \\
+  \hline
+  \multicolumn{2}{|p{\CPmcw}|}{%
+    \vspace{3pt}\textbf{Descripción:}\par\smallskip #7\vspace{5pt}%
+  }\\
+  \hline
+  \multicolumn{2}{|p{\CPmcw}|}{%
+    \vspace{3pt}\textbf{Impacto:}\par\smallskip #8\vspace{5pt}%
+  }\\
+  \hline
+  \multicolumn{2}{|p{\CPmcw}|}{%
+    \vspace{3pt}\textbf{Recomendación:}\par\smallskip #9\vspace{5pt}%
+  }\\
+  \hline
+  \end{tabular}%
+  \par\vspace{1cm}%
+}

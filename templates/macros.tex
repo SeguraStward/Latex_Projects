@@ -1,0 +1,27 @@
+% ==============================================================================
+% DEFAULT MACROS AND COMMANDS
+% ==============================================================================
+
+% --- Mathematical Operators ---------------------------------------------------
+\DeclareMathOperator{\R}{\mathbb{R}} % Real numbers
+\DeclareMathOperator{\N}{\mathbb{N}} % Natural numbers
+\DeclareMathOperator{\Z}{\mathbb{Z}} % Integers
+\DeclareMathOperator{\E}{\mathbb{E}} % Expectation
+\DeclareMathOperator{\Var}{Var}      % Variance
+\DeclareMathOperator{\Cov}{Cov}      % Covariance
+\DeclareMathOperator{\argmin}{arg\,min}
+\DeclareMathOperator{\argmax}{arg\,max}
+\DeclareMathOperator{\Tr}{Tr}        % Trace
+
+% --- Practical Commands -------------------------------------------------------
+% To do notes (requires xcolor)
+\newcommand{\TODO}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+\newcommand{\NOTE}[1]{\textcolor{blue}{\textbf{[NOTE: #1]}}}
+\newcommand{\REVIEW}[1]{\textcolor{orange}{\textbf{[REVIEW: #1]}}}
+
+% Shorthand for emphasized definitions
+\newcommand{\defemph}[1]{\textbf{\textit{#1}}}
+
+% Derivatives
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}     % Partial derivative
+\newcommand{\td}[2]{\frac{\mathrm{d} #1}{\mathrm{d} #2}} % Total derivative

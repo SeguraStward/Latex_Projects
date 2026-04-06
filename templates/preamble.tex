@@ -1,0 +1,84 @@
+% ==============================================================================
+% DEFAULT PREAMBLE - PROFESSIONAL STANDARD
+% ==============================================================================
+
+% --- Language and Encoding ----------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,english]{babel} % Last language is the default
+
+% --- Typography and Fonts -----------------------------------------------------
+\usepackage{microtype}              % Better typography and spacing
+\usepackage{csquotes}               % Context sensitive quotation facilities
+\usepackage{lmodern}                % Latin Modern fonts
+\usepackage{inconsolata}            % Professional monospaced font
+% \usepackage{newpxtext,newpxmath}  % Palatino alternatives (uncomment for a classic look)
+
+% --- Maths --------------------------------------------------------------------
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}              % Extension packages to amsmath
+
+% --- Graphics and Colors ------------------------------------------------------
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+% Define corporate/standard colors
+\definecolor{primarycolor}{RGB}{0, 80, 160}
+\definecolor{secondarycolor}{RGB}{120, 120, 120}
+\definecolor{accentcolor}{HTML}{D93F16}
+
+% --- Layout -------------------------------------------------------------------
+\usepackage{geometry}
+\geometry{
+    a4paper,
+    top=2.5cm,
+    bottom=2.5cm,
+    left=3cm,
+    right=2.5cm,
+    headheight=15pt
+}
+
+% --- Tables -------------------------------------------------------------------
+\usepackage{booktabs}               % Professional quality tables
+\usepackage{tabularx}               % Tabulars with adjustable-width columns
+\usepackage{multirow}               % Create tabular cells spanning multiple rows
+
+% --- Headers and Footers ------------------------------------------------------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\nouppercase{\leftmark}}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.0pt}
+
+% --- Code Listings ------------------------------------------------------------
+\usepackage{listings}
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=shadowbox,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{primarycolor}\bfseries,
+    commentstyle=\color{secondarycolor}\itshape,
+    stringstyle=\color{accentcolor},
+    captionpos=b,
+    showstringspaces=false
+}
+
+% --- Links and PDF Metadata ---------------------------------------------------
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primarycolor,
+    filecolor=primarycolor,
+    urlcolor=accentcolor,
+    citecolor=primarycolor,
+    pdfpagemode=UseOutlines
+}
+
+% --- References ---------------------------------------------------------------
+\usepackage{cleveref}               % Intelligent cross-referencing

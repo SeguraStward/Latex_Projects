@@ -1,0 +1,140 @@
+% ============================================================
+%  HALLAZGOS  (HAL-001 – HAL-007)
+% ============================================================
+\clearpage
+\section{Hallazgos Encontrados}
+
+\subsection{HAL-001: Producto inactivo sigue visible en módulo de Ventas}
+\hallazgo
+  {HAL-001}
+  {Producto inactivo visible en Ventas}
+  {\sevAlta}
+  {Productos \arr{} Ventas}
+  {Bug funcional}
+  {CP-M006}
+  {Al marcar un producto como inactivo en el módulo de Productos, dicho producto
+   continúa apareciendo disponible para seleccionar al crear una nueva venta.}
+  {Se pueden registrar ventas de productos dados de baja intencionalmente, generando
+   inconsistencias en el inventario y los reportes.}
+  {Agregar filtro \texttt{WHERE PRO\_Estado = 'A'} (activo) en la consulta que carga
+   productos disponibles para venta.}
+
+\subsection{HAL-002: Buscador de productos no filtra por código}
+\hallazgo
+  {HAL-002}
+  {Buscador de productos no filtra por código}
+  {\sevMedia}
+  {Productos}
+  {Funcionalidad incompleta}
+  {CP-A003}
+  {El buscador del módulo de Productos solo filtra por nombre. Al ingresar un código
+   de producto (ej: ``ARE-001''), no retorna ningún resultado aunque el producto exista
+   con ese código.}
+  {Los usuarios que conozcan el código del producto pero no el nombre exacto no pueden
+   encontrarlo, reduciendo la eficiencia operativa.}
+  {Incluir el campo \texttt{PRO\_Codigo} en el filtro de búsqueda, de forma que busque
+   por nombre \textbf{O} código.}
+
+\subsection{HAL-003: No existe historial de movimientos de inventario}
+\hallazgo
+  {HAL-003}
+  {No existe historial de movimientos de inventario}
+  {\sevAlta}
+  {Inventario}
+  {Funcionalidad faltante}
+  {CP-A004}
+  {El módulo de Inventario permite registrar entradas y salidas de mercadería, pero no
+   existe ninguna opción para consultar el historial de movimientos registrados
+   (auditoría de entradas, salidas y ajustes).}
+  {No es posible hacer trazabilidad de los movimientos de inventario. No se puede
+   verificar quién realizó qué movimiento ni cuándo, lo cual es crítico para auditorías
+   y control interno.}
+  {Agregar una sección ``Historial de movimientos'' en el módulo de Inventario que liste
+   los movimientos con fecha, tipo, cantidad, producto y usuario responsable.}
+
+\subsection{HAL-004: No hay indicador visual de stock bajo en módulo Inventario}
+\hallazgo
+  {HAL-004}
+  {Sin indicador visual de stock bajo en Inventario}
+  {\sevMedia}
+  {Inventario}
+  {Mejora de usabilidad}
+  {CP-A009}
+  {El módulo de Inventario muestra el stock de todos los productos, pero no diferencia
+   visualmente los productos con stock bajo o agotado. El Dashboard sí muestra el
+   contador ``Stock Bajo'', pero al entrar al módulo de Inventario no hay colores,
+   íconos ni etiquetas que identifiquen productos críticos.}
+  {El usuario debe revisar manualmente cada producto para identificar cuáles necesitan
+   reabastecimiento, aumentando el riesgo de quedarse sin stock de productos importantes.}
+  {Agregar indicadores visuales (color rojo/amarillo, ícono de alerta) para productos
+   con stock igual a 0 o por debajo de un umbral definido.}
+
+\subsection{HAL-005: Campo teléfono en Emprendedoras acepta letras}
+\hallazgo
+  {HAL-005}
+  {Campo teléfono en Emprendedoras acepta letras}
+  {\sevBaja}
+  {Emprendedoras}
+  {Validación faltante}
+  {CP-A008}
+  {El campo de teléfono en el formulario de Emprendedoras acepta cualquier carácter,
+   incluyendo letras. No existe validación de formato numérico.}
+  {Se pueden guardar números de teléfono inválidos (ej: ``abc123''), generando datos
+   de contacto incorrectos e inutilizables.}
+  {Agregar validación en el campo teléfono para aceptar solo dígitos numéricos, con
+   un formato esperado de 8 dígitos (estándar Costa Rica).}
+
+\subsection{HAL-006: US-14 (Gestión por local) no está implementada}
+\hallazgo
+  {HAL-006}
+  {Gestión por local no implementada (US-14)}
+  {\sevMedia}
+  {---}
+  {Funcionalidad no implementada}
+  {CP-A014}
+  {La User Story US-14 requiere gestionar información de diferentes locales o puntos de
+   venta. No existe ningún módulo, sección ni campo relacionado con locales en la
+   interfaz de la aplicación.}
+  {Si la asociación necesita expandirse a múltiples locales, el sistema no tiene soporte
+   para esto.}
+  {Implementar el módulo de gestión de locales según los requerimientos de la US-14,
+   incluyendo creación, edición y asignación de inventario por local.}
+
+\subsection{HAL-007: Botón ``Destacar producto'' no funciona}
+\hallazgo
+  {HAL-007}
+  {Botón ``Destacar producto'' no funciona}
+  {\sevAlta}
+  {Productos}
+  {Bug funcional}
+  {CP-A016}
+  {En el módulo de Productos existe un botón para marcar un producto como
+   ``destacado'' para mostrarlo en la página web. Al presionar el botón, no ocurre
+   ninguna acción visible: no cambia de estado, no muestra confirmación ni error.}
+  {La User Story US-16 no puede cumplirse. Los administradores no pueden promover
+   productos en el sitio web desde la aplicación.}
+  {Revisar el handler del botón de destacado en el componente de productos y verificar
+   que el IPC correspondiente esté registrado y funcionando correctamente.}
+
+\subsection{Tabla Resumen de Hallazgos}
+
+\begin{tabularx}{\linewidth}{|c|c|X|l|c|}
+\hline
+\rowcolor{grisheader}
+\textbf{ID} & \textbf{Severidad} & \textbf{Módulo} & \textbf{Tipo} & \textbf{Estado}\\
+\hline
+HAL-001 & \sevAlta  & Productos \arr{} Ventas & Bug funcional            & Confirmado\\
+\hline
+HAL-002 & \sevMedia & Productos               & Funcionalidad incompleta  & Confirmado\\
+\hline
+HAL-003 & \sevAlta  & Inventario              & Funcionalidad faltante    & Confirmado\\
+\hline
+HAL-004 & \sevMedia & Inventario              & Usabilidad                & Confirmado\\
+\hline
+HAL-005 & \sevBaja  & Emprendedoras           & Validación faltante       & Confirmado\\
+\hline
+HAL-006 & \sevMedia & ---                     & No implementado           & Confirmado\\
+\hline
+HAL-007 & \sevAlta  & Productos               & Bug funcional             & Confirmado\\
+\hline
+\end{tabularx}

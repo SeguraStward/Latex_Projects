@@ -5,7 +5,7 @@ Text.set_default(font="Noto Sans")
 
 class S10_Conclusiones(Scene):
     """
-    Conclusiones finales + galería de imágenes reales del tema.
+    Conclusiones finales + perspectivas futuras + galería de imágenes.
     """
 
     def construct(self):
@@ -15,13 +15,13 @@ class S10_Conclusiones(Scene):
         title.to_edge(UP, buff=0.35)
         self.play(Write(title), run_time=0.8)
 
-        # ── Conclusiones principales ─────────────────────────────────────────
+        # ── Síntesis de hallazgos ────────────────────────────────────────────
         conclusions = [
-            ("Las CNN superan métodos clásicos en imágenes médicas",       BLUE_B),
-            ("AUC 0.932 en clasificación de gliomas con ResNet",           GREEN),
-            ("La arquitectura define el rendimiento — no hay talla única", TEAL_C),
-            ("El sesgo de datos es el mayor desafío actual",               YELLOW),
-            ("XAI es clave para adopción clínica responsable",             ORANGE),
+            ("AUC 93.2% en gliomas · 89.6% en cáncer de mama",         GREEN),
+            ("Sensibilidad > 90% en hemorragia intracraneal (Aidoc)",   BLUE_B),
+            ("U-Net: estándar para segmentación médica",                TEAL_C),
+            ("873 algoritmos FDA autorizados en radiología (2025)",      YELLOW),
+            ("Adopción plena: solo 2% en EE.UU.",                       ORANGE),
         ]
 
         conc_items = VGroup()
@@ -44,19 +44,19 @@ class S10_Conclusiones(Scene):
 
         self.wait(1.5)
 
-        # ── Trabajo futuro ───────────────────────────────────────────────────
+        # ── Perspectivas futuras ─────────────────────────────────────────────
         self.play(FadeOut(conc_items), FadeOut(conc_bullets), run_time=0.5)
 
-        future_title = Text("Trabajo Futuro", font_size=26,
+        future_title = Text("Perspectivas Futuras", font_size=26,
                             color=PURPLE_B, weight=BOLD)
         future_title.move_to(UP * 2.0)
         self.play(FadeIn(future_title, shift=DOWN * 0.15), run_time=0.5)
 
         future_items_data = [
-            ("Datasets más equilibrados demográficamente",         BLUE_C),
-            ("Modelos multimodales: imagen + historial clínico",   TEAL_C),
-            ("XAI integrado desde el diseño del modelo",          YELLOW),
-            ("Validación en entornos clínicos reales",             GREEN),
+            ("IA Explicable (XAI) para eliminar la caja negra",         YELLOW),
+            ("Modelos multimodales: imagen + historial + laboratorio",   TEAL_C),
+            ("IA Adaptativa con marcos regulatorios flexibles",          BLUE_C),
+            ("Aprendizaje Federado entre hospitales sin compartir datos", GREEN),
         ]
 
         future_items = VGroup()
@@ -107,13 +107,11 @@ class S10_Conclusiones(Scene):
 
         for path, caption_text in images_data:
             img = ImageMobject(path)
-            # Escalar a tamaño uniforme que no desborde la pantalla
             img.set_height(4.8)
             if img.width > 8.5:
                 img.set_width(8.5)
             img.move_to(DOWN * 0.15)
 
-            # Marco sutil
             frame = SurroundingRectangle(
                 img, color=TEAL_C, stroke_width=1.5,
                 fill_opacity=0, buff=0.06,
@@ -136,9 +134,6 @@ class S10_Conclusiones(Scene):
             self.wait(0.9)
             prev_group = group
 
-        # Última imagen permanece un momento más
         self.wait(1.0)
-
-        # Fade final
         self.play(FadeOut(prev_group), FadeOut(gallery_title), run_time=0.8)
         self.wait(1.0)
