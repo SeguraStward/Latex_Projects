@@ -39,7 +39,7 @@ usage() {
     echo "  xelatex      Compile with XeLaTeX engine"
     echo "  lualatex     Compile with LuaLaTeX engine"
     echo "  manim        List scenes in animations/scenes.py"
-    echo "  manim <Scene> Render scene in low quality (preview)"
+    echo "  manim <Scene> Render scene in medium quality (preview)"
     echo "  manim-hq <Scene> Render scene in 1080p60 (final)"
     echo ""
     echo "Special commands:"
@@ -250,11 +250,11 @@ case "$COMMAND" in
                 exit 1
             fi
             SCENE_BASENAME=$(basename "$SCENE_FILE")
-            info "Renderizando '$SCENE' desde $SCENE_BASENAME (baja calidad)..."
+            info "Renderizando '$SCENE' desde $SCENE_BASENAME (calidad media)..."
             docker compose -f "$SCRIPT_DIR/docker-compose.yml" run --rm \
                 -w "/workspace/projects/$PROJECT_NAME/animations" manim \
-                manim -ql "$SCENE_BASENAME" "$SCENE"
-            ok "Output: $ANIMATIONS_DIR/media/videos/${SCENE_BASENAME%.py}/480p15/${SCENE}.mp4"
+                manim -qm "$SCENE_BASENAME" "$SCENE"
+            ok "Output: $ANIMATIONS_DIR/media/videos/${SCENE_BASENAME%.py}/720p30/${SCENE}.mp4"
         fi
         ;;
     manim-hq)

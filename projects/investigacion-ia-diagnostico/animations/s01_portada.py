@@ -1,39 +1,39 @@
 from manim import *
 import numpy as np
 
-Text.set_default(font="Noto Sans")
+Text.set_default(font="Noto Sans", line_spacing=1.1)
 config.background_color = "#030508"
 
-# ── Paleta de contraste (diseñada para fondo negro) ───────────────────────────
-C_HI   = "#FFFFFF"    # texto principal — máximo contraste
-C_MED  = "#E0E0E0"    # nombres secundarios — perfectamente legible
-C_SUB  = "#A8A8A8"    # subtítulos y labels pequeños — legible
-C_DIM  = "#727272"    # elementos decorativos menores
-C_ACC  = "#5CE0CF"    # teal accent (TEAL_C equivalente)
+# ── Contrast palette (designed for black background) ─────────────────────────
+C_HI   = "#FFFFFF"    # main text — maximum contrast
+C_MED  = "#E0E0E0"    # secondary names — perfectly readable
+C_SUB  = "#A8A8A8"    # subtitles and small labels — readable
+C_DIM  = "#727272"    # minor decorative elements
+C_ACC  = "#5CE0CF"    # teal accent (TEAL_C equivalent)
 C_ACC2 = "#78B4FF"    # blue accent
 
 
 class S01_Portada(Scene):
     """
-    Portada cinematográfica:
-    Fase 1 — Red neuronal: capas y conexiones aparecen una a una
-    Fase 2 — Activación hacia adelante (forward pass) + métricas
-    Fase 3 — Fade-out elegante a negro
-    Fase 4 — Pantalla completa con contraste óptimo
+    Cinematic title card:
+    Phase 1 — Neural network: layers and connections appear one by one
+    Phase 2 — Forward pass activation + metrics
+    Phase 3 — Elegant fade-out to black
+    Phase 4 — Full screen with optimal contrast
     """
 
     def construct(self):
 
         # ══════════════════════════════════════════════════════════════════════
-        # GEOMETRÍA DE LA RED NEURONAL
+        # NEURAL NETWORK GEOMETRY
         # ══════════════════════════════════════════════════════════════════════
         LAYER_X  = [-5.2, -1.8,  1.6,  5.0]
         LAYER_N  = [  5,    7,    5,    3  ]
         LAYER_C  = [C_ACC2, C_ACC, C_ACC2, GREEN_C]
         NODE_R   = 0.16
-        YGAP     = 0.80        # separación vertical nodos
+        YGAP     = 0.80        # vertical node spacing
 
-        # Nodos
+        # Nodes
         node_layers    = []
         node_positions = []
         for lx, ln, lc in zip(LAYER_X, LAYER_N, LAYER_C):
@@ -48,7 +48,7 @@ class S01_Portada(Scene):
             node_layers.append(grp)
             node_positions.append([np.array([lx, y, 0]) for y in ys])
 
-        # Conexiones por par de capas adyacentes
+        # Connections between adjacent layer pairs
         edge_layers = []
         for i in range(len(node_layers) - 1):
             eg = VGroup(*[
@@ -64,11 +64,11 @@ class S01_Portada(Scene):
         all_edges = VGroup(*edge_layers)
         net       = VGroup(all_edges, all_nodes)
 
-        # Desplazar red hacia arriba para dejar espacio a métricas
+        # Shift network upward to leave space for metrics
         net.shift(UP * 0.70)
 
         # ══════════════════════════════════════════════════════════════════════
-        # FASE 1 — Aparición capa por capa con conexiones
+        # PHASE 1 — Layer-by-layer appearance with connections
         # ══════════════════════════════════════════════════════════════════════
         for i, ng in enumerate(node_layers):
             self.play(
@@ -85,7 +85,7 @@ class S01_Portada(Scene):
         self.wait(0.15)
 
         # ══════════════════════════════════════════════════════════════════════
-        # FASE 2a — Forward pass: activación viaja de izquierda a derecha
+        # PHASE 2a — Forward pass: activation travels left to right
         # ══════════════════════════════════════════════════════════════════════
         ORIG_C = [C_ACC2, C_ACC, C_ACC2, GREEN_C]
 
@@ -119,12 +119,12 @@ class S01_Portada(Scene):
         self.wait(0.20)
 
         # ══════════════════════════════════════════════════════════════════════
-        # FASE 2b — Métricas clave emergen debajo de la red
+        # PHASE 2b — Key metrics emerge below the network
         # ══════════════════════════════════════════════════════════════════════
         metrics_data = [
             ("AUC",           "0.932",   C_ACC,  LEFT  * 3.8),
-            ("Sensibilidad",  "94.7 %",  "#66DD88", ORIGIN),
-            ("Especificidad", "91.2 %",  C_ACC2, RIGHT * 3.8),
+            ("Sensitivity",   "94.7 %",  "#66DD88", ORIGIN),
+            ("Specificity",   "91.2 %",  C_ACC2, RIGHT * 3.8),
         ]
 
         m_groups = VGroup()
@@ -148,7 +148,7 @@ class S01_Portada(Scene):
         self.wait(1.0)
 
         # ══════════════════════════════════════════════════════════════════════
-        # FASE 3 — Fade-out elegante
+        # PHASE 3 — Elegant fade-out
         # ══════════════════════════════════════════════════════════════════════
         self.play(
             FadeOut(net),
@@ -158,10 +158,10 @@ class S01_Portada(Scene):
         self.wait(0.20)
 
         # ══════════════════════════════════════════════════════════════════════
-        # FASE 4 — Pantalla completa · contraste optimizado
+        # PHASE 4 — Full screen · optimized contrast
         # ══════════════════════════════════════════════════════════════════════
 
-        # Textura puntual muy sutil (mantiene el look tecnológico)
+        # Very subtle point texture (keeps the tech look)
         np.random.seed(77)
         bg_tex = VGroup(*[
             Dot(np.array([np.random.uniform(-7.0, 7.0),
@@ -171,12 +171,12 @@ class S01_Portada(Scene):
         ])
         self.play(FadeIn(bg_tex), run_time=0.35)
 
-        # ── Encabezado institucional ──────────────────────────────────────────
+        # ── Institutional header ──────────────────────────────────────────────
         univ   = Text("Universidad Nacional",
                       font_size=15, color=C_MED, weight=BOLD)
-        campus = Text("Sede Regional Brunca — Campus Pérez Zeledón",
+        campus = Text("Sede Regional Brunca — Campus Perez Zeledon",
                       font_size=11, color=C_SUB)
-        curso  = Text("Curso: Inteligencia Artificial",
+        curso  = Text("Course: Artificial Intelligence",
                       font_size=11, color=C_SUB)
         header = VGroup(univ, campus, curso).arrange(DOWN, buff=0.09)
         header.move_to(UP * 3.38)
@@ -188,14 +188,14 @@ class S01_Portada(Scene):
         self.play(FadeIn(header, shift=DOWN * 0.12), run_time=0.45)
         self.play(Create(sep_t), run_time=0.32)
 
-        # ── Título principal ──────────────────────────────────────────────────
-        t1 = Text("Inteligencia Artificial",
+        # ── Main title ────────────────────────────────────────────────────────
+        t1 = Text("Artificial Intelligence",
                   font_size=48, color=C_ACC, weight=BOLD)
-        t2 = Text("en Diagnóstico Médico",
+        t2 = Text("in Medical Diagnosis",
                   font_size=48, color=C_HI, weight=BOLD)
         VGroup(t1, t2).arrange(DOWN, buff=0.18).move_to(UP * 1.30)
 
-        sub_t = Text("Deep Learning  ·  CNN  ·  Diagnóstico por Imagen",
+        sub_t = Text("Deep Learning  .  CNN  .  Image-Based Diagnosis",
                      font_size=14, color=C_SUB)
         sub_t.move_to(UP * 0.0)
 
@@ -208,27 +208,27 @@ class S01_Portada(Scene):
         sep_b.move_to(DOWN * 0.65)
         self.play(Create(sep_b), run_time=0.32)
 
-        # ── Docente (izquierda) · Estudiante (derecha) ────────────────────────
-        prof_role = Text("DOCENTE", font_size=10, color=C_ACC,
+        # ── Professor (left) · Student (right) ───────────────────────────────
+        prof_role = Text("PROFESSOR", font_size=10, color=C_ACC,
                          weight=BOLD, slant=ITALIC)
-        prof_name = Text("Prof. Pablo Andrés Venegas Elizondo",
+        prof_name = Text("Prof. Pablo Andres Venegas Elizondo",
                          font_size=19, color=C_HI, weight=BOLD)
         prof_grp  = VGroup(prof_role, prof_name).arrange(DOWN, buff=0.09)
         prof_grp.move_to(LEFT * 2.6 + DOWN * 1.52)
 
-        stu_role = Text("ESTUDIANTE", font_size=10, color=C_SUB,
+        stu_role = Text("STUDENT", font_size=10, color=C_SUB,
                         weight=BOLD, slant=ITALIC)
-        stu_name = Text("Ángel Stward Segura Méndez",
+        stu_name = Text("Angel Stward Segura Mendez",
                         font_size=17, color=C_MED)
         stu_grp  = VGroup(stu_role, stu_name).arrange(DOWN, buff=0.09)
         stu_grp.move_to(RIGHT * 2.6 + DOWN * 1.52)
 
-        # Divisor vertical entre las dos columnas (sutil)
+        # Subtle vertical divider between the two columns
         col_div = Line(UP * 0.2, DOWN * 2.2,
                        stroke_color=C_ACC, stroke_width=0.7, stroke_opacity=0.30)
         col_div.move_to(DOWN * 1.0)
 
-        date = Text("Marzo, 2026", font_size=12, color=C_DIM)
+        date = Text("March, 2026", font_size=12, color=C_DIM)
         date.move_to(DOWN * 3.05)
 
         self.play(FadeIn(col_div), run_time=0.25)

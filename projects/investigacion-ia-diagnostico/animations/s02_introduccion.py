@@ -1,12 +1,12 @@
 from manim import *
 
-Text.set_default(font="Noto Sans")
+Text.set_default(font="Noto Sans", line_spacing=1.1)
 
 
 class S02_Introduccion(Scene):
     """
-    MRI cerebral simulado, CNN detecta tumor con bounding box verde,
-    y puntos clave de la introduccion.
+    Simulated brain MRI, CNN detects tumor with green bounding box,
+    and key introduction points.
     """
 
     def _make_brain_scan(self):
@@ -64,19 +64,19 @@ class S02_Introduccion(Scene):
         return network, layers
 
     def construct(self):
-        title = Text("Introducción", font_size=40, color=BLUE_B, weight=BOLD)
+        title = Text("Introduction", font_size=40, color=BLUE_B, weight=BOLD)
         title.to_edge(UP, buff=0.4)
         self.play(Write(title), run_time=0.9)
 
-        # Scan MRI
+        # MRI Scan
         scan_group, tumor = self._make_brain_scan()
         scan_group.scale(0.95).move_to(LEFT * 4.2 + DOWN * 0.3)
         tumor_center = tumor.get_center()
-        scan_label = Text("Resonancia Magnética (MRI)", font_size=15, color=GRAY_C)
+        scan_label = Text("Magnetic Resonance Imaging (MRI)", font_size=15, color=GRAY_C)
         scan_label.next_to(scan_group, DOWN, buff=0.18)
         self.play(FadeIn(scan_group), FadeIn(scan_label), run_time=1.2)
 
-        # Red neuronal
+        # Neural network
         network, layers = self._make_network()
         network.move_to(ORIGIN + DOWN * 0.3)
         cnn_label = Text("CNN", font_size=18, color=TEAL_C, weight=BOLD)
@@ -87,7 +87,7 @@ class S02_Introduccion(Scene):
                        buff=0.12, color=GRAY_C, stroke_width=1.8, tip_length=0.18)
         self.play(GrowArrow(arr_in), run_time=0.5)
 
-        # Linea de escaneo
+        # Scan line
         scan_top = scan_group.get_top() + DOWN * 0.15
         scan_line = Line(scan_group.get_left() + RIGHT * 0.05,
                          scan_group.get_right() + LEFT * 0.05,
@@ -96,7 +96,7 @@ class S02_Introduccion(Scene):
         self.play(scan_line.animate.move_to(scan_group.get_bottom() + UP * 0.15),
                   run_time=1.4, rate_func=linear)
 
-        # Bounding boxes falsos
+        # False bounding boxes
         for pos in [LEFT * 4.2 + UP * 0.2, LEFT * 3.8 + DOWN * 0.5, LEFT * 4.5 + UP * 0.6]:
             fb = Rectangle(width=0.55, height=0.55,
                            stroke_color=YELLOW, stroke_width=1.5, fill_opacity=0)
@@ -111,7 +111,7 @@ class S02_Introduccion(Scene):
             self.play(*[n.animate.set_fill(n.get_fill_color(), opacity=0.5) for n in layer],
                       run_time=0.2)
 
-        # Bounding box verde
+        # Green bounding box
         bbox = Rectangle(width=0.72, height=0.72,
                          stroke_color=GREEN, stroke_width=2.8, fill_opacity=0)
         bbox.move_to(tumor_center)
@@ -124,22 +124,22 @@ class S02_Introduccion(Scene):
 
         arr_out = Arrow(network.get_right(), RIGHT * 1.5 + DOWN * 0.3,
                         buff=0.1, color=GREEN, stroke_width=1.8, tip_length=0.18)
-        result_text = Text("Diagnóstico", font_size=16, color=GREEN)
+        result_text = Text("Diagnosis", font_size=16, color=GREEN)
         result_text.next_to(arr_out, RIGHT, buff=0.1)
         self.play(GrowArrow(arr_out), FadeIn(result_text), run_time=0.5)
 
-        # Puntos clave
+        # Key points
         self.play(FadeOut(arr_out), FadeOut(result_text),
                   FadeOut(network), FadeOut(cnn_label), FadeOut(arr_in),
                   FadeOut(scan_line), run_time=0.6)
 
         points = VGroup(
-            Text("Deep Learning revoluciona el diagnóstico", font_size=17, color=WHITE),
-            Text("Radiología | Dermatología | Oftalmología", font_size=15, color=GRAY_B),
-            Text("AlexNet (2012): punto de inflexión en ImageNet", font_size=17, color=YELLOW),
-            Text("CNN supera a especialistas en ciertas tareas", font_size=17, color=WHITE),
-            Text("FDA autoriza modelos como copilotos clínicos", font_size=17, color=TEAL_C),
-            Text("Elimina handcrafted features", font_size=17, color=WHITE),
+            Text("Deep Learning revolutionizes diagnosis", font_size=17, color=WHITE),
+            Text("Radiology | Dermatology | Ophthalmology", font_size=15, color=GRAY_B),
+            Text("AlexNet (2012): turning point in ImageNet", font_size=17, color=YELLOW),
+            Text("CNN outperforms specialists in certain tasks", font_size=17, color=WHITE),
+            Text("FDA approves models as clinical co-pilots", font_size=17, color=TEAL_C),
+            Text("Eliminates handcrafted features", font_size=17, color=WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28)
         points.move_to(RIGHT * 2.5 + DOWN * 0.2)
 

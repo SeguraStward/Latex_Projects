@@ -1,0 +1,418 @@
+% ==============================================================================
+% CAPÍTULO V: PRUEBAS MODULARES
+% ==============================================================================
+\section{Capítulo V: Pruebas — Pruebas Modulares}
+
+\begin{center}
+  \textbf{Responsable:} Francisco Mora Cabezas \quad|\quad
+  \textbf{Total de casos:} 23 \quad|\quad
+  \textbf{Aprobados:} \textcolor{successgreen}{\textbf{23}} \quad|\quad
+  \textbf{Fallidos:} 0
+\end{center}
+
+Las pruebas modulares validan la interrelación entre los controladores, servicios, guardas y el módulo completo de \textbf{NestJS}, usando \texttt{Test.createTestingModule} de NestJS y \textbf{Supertest} para simular solicitudes HTTP reales sobre la aplicación ensamblada. Se verifica la correcta propagación de excepciones, los códigos de respuesta HTTP y el formato de los datos retornados.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: Auth (CP-M-001 a CP-M-003)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-M-001}{POST /auth/authenticate — valida credenciales y responde 200}{08/04/2026}{Auth (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{AuthModule} cargado con \texttt{Test.createTestingModule}. Supertest configurado con la app NestJS.
+
+\begin{tcpasos}
+  1. Enviar \texttt{POST /auth/authenticate} con credenciales mock & Request llega al controlador \\
+  2. Controlador llama a \texttt{AuthService.googleLogin} & Servicio procesa autenticación \\
+  3. Verificar código de respuesta & \texttt{200} o \texttt{201} \\
+  4. Verificar cuerpo de respuesta & Contiene datos de sesión \\
+\end{tcpasos}
+\tcresult{El test \textit{POST /auth/authenticate — Debe validar credenciales (MOCK) responde 200 o 201} pasa.}
+
+\tcsep
+
+\tcheader{CP-M-002}{GET /auth/me — obtiene perfil del usuario autenticado}{08/04/2026}{Auth (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Token JWT válido en el header. Endpoint: \texttt{GET /auth/me}.
+
+\begin{tcpasos}
+  1. Enviar \texttt{GET /auth/me} con token en header & Request llega al guard JWT \\
+  2. Guard valida el token & Usuario extraído del token \\
+  3. Controlador llama a \texttt{AuthService.meGetUser} & Perfil obtenido del servicio \\
+  4. Verificar código de respuesta & \texttt{200} \\
+\end{tcpasos}
+\tcresult{El test \textit{GET /auth/me — Obtiene perfil de usuario actual — responde 200} pasa.}
+
+\tcsep
+
+\tcheader{CP-M-003}{POST /auth/logout — cierra sesión correctamente}{08/04/2026}{Auth (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Token JWT válido en el header. Endpoint: \texttt{POST /auth/logout}.
+
+\begin{tcpasos}
+  1. Enviar \texttt{POST /auth/logout} & Request al controlador \\
+  2. Controlador llama a \texttt{revokeRefreshToken} & Token revocado \\
+  3. Verificar código de respuesta & \texttt{200} \\
+\end{tcpasos}
+\tcresult{El test \textit{POST /auth/logout — Cierra sesión — responde 200} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: Users (CP-M-004 a CP-M-006)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-M-004}{GET /users — lista usuarios con código 200}{08/04/2026}{Users (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{UsersModule} cargado. Endpoint: \texttt{GET /users}.
+
+\begin{tcpasos}
+  1. Enviar \texttt{GET /users} & Request al controlador \\
+  2. Controlador llama a \texttt{UsersService.findAll} & Lista paginada obtenida \\
+  3. Verificar código de respuesta & \texttt{200} \\
+  4. Verificar cuerpo & \texttt{\{ data: [], meta: \{ total \} \}} \\
+\end{tcpasos}
+\tcresult{El test \textit{GET /users — Lista usuarios — responde 200} pasa.}
+
+\tcsep
+
+\tcheader{CP-M-005}{PATCH /users/:id/profile — actualiza perfil limpiando campos vacíos}{08/04/2026}{Users (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{UsersModule} cargado, usuario existente en BD de prueba. Body: \texttt{\{ fullName: '', email: 'valido@una.cr' \}}.
+
+\begin{tcpasos}
+  1. Enviar \texttt{PATCH /users/:id/profile} con body mixto & Request al controlador \\
+  2. Controlador llama a \texttt{UsersService.updateProfile} & Campos vacíos filtrados \\
+  3. Solo \texttt{email} actualizado en BD & \texttt{fullName} ignorado \\
+  4. Verificar código de respuesta & \texttt{200} \\
+\end{tcpasos}
+\tcresult{El test \textit{PATCH /users/:id/profile — Actualiza perfil limpiando campos vacíos} pasa.}
+
+\tcsep
+
+\tcheader{CP-M-006}{GET /users/:id — usuario no encontrado responde 404}{08/04/2026}{Users (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{UsersModule} cargado. Endpoint: \texttt{GET /users/id-inexistente}.
+
+\begin{tcpasos}
+  1. Enviar \texttt{GET /users/id-inexistente} & Request al controlador \\
+  2. \texttt{UsersService.findById} retorna \texttt{null} & Usuario no encontrado \\
+  3. Controlador lanza \texttt{NotFoundException} & Error propagado \\
+  4. Verificar código de respuesta & \texttt{404} \\
+\end{tcpasos}
+\tcresult{El test \textit{GET /users/:id — Usuario no encontrado — responde 404} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: Projects (CP-M-007 a CP-M-008)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-M-007}{POST /projects — crea proyecto y responde 201}{08/04/2026}{Projects (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{ProjectsModule} cargado con BD de prueba. Endpoint: \texttt{POST /projects}.
+
+\begin{tcpasos}
+  1. Enviar \texttt{POST /projects} con body válido & Request al controlador \\
+  2. Controlador llama a \texttt{ProjectsService.save} & Proyecto creado en BD \\
+  3. Verificar código de respuesta & \texttt{201} \\
+  4. Verificar cuerpo & Proyecto con \texttt{id} generado \\
+\end{tcpasos}
+\tcresult{El test \textit{POST /projects — Crea proyecto — responde 201} pasa.}
+
+\tcsep
+
+\tcheader{CP-M-008}{DELETE /projects/:id — intento con documentos activos responde 400}{08/04/2026}{Projects (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Proyecto con documentos activos en BD de prueba. Endpoint: \texttt{DELETE /projects/:id}.
+
+\begin{tcpasos}
+  1. Enviar \texttt{DELETE /projects/:id} & Request al controlador \\
+  2. \texttt{ProjectsService.deleteById} detecta docs activos & \texttt{BadRequestException} lanzada \\
+  3. NestJS convierte excepción & Respuesta de error \\
+  4. Verificar código de respuesta & \texttt{400} \\
+\end{tcpasos}
+\tcresult{El test \textit{DELETE /projects/:id — Intenta eliminar con docs activos — responde 400} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: Cohorts (CP-M-009 a CP-M-010)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-M-009}{POST /cohorts — crea cohorte y responde 201}{08/04/2026}{Cohorts (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{CohortsModule} cargado con BD de prueba. Body: \texttt{\{ name: '2024-A', careerId: 'career-1' \}}.
+
+\begin{tcpasos}
+  1. Enviar \texttt{POST /cohorts} & Request al controlador \\
+  2. \texttt{CohortsService.save} crea la cohorte & Registro en BD \\
+  3. Verificar código de respuesta & \texttt{201} \\
+  4. Verificar cohorte en respuesta & Tiene \texttt{id} y \texttt{status: ACTIVE} \\
+\end{tcpasos}
+\tcresult{El test \textit{POST /cohorts — Crea cohorte — responde 201} pasa.}
+
+\tcsep
+
+\tcheader{CP-M-010}{GET /cohorts/:id — ID inexistente responde 404}{08/04/2026}{Cohorts (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{CohortsModule} cargado. Endpoint: \texttt{GET /cohorts/id-que-no-existe}.
+
+\begin{tcpasos}
+  1. Enviar \texttt{GET /cohorts/id-que-no-existe} & Request al controlador \\
+  2. \texttt{CohortsService.findById} lanza \texttt{NotFoundException} & Error propagado \\
+  3. NestJS convierte excepción & Respuesta de error \\
+  4. Verificar código de respuesta & \texttt{404} \\
+\end{tcpasos}
+\tcresult{El test \textit{GET /cohorts/:id — ID inexistente — responde 404} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: Standards (CP-M-011)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-M-011}{POST /standards — crea estándar y responde 201}{08/04/2026}{Standards (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{StandardsModule} cargado. Endpoint: \texttt{POST /standards} con nombre único.
+
+\begin{tcpasos}
+  1. Enviar \texttt{POST /standards} con nombre único & Request al controlador \\
+  2. \texttt{StandardsService.save} verifica nombre & No existe duplicado \\
+  3. Repositorio persiste el estándar & Registro creado \\
+  4. Verificar código de respuesta & \texttt{201} \\
+\end{tcpasos}
+\tcresult{El test \textit{POST /standards — Crea registro — responde 201} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: Commissions (CP-M-012)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-M-012}{POST /commissions — crea comisión y responde 201}{08/04/2026}{Commissions (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{CommissionsModule} cargado. Endpoint: \texttt{POST /commissions} con datos válidos.
+
+\begin{tcpasos}
+  1. Enviar \texttt{POST /commissions} & Request al controlador \\
+  2. \texttt{CommissionsService.save} crea la comisión & Registro en BD \\
+  3. Verificar código de respuesta & \texttt{201} \\
+\end{tcpasos}
+\tcresult{El test \textit{POST /commissions — Crea registro — responde 201} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: AcademicCycles (CP-M-013)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-M-013}{CRUD completo /academic-cycles — todos los endpoints responden correctamente}{08/04/2026}{AcademicCycles (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{AcademicCyclesModule} cargado con BD de prueba. Endpoints: \texttt{POST}, \texttt{GET}, \texttt{GET/:id}, \texttt{PUT/:id}, \texttt{DELETE/:id}.
+
+\begin{tcpasos}
+  1. \texttt{POST /academic-cycles} & \texttt{201} — ciclo creado \\
+  2. \texttt{GET /academic-cycles} & \texttt{200} — lista paginada \\
+  3. \texttt{GET /academic-cycles/:id} & \texttt{200} — ciclo específico \\
+  4. \texttt{PUT /academic-cycles/:id} & \texttt{200} o \texttt{204} — actualizado \\
+  5. \texttt{DELETE /academic-cycles/:id} & \texttt{200} o \texttt{204} — eliminado \\
+\end{tcpasos}
+\tcresult{Los 5 tests del módulo de ciclos académicos pasan. Flujo CRUD completo validado.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: QualityEvidences (CP-M-014)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-M-014}{CRUD completo /quality-evidences — todos los endpoints responden correctamente}{08/04/2026}{QualityEvidences (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{QualityEvidencesModule} cargado. Endpoints: \texttt{POST}, \texttt{GET}, \texttt{GET/:id}, \texttt{PUT/:id}, \texttt{DELETE/:id}.
+
+\begin{tcpasos}
+  1. \texttt{POST /quality-evidences} & \texttt{201} — evidencia creada \\
+  2. \texttt{GET /quality-evidences} & \texttt{200} — lista paginada \\
+  3. \texttt{GET /quality-evidences/:id} & \texttt{200} — evidencia específica \\
+  4. \texttt{PUT /quality-evidences/:id} & \texttt{200} o \texttt{204} — actualizada \\
+  5. \texttt{DELETE /quality-evidences/:id} & \texttt{200} o \texttt{204} — eliminada \\
+\end{tcpasos}
+\tcresult{Los 5 tests de gestión de evidencias de calidad SINAES pasan correctamente.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: FinalReports (CP-M-015)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-M-015}{CRUD completo /final-reports — todos los endpoints responden correctamente}{08/04/2026}{FinalReports (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{FinalReportsModule} cargado. Endpoints: \texttt{POST}, \texttt{GET}, \texttt{GET/:id}, \texttt{PUT/:id}, \texttt{DELETE/:id}.
+
+\begin{tcpasos}
+  1. \texttt{POST /final-reports} & \texttt{201} — reporte creado \\
+  2. \texttt{GET /final-reports} & \texttt{200} — lista paginada \\
+  3. \texttt{GET /final-reports/:id} & \texttt{200} — reporte específico \\
+  4. \texttt{PUT /final-reports/:id} & \texttt{200} o \texttt{204} — actualizado \\
+  5. \texttt{DELETE /final-reports/:id} & \texttt{200} o \texttt{204} — eliminado \\
+\end{tcpasos}
+\tcresult{Los 5 tests del módulo de reportes finales pasan.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: Questions (CP-M-016)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-M-016}{CRUD /questions — creación, listado, actualización y eliminación}{08/04/2026}{Questions (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{QuestionsModule} cargado. Endpoints: \texttt{POST}, \texttt{GET}, \texttt{PUT/:id}, \texttt{DELETE/:id}.
+
+\begin{tcpasos}
+  1. \texttt{POST /questions} & \texttt{201} — pregunta creada \\
+  2. \texttt{GET /questions} & \texttt{200} — lista de preguntas \\
+  3. \texttt{PUT /questions/:id} & \texttt{200} o \texttt{204} — actualizada \\
+  4. \texttt{DELETE /questions/:id} & \texttt{200} o \texttt{204} — eliminada \\
+\end{tcpasos}
+\tcresult{Los 4 tests del módulo de gestión de preguntas pasan.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: ProofDocuments (CP-M-017)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-M-017}{CRUD completo /proof-documents — todos los endpoints responden correctamente}{08/04/2026}{ProofDocuments (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{ProofDocumentsModule} cargado. Endpoints: \texttt{POST}, \texttt{GET}, \texttt{GET/:id}, \texttt{PUT/:id}, \texttt{DELETE/:id}.
+
+\begin{tcpasos}
+  1. \texttt{POST /proof-documents} & \texttt{201} — documento creado \\
+  2. \texttt{GET /proof-documents} & \texttt{200} — lista paginada \\
+  3. \texttt{GET /proof-documents/:id} & \texttt{200} — documento específico \\
+  4. \texttt{PUT /proof-documents/:id} & \texttt{200} o \texttt{204} — actualizado \\
+  5. \texttt{DELETE /proof-documents/:id} & \texttt{200} o \texttt{204} — eliminado \\
+\end{tcpasos}
+\tcresult{Los 5 tests del módulo de documentos de prueba SINAES pasan.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: ProofDocumentTypes (CP-M-018)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-M-018}{CRUD completo /proof-document-types — todos los endpoints responden}{08/04/2026}{ProofDocumentTypes (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{ProofDocumentTypesModule} cargado. Endpoints: \texttt{POST}, \texttt{GET}, \texttt{GET/:id}, \texttt{PUT/:id}, \texttt{DELETE/:id}.
+
+\begin{tcpasos}
+  1. \texttt{POST /proof-document-types} & \texttt{201} — tipo creado \\
+  2. \texttt{GET /proof-document-types} & \texttt{200} — lista paginada \\
+  3. \texttt{GET /proof-document-types/:id} & \texttt{200} — tipo específico \\
+  4. \texttt{PUT /proof-document-types/:id} & \texttt{200} o \texttt{204} — actualizado \\
+  5. \texttt{DELETE /proof-document-types/:id} & \texttt{200} o \texttt{204} — eliminado \\
+\end{tcpasos}
+\tcresult{Los 5 tests de tipos de documentos de prueba pasan.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: SinaesDocumentHistory (CP-M-019 a CP-M-020)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-M-019}{GET /sinaes-document-history/document/:id — obtiene historial del documento}{08/04/2026}{SinaesDocumentHistory (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{SinaesDocumentHistoryModule} cargado. Endpoint: \texttt{GET /sinaes-document-history/document/:documentId}.
+
+\begin{tcpasos}
+  1. Enviar \texttt{GET /sinaes-document-history/document/doc-1} & Request al controlador \\
+  2. \texttt{SinaesDocumentHistoryService} consulta historial & Registros obtenidos \\
+  3. Verificar código de respuesta & \texttt{200} \\
+  4. Verificar cuerpo & Lista de cambios históricos \\
+\end{tcpasos}
+\tcresult{El test \textit{GET /sinaes-document-history/document/:documentId — Obtiene historial del doc — responde 200} pasa.}
+
+\tcsep
+
+\tcheader{CP-M-020}{GET /sinaes-document-history/statistics — obtiene estadísticas de auditoría}{08/04/2026}{SinaesDocumentHistory (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{SinaesDocumentHistoryModule} cargado. Endpoint: \texttt{GET /sinaes-document-history/statistics}.
+
+\begin{tcpasos}
+  1. Enviar \texttt{GET /sinaes-document-history/statistics} & Request al controlador \\
+  2. \texttt{getActivityStatistics} ejecutado & Estadísticas calculadas \\
+  3. Verificar código de respuesta & \texttt{200} \\
+  4. Verificar estructura & Incluye \texttt{recentActivity} agrupada por día \\
+\end{tcpasos}
+\tcresult{El test \textit{GET /sinaes-document-history/statistics — Obtiene estadísticas — responde 200} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: GoogleDrive (CP-M-021 a CP-M-022)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-M-021}{POST /google-drive/create-structure — crea estructura de carpetas}{08/04/2026}{GoogleDrive (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{GoogleDriveModule} cargado con mocks de \texttt{googleapis}. Endpoint: \texttt{POST /google-drive/create-structure}.
+
+\begin{tcpasos}
+  1. Enviar \texttt{POST /google-drive/create-structure} con jerarquía SINAES & Request al controlador \\
+  2. \texttt{GoogleDriveService.createFolderStructure} ejecutado & Estructura creada en Drive \\
+  3. Verificar código de respuesta & \texttt{200} o \texttt{201} \\
+  4. Verificar cuerpo & \texttt{\{ id, path \}} de la carpeta creada \\
+\end{tcpasos}
+\tcresult{El test \textit{POST /google-drive/create-structure} pasa.}
+
+\tcsep
+
+\tcheader{CP-M-022}{POST /google-drive/upload — sube archivo al Drive}{08/04/2026}{GoogleDrive (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{GoogleDriveModule} cargado. Endpoint: \texttt{POST /google-drive/upload}.
+
+\begin{tcpasos}
+  1. Enviar \texttt{POST /google-drive/upload} con file y folderId & Request al controlador \\
+  2. \texttt{GoogleDriveService.uploadFile} ejecutado & Archivo subido \\
+  3. Verificar código de respuesta & \texttt{200} \\
+  4. Verificar cuerpo & \texttt{\{ id, url, size \}} del archivo \\
+\end{tcpasos}
+\tcresult{El test \textit{POST /google-drive/upload} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: SinaesReports (CP-M-023)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-M-023}{GET /sinaes-reports/compliance — genera reporte de cumplimiento SINAES}{08/04/2026}{SinaesReports (Modular)}{Modular}
+\tcstatus
+
+\textbf{Precondición:} Módulo \texttt{SinaesReportsModule} cargado. Endpoint: \texttt{GET /sinaes-reports/compliance}.
+
+\begin{tcpasos}
+  1. Enviar \texttt{GET /sinaes-reports/compliance} & Request al controlador \\
+  2. \texttt{SinaesReportsService} genera el reporte & Datos de cumplimiento calculados \\
+  3. Verificar código de respuesta & \texttt{200} \\
+  4. Verificar estructura del reporte & Incluye porcentajes de cumplimiento por dimensión \\
+\end{tcpasos}
+\tcresult{El test \textit{GET /sinaes-reports/compliance — Genera reporte — responde 200} pasa.}
+
+\vspace{1em}
+\noindent\rule{\linewidth}{0.6pt}
+
+\begin{center}
+  \textbf{Resumen de Pruebas Modulares:} \quad
+  \textcolor{successgreen}{\textbf{23 / 23 casos aprobados}} \quad|\quad
+  Tasa de éxito: \textcolor{successgreen}{\textbf{100\%}}
+\end{center}
+
+\vspace{2em}
+\noindent\rule{\linewidth}{1pt}
+
+\begin{center}
+  {\Large\bfseries Resumen General de Pruebas}\\[0.8em]
+  \begin{tabular}{lrr}
+    \toprule
+    \textbf{Tipo de Prueba} & \textbf{Casos} & \textbf{Aprobados} \\
+    \midrule
+    Pruebas Unitarias & 60 & \textcolor{successgreen}{\textbf{60}} \\
+    Pruebas Modulares & 23 & \textcolor{successgreen}{\textbf{23}} \\
+    \midrule
+    \textbf{Total} & \textbf{83} & \textcolor{successgreen}{\textbf{83}} \\
+    \bottomrule
+  \end{tabular}\\[0.8em]
+  \textbf{Tasa global de éxito:} \textcolor{successgreen}{\Large\textbf{100\%}}
+\end{center}

@@ -1,16 +1,16 @@
 from manim import *
 from helpers import make_neuron_col, make_sparse_edges, make_pixel_grid, make_mini_pattern
 
-Text.set_default(font="Noto Sans")
+Text.set_default(font="Noto Sans", line_spacing=1.1)
 
 
 class S04_CapasCNN(MovingCameraScene):
     """
-    El numero '8' recorre las 4 capas de una CNN.
-    Acto 1 — Capa de Entrada   : pixel grid a neuronas
-    Acto 2 — Primera Oculta    : detectores de bordes (zoom)
-    Acto 3 — Segunda Oculta    : detectores de formas / bucles (zoom)
-    Acto 4 — Capa de Salida    : softmax y probabilidades
+    The digit '8' travels through 4 CNN layers.
+    Act 1 — Input Layer    : pixel grid to neurons
+    Act 2 — First Hidden   : edge detectors (zoom)
+    Act 3 — Second Hidden  : shape / loop detectors (zoom)
+    Act 4 — Output Layer   : softmax and probabilities
     """
 
     DIGIT_8 = [
@@ -27,14 +27,14 @@ class S04_CapasCNN(MovingCameraScene):
         self.camera.frame.save_state()
 
         # ═══════════════════════════════════════════════════════════════════
-        # ACTO 1 — El Lienzo de Pixeles (Capa de Entrada)
+        # ACT 1 — The Pixel Canvas (Input Layer)
         # ═══════════════════════════════════════════════════════════════════
-        act_lbl = Text("Capa de Entrada",
+        act_lbl = Text("Input Layer",
                        font_size=26, color=TEAL_C, weight=BOLD)
         act_lbl.to_edge(UP, buff=0.35)
         self.play(Write(act_lbl))
 
-        # El "8" como trazado vectorial
+        # The "8" as a vector path
         top_loop = Ellipse(width=1.7, height=1.4, fill_opacity=0,
                            stroke_color=WHITE, stroke_width=6)
         bot_loop = Ellipse(width=1.7, height=1.4, fill_opacity=0,
@@ -44,26 +44,26 @@ class S04_CapasCNN(MovingCameraScene):
         self.play(Create(eight), run_time=1.0)
         self.wait(0.4)
 
-        # La cuadricula desciende sobre el "8"
+        # The grid descends over the "8"
         grid = make_pixel_grid(self.DIGIT_8, cell=0.42)
         grid.move_to(UP * 5)
         self.play(FadeOut(eight), grid.animate.move_to(ORIGIN), run_time=1.2)
 
-        px_lbl = Text("7x6 pixeles — valor entre 0 y 1 por pixel",
+        px_lbl = Text("7x6 pixels -- value between 0 and 1 per pixel",
                       font_size=15, color=GRAY_B)
         px_lbl.next_to(grid, DOWN, buff=0.22)
         self.play(FadeIn(px_lbl))
         self.wait(0.6)
 
-        # Comprimir al lado izquierdo
+        # Compress to the left side
         self.play(FadeOut(px_lbl),
                   grid.animate.scale(0.7).move_to(LEFT * 5.0), run_time=0.9)
 
-        # Columna de entrada
+        # Input column
         in_col = make_neuron_col(-2.8, BLUE_C)
         in_dots = Text("...", font_size=20, color=GRAY_C)
         in_dots.next_to(in_col, DOWN, buff=0.08)
-        in_title = Text("Entrada\n784", font_size=13, color=BLUE_C)
+        in_title = Text("Input\n784", font_size=13, color=BLUE_C)
         in_title.next_to(in_col, UP, buff=0.15)
 
         unroll_arr = Arrow(grid.get_right(), in_col.get_left(), buff=0.12,
@@ -76,9 +76,9 @@ class S04_CapasCNN(MovingCameraScene):
         self.wait(0.5)
 
         # ═══════════════════════════════════════════════════════════════════
-        # ACTO 2 — Detectores de Bordes (Primera Capa Oculta)
+        # ACT 2 — Edge Detectors (First Hidden Layer)
         # ═══════════════════════════════════════════════════════════════════
-        act2 = Text("Detectores de Bordes",
+        act2 = Text("Edge Detectors",
                     font_size=24, color=YELLOW, weight=BOLD)
         act2.to_edge(UP, buff=0.35)
         self.play(ReplacementTransform(act_lbl, act2))
@@ -86,7 +86,7 @@ class S04_CapasCNN(MovingCameraScene):
         h1_col = make_neuron_col(-0.6, TEAL_C)
         h1_dots = Text("...", font_size=20, color=GRAY_C)
         h1_dots.next_to(h1_col, DOWN, buff=0.08)
-        h1_title = Text("Oculta 1\n128", font_size=13, color=TEAL_C)
+        h1_title = Text("Hidden 1\n128", font_size=13, color=TEAL_C)
         h1_title.next_to(h1_col, UP, buff=0.15)
 
         edges1 = make_sparse_edges(in_col, h1_col)
@@ -96,7 +96,7 @@ class S04_CapasCNN(MovingCameraScene):
         self.play(FadeIn(h1_dots), FadeIn(h1_title))
         self.wait(0.3)
 
-        # Zoom a neurona — borde horizontal
+        # Zoom to neuron — horizontal edge
         n_horiz = h1_col[2]
         self.play(
             self.camera.frame.animate.scale(0.38).move_to(n_horiz.get_center()),
@@ -106,12 +106,12 @@ class S04_CapasCNN(MovingCameraScene):
         horiz_grid = make_mini_pattern(
             [[1, 1, 1, 1, 1], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], cell=0.09)
         horiz_grid.next_to(n_horiz, RIGHT, buff=0.12)
-        horiz_lbl = Text("borde horizontal", font_size=5, color=YELLOW)
+        horiz_lbl = Text("horizontal edge", font_size=5, color=YELLOW)
         horiz_lbl.next_to(horiz_grid, DOWN, buff=0.08)
         self.play(FadeIn(horiz_grid), FadeIn(horiz_lbl), run_time=0.6)
         self.wait(0.5)
 
-        # Zoom a neurona — borde vertical
+        # Zoom to neuron — vertical edge
         n_vert = h1_col[5]
         self.play(
             self.camera.frame.animate.move_to(n_vert.get_center()),
@@ -122,12 +122,12 @@ class S04_CapasCNN(MovingCameraScene):
         vert_grid = make_mini_pattern(
             [[1, 0, 0, 0, 0], [1, 0, 0, 0, 0], [1, 0, 0, 0, 0]], cell=0.09)
         vert_grid.next_to(n_vert, RIGHT, buff=0.12)
-        vert_lbl = Text("borde vertical", font_size=5, color=YELLOW)
+        vert_lbl = Text("vertical edge", font_size=5, color=YELLOW)
         vert_lbl.next_to(vert_grid, DOWN, buff=0.08)
         self.play(FadeIn(vert_grid), FadeIn(vert_lbl), run_time=0.6)
         self.wait(0.5)
 
-        # Zoom a neurona — curva
+        # Zoom to neuron — curve
         n_curve = h1_col[7]
         self.play(
             self.camera.frame.animate.move_to(n_curve.get_center()),
@@ -138,7 +138,7 @@ class S04_CapasCNN(MovingCameraScene):
         curve_grid = make_mini_pattern(
             [[0, 0, 1, 0, 0], [0, 1, 0, 0, 0], [1, 0, 0, 0, 0]], cell=0.09)
         curve_grid.next_to(n_curve, RIGHT, buff=0.12)
-        curve_lbl = Text("curva / diagonal", font_size=5, color=YELLOW)
+        curve_lbl = Text("curve / diagonal", font_size=5, color=YELLOW)
         curve_lbl.next_to(curve_grid, DOWN, buff=0.08)
         self.play(FadeIn(curve_grid), FadeIn(curve_lbl), run_time=0.6)
         self.wait(0.5)
@@ -151,7 +151,7 @@ class S04_CapasCNN(MovingCameraScene):
             FadeOut(curve_grid), FadeOut(curve_lbl),
             run_time=1.0,
         )
-        cap2 = Text("Capa 1: solo detecta bordes y esquinas, no el número completo",
+        cap2 = Text("Layer 1: detects only edges and corners, not the full digit",
                     font_size=15, color=GRAY_B)
         cap2.to_edge(DOWN, buff=0.3)
         self.play(FadeIn(cap2))
@@ -159,9 +159,9 @@ class S04_CapasCNN(MovingCameraScene):
         self.play(FadeOut(cap2))
 
         # ═══════════════════════════════════════════════════════════════════
-        # ACTO 3 — Detectores de Formas (Segunda Capa Oculta)
+        # ACT 3 — Shape Detectors (Second Hidden Layer)
         # ═══════════════════════════════════════════════════════════════════
-        act3 = Text("Detectores de Formas",
+        act3 = Text("Shape Detectors",
                     font_size=24, color=ORANGE, weight=BOLD)
         act3.to_edge(UP, buff=0.35)
         self.play(ReplacementTransform(act2, act3))
@@ -169,7 +169,7 @@ class S04_CapasCNN(MovingCameraScene):
         h2_col = make_neuron_col(1.2, PURPLE_B)
         h2_dots = Text("...", font_size=20, color=GRAY_C)
         h2_dots.next_to(h2_col, DOWN, buff=0.08)
-        h2_title = Text("Oculta 2\n64", font_size=13, color=PURPLE_B)
+        h2_title = Text("Hidden 2\n64", font_size=13, color=PURPLE_B)
         h2_title.next_to(h2_col, UP, buff=0.15)
 
         edges2 = make_sparse_edges(h1_col, h2_col)
@@ -179,11 +179,11 @@ class S04_CapasCNN(MovingCameraScene):
         self.play(FadeIn(h2_dots), FadeIn(h2_title))
         self.wait(0.3)
 
-        # ── Qué detecta cada neurona — diagrama claro sin zoom ───────────────
+        # ── What each neuron detects — clear diagram without zoom ───────────
         n_loop1 = h2_col[2]
         n_loop2 = h2_col[5]
 
-        # El "8" como dos elipses grandes y visibles a la derecha de la red
+        # The "8" as two large visible ellipses to the right of the network
         demo_cx = 4.3
         loop_top = Ellipse(width=1.2, height=1.05, fill_opacity=0,
                            stroke_color=GRAY_B, stroke_width=2.5)
@@ -191,26 +191,26 @@ class S04_CapasCNN(MovingCameraScene):
                            stroke_color=GRAY_B, stroke_width=2.5)
         loop_top.move_to(RIGHT * demo_cx + UP * 0.50)
         loop_bot.move_to(RIGHT * demo_cx + DOWN * 0.50)
-        eight_lbl = Text('Dígito "8"', font_size=14, color=GRAY_B)
+        eight_lbl = Text('Digit "8"', font_size=14, color=GRAY_B)
         eight_lbl.next_to(VGroup(loop_top, loop_bot), UP, buff=0.14)
 
         self.play(Create(loop_top), Create(loop_bot),
                   FadeIn(eight_lbl), run_time=0.7)
 
-        # ── Bucle superior → n_loop1 ──────────────────────────────────────
+        # ── Upper loop → n_loop1 ──────────────────────────────────────────
         ring_top = Ellipse(width=1.45, height=1.25,
                            fill_color=ORANGE, fill_opacity=0.18,
                            stroke_color=ORANGE, stroke_width=2.8)
         ring_top.move_to(loop_top.get_center())
 
-        top_tag = Text("Bucle\nsuperior", font_size=13, color=ORANGE, weight=BOLD)
+        top_tag = Text("Upper\nloop", font_size=13, color=ORANGE, weight=BOLD)
         top_tag.next_to(ring_top, RIGHT, buff=0.14)
 
         arr_top = Arrow(
             n_loop1.get_right(), ring_top.get_left(),
             buff=0.12, color=ORANGE, stroke_width=2.2, tip_length=0.18,
         )
-        arr_top_lbl = Text("detecta", font_size=11, color=ORANGE)
+        arr_top_lbl = Text("detects", font_size=11, color=ORANGE)
         arr_top_lbl.next_to(arr_top, UP, buff=0.06)
 
         self.play(
@@ -221,20 +221,20 @@ class S04_CapasCNN(MovingCameraScene):
         self.play(GrowArrow(arr_top), FadeIn(arr_top_lbl), run_time=0.5)
         self.wait(0.6)
 
-        # ── Bucle inferior → n_loop2 ──────────────────────────────────────
+        # ── Lower loop → n_loop2 ──────────────────────────────────────────
         ring_bot = Ellipse(width=1.45, height=1.25,
                            fill_color=YELLOW, fill_opacity=0.18,
                            stroke_color=YELLOW, stroke_width=2.8)
         ring_bot.move_to(loop_bot.get_center())
 
-        bot_tag = Text("Bucle\ninferior", font_size=13, color=YELLOW, weight=BOLD)
+        bot_tag = Text("Lower\nloop", font_size=13, color=YELLOW, weight=BOLD)
         bot_tag.next_to(ring_bot, RIGHT, buff=0.14)
 
         arr_bot = Arrow(
             n_loop2.get_right(), ring_bot.get_left(),
             buff=0.12, color=YELLOW, stroke_width=2.2, tip_length=0.18,
         )
-        arr_bot_lbl = Text("detecta", font_size=11, color=YELLOW)
+        arr_bot_lbl = Text("detects", font_size=11, color=YELLOW)
         arr_bot_lbl.next_to(arr_bot, DOWN, buff=0.06)
 
         self.play(
@@ -260,7 +260,7 @@ class S04_CapasCNN(MovingCameraScene):
             run_time=0.5,
         )
 
-        cap3 = Text("Capa 2: combina bordes para reconocer bucles — el '8' tiene DOS.",
+        cap3 = Text("Layer 2: combines edges to recognize loops -- the '8' has TWO.",
                     font_size=15, color=GRAY_B)
         cap3.to_edge(DOWN, buff=0.3)
         self.play(FadeIn(cap3))
@@ -268,9 +268,9 @@ class S04_CapasCNN(MovingCameraScene):
         self.play(FadeOut(cap3))
 
         # ═══════════════════════════════════════════════════════════════════
-        # ACTO 4 — El Veredicto (Capa de Salida)
+        # ACT 4 — The Verdict (Output Layer)
         # ═══════════════════════════════════════════════════════════════════
-        act4 = Text("Capa de Salida",
+        act4 = Text("Output Layer",
                     font_size=26, color=GREEN, weight=BOLD)
         act4.to_edge(UP, buff=0.35)
         self.play(ReplacementTransform(act3, act4))
@@ -289,7 +289,7 @@ class S04_CapasCNN(MovingCameraScene):
             out_neurons.add(n)
             out_labels.add(lbl)
 
-        out_title = Text("Salida\n(Softmax)", font_size=13, color=GREEN)
+        out_title = Text("Output\n(Softmax)", font_size=13, color=GREEN)
         out_title.next_to(out_neurons, UP, buff=0.15)
 
         edges3 = make_sparse_edges(h2_col, out_neurons, step_a=1, step_b=2)
@@ -299,7 +299,7 @@ class S04_CapasCNN(MovingCameraScene):
         self.play(FadeIn(out_labels), FadeIn(out_title))
         self.wait(0.3)
 
-        # Conexiones fuertes desde los bucles al nodo "8"
+        # Strong connections from loops to the "8" node
         neuron_8 = out_neurons[8]
         strong_edges = VGroup(
             Line(n_loop1.get_center(), neuron_8.get_center(),
@@ -309,7 +309,7 @@ class S04_CapasCNN(MovingCameraScene):
         )
         self.play(Create(strong_edges), run_time=0.6)
 
-        # Probabilidades como texto estático
+        # Probabilities as static text
         probs = [0, 0, 1, 1, 0, 0, 0, 0, 98, 0]
         prob_nums = VGroup()
         for i, (neuron, p) in enumerate(zip(out_neurons, probs)):
@@ -323,7 +323,7 @@ class S04_CapasCNN(MovingCameraScene):
             run_time=0.7,
         )
 
-        # Flash en el nodo "8"
+        # Flash on the "8" node
         self.play(
             neuron_8.animate.set_fill(GREEN, opacity=1.0).scale(1.15),
             Flash(neuron_8, color=GREEN, flash_radius=0.35, line_length=0.10),
@@ -331,7 +331,7 @@ class S04_CapasCNN(MovingCameraScene):
         )
 
         cap4 = Text(
-            "Softmax convierte activaciones en probabilidades — el '8' gana con 98%",
+            "Softmax converts activations to probabilities -- '8' wins with 98%",
             font_size=15, color=GREEN)
         cap4.to_edge(DOWN, buff=0.3)
         self.play(FadeIn(cap4))

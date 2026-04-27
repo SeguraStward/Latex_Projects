@@ -1,11 +1,11 @@
 from manim import *
 
-Text.set_default(font="Noto Sans")
+Text.set_default(font="Noto Sans", line_spacing=1.1)
 
 
 class S05b_TransferLearning(Scene):
     """
-    Transfer Learning: dominio fuente (ImageNet) → dominio destino (médico).
+    Transfer Learning: source domain (ImageNet) -> target domain (medical).
     """
 
     # ── construct ─────────────────────────────────────────────────────────────
@@ -17,9 +17,9 @@ class S05b_TransferLearning(Scene):
         self.play(Write(title), run_time=0.8)
 
         # ══════════════════════════════════════════════════════════════════════
-        # ACT 1 — Dominio fuente → dominio destino
+        # ACT 1 — Source domain → target domain
         # ══════════════════════════════════════════════════════════════════════
-        # ── Dominio fuente (ImageNet) ─────────────────────────────────────
+        # ── Source domain (ImageNet) ──────────────────────────────────────
         src_box = RoundedRectangle(
             width=4.2, height=2.6,
             fill_color="#070c1a", fill_opacity=0.9,
@@ -28,14 +28,14 @@ class S05b_TransferLearning(Scene):
         )
         src_box.move_to(LEFT * 3.5 + DOWN * 0.2)
 
-        src_title = Text("Dominio Fuente", font_size=14, color=BLUE_C, weight=BOLD)
+        src_title = Text("Source Domain", font_size=14, color=BLUE_C, weight=BOLD)
         src_title.next_to(src_box, UP, buff=0.12)
 
-        src_tag = Text("ImageNet  —  1.2 M imágenes", font_size=11, color=GRAY_B)
+        src_tag = Text("ImageNet  --  1.2 M images", font_size=11, color=GRAY_B)
         src_tag.move_to(src_box.get_top() + DOWN * 0.28)
 
-        # Pequeña cuadrícula de fotos naturales
-        nat_labels = ["Perro", "Gato", "Auto", "Avión", "Árbol", "Flor"]
+        # Small grid of natural photos
+        nat_labels = ["Dog", "Cat", "Car", "Plane", "Tree", "Flower"]
         nat_colors = [BLUE_C, TEAL_C, GREEN_C, YELLOW, ORANGE, PURPLE_B]
         nat_cards = VGroup(*[
             VGroup(
@@ -56,7 +56,7 @@ class S05b_TransferLearning(Scene):
             run_time=0.9,
         )
 
-        # ── Flecha de transferencia ───────────────────────────────────────
+        # ── Transfer arrow ────────────────────────────────────────────────
         transfer_arrow = Arrow(
             src_box.get_right() + RIGHT * 0.1,
             src_box.get_right() + RIGHT * 2.0,
@@ -66,7 +66,7 @@ class S05b_TransferLearning(Scene):
         tl_badge.next_to(transfer_arrow, UP, buff=0.1)
         self.play(GrowArrow(transfer_arrow), FadeIn(tl_badge), run_time=0.6)
 
-        # ── Dominio destino (Médico) ──────────────────────────────────────
+        # ── Target domain (Medical) ───────────────────────────────────────
         dst_box = RoundedRectangle(
             width=4.2, height=2.6,
             fill_color="#070c0e", fill_opacity=0.9,
@@ -75,13 +75,13 @@ class S05b_TransferLearning(Scene):
         )
         dst_box.move_to(RIGHT * 3.5 + DOWN * 0.2)
 
-        dst_title = Text("Dominio Destino", font_size=14, color=TEAL_C, weight=BOLD)
+        dst_title = Text("Target Domain", font_size=14, color=TEAL_C, weight=BOLD)
         dst_title.next_to(dst_box, UP, buff=0.12)
 
-        dst_tag = Text("Imágenes Médicas  —  ~500 muestras", font_size=11, color=GRAY_B)
+        dst_tag = Text("Medical Images  --  ~500 samples", font_size=11, color=GRAY_B)
         dst_tag.move_to(dst_box.get_top() + DOWN * 0.28)
 
-        med_labels = ["RX Tórax", "MRI", "Derma", "Retina", "Histo", "TC"]
+        med_labels = ["Chest X-Ray", "MRI", "Derma", "Retina", "Histo", "CT"]
         med_colors = [BLUE_C, TEAL_C, ORANGE, RED_C, GREEN_C, PURPLE_B]
         med_cards = VGroup(*[
             VGroup(
@@ -103,8 +103,8 @@ class S05b_TransferLearning(Scene):
         )
 
         caption1 = Text(
-            "Una red entrenada en millones de imágenes genéricas\n"
-            "se adapta a tareas médicas con muy pocos datos",
+            "A network trained on millions of generic images\n"
+            "adapts to medical tasks with very little data",
             font_size=14, color=GRAY_A,
         )
         caption1.to_edge(DOWN, buff=0.28)

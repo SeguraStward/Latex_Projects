@@ -1,0 +1,155 @@
+\documentclass[12pt,letterpaper]{article}
+
+% ==============================================================================
+% PREAMBLE
+% ==============================================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+% Language support — inputenc handles accents
+
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[top=2.5cm,bottom=2.5cm,left=3cm,right=2.5cm,headheight=15pt]{geometry}
+
+% Graphics & Color
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{colortbl}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+
+% Lists and spacing
+\usepackage{parskip}
+\setlength{\parskip}{6pt}
+
+% Headers/Footers
+\usepackage{fancyhdr}
+\usepackage{etoolbox}
+
+% Links
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primarycolor,
+  urlcolor=accentcolor,
+  pdfpagemode=UseOutlines
+}
+
+% Float control
+\usepackage{float}
+\usepackage{caption}
+\captionsetup{font=small, labelfont=bf, skip=4pt}
+
+% ==============================================================================
+% COLORS
+% ==============================================================================
+\definecolor{primarycolor}{RGB}{0, 80, 160}
+\definecolor{accentcolor}{HTML}{D93F16}
+\definecolor{successgreen}{RGB}{34, 139, 34}
+\definecolor{rowgray}{RGB}{245, 245, 245}
+\definecolor{headergray}{RGB}{220, 220, 220}
+\definecolor{modulebg}{RGB}{235, 242, 252}
+
+% ==============================================================================
+% SECTION FORMATTING (manual — no titlesec)
+% ==============================================================================
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+  {-3.5ex \@plus -1ex \@minus -.2ex}%
+  {2.3ex \@plus .2ex}%
+  {\Large\bfseries\color{primarycolor}}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+  {-2.5ex \@plus -1ex \@minus -.2ex}%
+  {1.2ex \@plus .2ex}%
+  {\large\bfseries\color{primarycolor!80}}}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+  {-2ex \@plus -1ex \@minus -.2ex}%
+  {0.8ex \@plus .2ex}%
+  {\normalsize\bfseries\color{primarycolor!60}}}
+\makeatother
+
+% ==============================================================================
+% HEADERS & FOOTERS
+% ==============================================================================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{gray}\nouppercase{\leftmark}}
+\fancyhead[R]{\small\color{gray}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyfoot[C]{\small\color{gray}Sistema de Gestión de Calidad --- Universidad Nacional}
+
+% ==============================================================================
+% TEST CASE MACROS
+% ==============================================================================
+
+% Colors for status
+\newcommand{\estadoPaso}{\cellcolor{green!25}\textbf{\textcolor{successgreen}{PASÓ}}}
+
+% Test case header box
+% Args: #1 ID  #2 Nombre  #3 Fecha  #4 Módulo  #5 Tipo
+\newcommand{\tcheader}[5]{%
+  \noindent
+  \begin{tabular}{|>{\bfseries}p{2.1cm}|p{2.4cm}|>{\bfseries}p{1.5cm}|p{2.1cm}|>{\bfseries}p{1.9cm}|p{2.5cm}|}
+    \hline
+    \rowcolor{modulebg}
+    ID & \texttt{#1} & Fecha & #3 & Módulo & \texttt{#4} \\
+    \hline
+    \multicolumn{4}{|l|}{\textbf{Nombre:} #2} & \multicolumn{2}{l|}{\textbf{Tipo:} #5} \\
+    \hline
+  \end{tabular}%
+}
+
+% Status badge
+\newcommand{\tcstatus}{\quad\estadoPaso}
+
+% Steps table environment
+% Usage: \begin{tcpasos} step & expected \\ ... \end{tcpasos}
+\newenvironment{tcpasos}{%
+  \vspace{2pt}%
+  \noindent\begin{tabular}{|>{\small}p{7.5cm}|>{\small}p{6.5cm}|}
+    \hline
+    \rowcolor{headergray}
+    \textbf{Pasos} & \textbf{Resultado Esperado} \\
+    \hline
+}{%
+    \hline
+  \end{tabular}%
+}
+
+% Result line
+\newcommand{\tcresult}[1]{%
+  \par\noindent\textbf{Resultado Obtenido:} \small #1\normalsize
+}
+
+% Compact separator between test cases
+\newcommand{\tcsep}{\vspace{6pt}\noindent\rule{\linewidth}{0.2pt}\vspace{4pt}}
+
+% ==============================================================================
+% DOCUMENT
+% ==============================================================================
+\begin{document}
+\setcounter{tocdepth}{2}
+
+% ── PORTADA ───────────────────────────────────────────────────────────────────
+\def\PortadaLogo{../avance2/pruebas/Logo-UNA-Rojo_FondoTransparente.png}
+\def\PortadaTitulo{Seguimiento Parte II}
+\def\PortadaSubtitulo{Conclusi\'{o}n de Desarrollo y Pruebas de Software}
+\def\PortadaFecha{8 de abril de 2026}
+\input{../../templates/portada_una_investigacion}
+
+% ── TABLA DE CONTENIDOS ───────────────────────────────────────────────────────
+\tableofcontents
+\newpage
+
+% ── SECCIONES ─────────────────────────────────────────────────────────────────
+\input{sections/conclusion}
+\newpage
+\input{sections/pruebas_unitarias}
+\newpage
+\input{sections/pruebas_modulares}
+
+\end{document}

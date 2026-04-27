@@ -1,21 +1,21 @@
 from manim import *
 import numpy as np
 
-Text.set_default(font="Noto Sans")
+Text.set_default(font="Noto Sans", line_spacing=1.1)
 
 
 class S07_Metricas(Scene):
     """
-    Acto 1 — El Espejismo de la Precision
-    Acto 2 — Las Dos Balanzas (Sensibilidad y Especificidad)
-    Acto 3 — Nace la Curva ROC
-    Acto 4 — El AUC: la calificacion final
+    Act 1 — The Accuracy Illusion
+    Act 2 — The Two Scales (Sensitivity and Specificity)
+    Act 3 — The ROC Curve is Born
+    Act 4 — The AUC: the final score
     """
 
     # ── helpers ───────────────────────────────────────────────────────────────
 
     def _dot_grid(self, n_green, n_red, cols=10, dot_r=0.09, spacing=0.32):
-        """Grid de puntos: n_green verdes y n_red rojos (mezclados)."""
+        """Grid of dots: n_green green and n_red red (mixed)."""
         total = n_green + n_red
         rows = (total + cols - 1) // cols
         np.random.seed(3)
@@ -37,14 +37,14 @@ class S07_Metricas(Scene):
     def construct(self):
 
         # ══════════════════════════════════════════════════════════════════════
-        # ACTO 1 — El Espejismo de la Precision
+        # ACT 1 — The Accuracy Illusion
         # ══════════════════════════════════════════════════════════════════════
-        act_lbl = Text("El Espejismo de la Precisión",
+        act_lbl = Text("The Accuracy Illusion",
                        font_size=26, color=TEAL_C, weight=BOLD)
         act_lbl.to_edge(UP, buff=0.35)
         self.play(Write(act_lbl))
 
-        # 100 puntos: 99 verdes + 1 rojo
+        # 100 dots: 99 green + 1 red
         dots, red_indices = self._dot_grid(99, 1)
         dots.move_to(UP * 0.2)
         red_dot = dots[list(red_indices)[0]]
@@ -55,7 +55,7 @@ class S07_Metricas(Scene):
         )
         self.wait(0.4)
 
-        # Scanner barre de arriba a abajo pintando todo de verde
+        # Scanner sweeps top to bottom painting everything green
         scanner = Rectangle(
             width=dots.width + 0.3, height=0.28,
             fill_color=GREEN, fill_opacity=0.18,
@@ -70,28 +70,28 @@ class S07_Metricas(Scene):
         )
         self.play(FadeOut(scanner), run_time=0.2)
 
-        # Mostrar "Precision: 99%"
-        acc_text = Text("Precisión:", font_size=36, color=WHITE)
+        # Show "Accuracy: 99%"
+        acc_text = Text("Accuracy:", font_size=36, color=WHITE)
         acc_val = Text("99%", font_size=48, color=GREEN, weight=BOLD)
         acc_group = VGroup(acc_text, acc_val).arrange(RIGHT, buff=0.2)
         acc_group.to_edge(DOWN, buff=0.7)
         self.play(FadeIn(acc_group, shift=UP * 0.3), run_time=0.6)
         self.wait(0.8)
 
-        # Zoom al punto rojo original — fue pintado de verde
-        # Desplazar la cuadricula a la izquierda para dejar espacio a la etiqueta
+        # Zoom to the original red dot — it was painted green
+        # Shift the grid to the left to leave space for the label
         self.play(dots.animate.shift(LEFT * 2.0), run_time=0.5)
         self.play(
             red_dot.animate.scale(3.5).set_color(RED),
             run_time=0.7,
         )
-        fn_lbl = Text("Falso Negativo:\nel tumor que se perdió",
+        fn_lbl = Text("False Negative:\nthe missed tumor",
                       font_size=16, color=RED, weight=BOLD)
         fn_lbl.move_to(RIGHT * 2.5 + UP * 0.2)
         self.play(FadeIn(fn_lbl, shift=LEFT * 0.2))
         self.wait(0.5)
 
-        # "99%" se rompe: tiembla y se pone rojo
+        # "99%" breaks: shakes and turns red
         self.play(
             acc_val.animate.set_color(RED),
             acc_val.animate.shift(RIGHT * 0.08),
@@ -100,7 +100,7 @@ class S07_Metricas(Scene):
         self.play(acc_val.animate.shift(LEFT * 0.16), run_time=0.1)
         self.play(acc_val.animate.shift(RIGHT * 0.08), run_time=0.1)
 
-        useless = Text("Alta precisión NO garantiza detectar enfermos",
+        useless = Text("High accuracy does NOT guarantee detecting sick patients",
                        font_size=15, color=RED)
         useless.to_edge(DOWN, buff=0.3)
         self.play(FadeIn(useless, shift=UP * 0.2))
@@ -112,32 +112,32 @@ class S07_Metricas(Scene):
         )
 
         # ══════════════════════════════════════════════════════════════════════
-        # ACTO 2 — Las Dos Balanzas
+        # ACT 2 — The Two Scales
         # ══════════════════════════════════════════════════════════════════════
-        act2 = Text("Las Dos Balanzas",
+        act2 = Text("The Two Scales",
                     font_size=26, color=YELLOW, weight=BOLD)
         act2.to_edge(UP, buff=0.35)
         self.play(ReplacementTransform(act_lbl, act2))
 
-        # Divisor
+        # Divider
         div = Line(UP * 2.8, DOWN * 3.2, stroke_color=GRAY_D, stroke_width=1)
         self.play(Create(div), run_time=0.3)
 
-        # ── Izquierda: Sensibilidad ────────────────────────────────────────
-        sens_title = Text("Sensibilidad", font_size=22, color=GREEN, weight=BOLD)
+        # ── Left: Sensitivity ─────────────────────────────────────────────
+        sens_title = Text("Sensitivity", font_size=22, color=GREEN, weight=BOLD)
         sens_title.move_to(LEFT * 3.2 + UP * 2.3)
-        sens_sub = Text("Detectar a los enfermos", font_size=14, color=GRAY_B)
+        sens_sub = Text("Detecting the sick", font_size=14, color=GRAY_B)
         sens_sub.next_to(sens_title, DOWN, buff=0.08)
         self.play(FadeIn(sens_title), FadeIn(sens_sub))
 
         sens_formula = MathTex(
-            r"\text{Sensibilidad} = \frac{VP}{VP + FN}",
+            r"\text{Sensitivity} = \frac{TP}{TP + FN}",
             font_size=26, color=GREEN,
         )
         sens_formula.move_to(LEFT * 3.2 + UP * 1.3)
         self.play(Write(sens_formula), run_time=0.8)
 
-        # Puntos rojos (enfermos): algunos rodeados (VP), otros escapan (FN)
+        # Red dots (sick): some circled (TP), others escape (FN)
         vp_dots = VGroup(*[
             Dot(radius=0.1, color=RED, fill_opacity=0.85).move_to(
                 LEFT * (4.5 - i * 0.45) + DOWN * 0.1)
@@ -146,13 +146,13 @@ class S07_Metricas(Scene):
         vp_circles = VGroup(*[
             Circle(radius=0.16, stroke_color=GREEN, stroke_width=2, fill_opacity=0)
             .move_to(vp_dots[i].get_center())
-            for i in range(4)           # solo 4 detectados (VP)
+            for i in range(4)           # only 4 detected (TP)
         ])
         fn_label = VGroup(*[
             Text("FN", font_size=9, color=RED).next_to(vp_dots[i], DOWN, buff=0.05)
-            for i in range(4, 6)        # 2 no detectados
+            for i in range(4, 6)        # 2 undetected
         ])
-        vp_label = Text("VP: detectados", font_size=12, color=GREEN)
+        vp_label = Text("TP: detected", font_size=12, color=GREEN)
         vp_label.move_to(LEFT * 3.2 + DOWN * 0.55)
 
         self.play(
@@ -165,21 +165,21 @@ class S07_Metricas(Scene):
             run_time=0.8,
         )
 
-        # ── Derecha: Especificidad ─────────────────────────────────────────
-        spec_title = Text("Especificidad", font_size=22, color=TEAL_C, weight=BOLD)
+        # ── Right: Specificity ────────────────────────────────────────────
+        spec_title = Text("Specificity", font_size=22, color=TEAL_C, weight=BOLD)
         spec_title.move_to(RIGHT * 3.2 + UP * 2.3)
-        spec_sub = Text("Descartar a los sanos", font_size=14, color=GRAY_B)
+        spec_sub = Text("Ruling out healthy patients", font_size=14, color=GRAY_B)
         spec_sub.next_to(spec_title, DOWN, buff=0.08)
         self.play(FadeIn(spec_title), FadeIn(spec_sub))
 
         spec_formula = MathTex(
-            r"\text{Especificidad} = \frac{VN}{VN + FP}",
+            r"\text{Specificity} = \frac{TN}{TN + FP}",
             font_size=26, color=TEAL_C,
         )
         spec_formula.move_to(RIGHT * 3.2 + UP * 1.3)
         self.play(Write(spec_formula), run_time=0.8)
 
-        # Puntos verdes (sanos): algunos correctamente ignorados (VN), otros FP
+        # Green dots (healthy): some correctly ignored (TN), others FP
         vn_dots = VGroup(*[
             Dot(radius=0.1, color=GREEN, fill_opacity=0.85).move_to(
                 RIGHT * (2.0 + i * 0.45) + DOWN * 0.1)
@@ -188,13 +188,13 @@ class S07_Metricas(Scene):
         fp_circles = VGroup(*[
             Circle(radius=0.16, stroke_color=RED, stroke_width=2, fill_opacity=0)
             .move_to(vn_dots[i].get_center())
-            for i in range(4, 6)        # 2 falsos positivos
+            for i in range(4, 6)        # 2 false positives
         ])
         fp_label = VGroup(*[
             Text("FP", font_size=9, color=RED).next_to(vn_dots[i], DOWN, buff=0.05)
             for i in range(4, 6)
         ])
-        vn_label = Text("VN: correctamente sanos", font_size=12, color=TEAL_C)
+        vn_label = Text("TN: correctly healthy", font_size=12, color=TEAL_C)
         vn_label.move_to(RIGHT * 3.2 + DOWN * 0.55)
 
         self.play(
@@ -207,8 +207,8 @@ class S07_Metricas(Scene):
             run_time=0.8,
         )
 
-        # Umbral slider
-        threshold = ValueTracker(0.0)          # posicion -1.0 a 1.0
+        # Threshold slider
+        threshold = ValueTracker(0.0)          # position -1.0 to 1.0
         slider_line = Line(LEFT * 4.8, RIGHT * 4.8,
                            stroke_color=GRAY_D, stroke_width=0.8)
         slider_line.move_to(DOWN * 1.5)
@@ -218,7 +218,7 @@ class S07_Metricas(Scene):
             DOWN * 1.5 + DOWN * 0.35 + RIGHT * threshold.get_value(),
             stroke_color=YELLOW, stroke_width=3,
         ))
-        thresh_lbl = Text("Umbral de Decisión", font_size=13, color=YELLOW)
+        thresh_lbl = Text("Decision Threshold", font_size=13, color=YELLOW)
         thresh_lbl.next_to(slider_line, DOWN, buff=0.12)
 
         sens_pct = always_redraw(lambda: Text(
@@ -236,10 +236,10 @@ class S07_Metricas(Scene):
         self.add(sens_pct, spec_pct)
         self.wait(0.3)
 
-        # Mover slider izquierda: mas sensibilidad, menos especificidad
+        # Move slider left: more sensitivity, less specificity
         self.play(threshold.animate.set_value(-2.5), run_time=1.2)
         self.wait(0.5)
-        # Mover slider derecha: mas especificidad, menos sensibilidad
+        # Move slider right: more specificity, less sensitivity
         self.play(threshold.animate.set_value(2.5), run_time=1.5)
         self.wait(0.5)
         self.play(threshold.animate.set_value(0.0), run_time=0.8)
@@ -258,9 +258,9 @@ class S07_Metricas(Scene):
         )
 
         # ══════════════════════════════════════════════════════════════════════
-        # ACTO 3 — Nace la Curva ROC
+        # ACT 3 — The ROC Curve is Born
         # ══════════════════════════════════════════════════════════════════════
-        act3 = Text("Curva ROC",
+        act3 = Text("ROC Curve",
                     font_size=26, color=ORANGE, weight=BOLD)
         act3.to_edge(UP, buff=0.35)
         self.play(ReplacementTransform(act2, act3))
@@ -276,31 +276,31 @@ class S07_Metricas(Scene):
         )
         axes.move_to(DOWN * 0.15)
 
-        x_label = Text("1 - Especificidad\n(Falsas alarmas)",
+        x_label = Text("1 - Specificity\n(False alarms)",
                        font_size=14, color=GRAY_B)
         x_label.next_to(axes.x_axis, DOWN, buff=0.25)
-        y_label = Text("Sensibilidad\n(Detectar enfermos)",
+        y_label = Text("Sensitivity\n(Detecting sick)",
                        font_size=14, color=GRAY_B)
         y_label.next_to(axes.y_axis, LEFT, buff=0.15)
 
         self.play(Create(axes), FadeIn(x_label), FadeIn(y_label), run_time=1.0)
 
-        # Linea diagonal (adivinanza aleatoria)
+        # Diagonal line (random guess)
         diagonal = axes.plot(lambda x: x, x_range=[0, 1],
                              color=GRAY_C, stroke_width=1.5)
-        diag_lbl = Text("Adivinanza aleatoria", font_size=11, color=GRAY_C)
+        diag_lbl = Text("Random guess", font_size=11, color=GRAY_C)
         diag_lbl.move_to(axes.c2p(0.72, 0.54))
         self.play(Create(diagonal), FadeIn(diag_lbl), run_time=0.8)
         self.wait(0.3)
 
-        # Anotacion del eje X
+        # X-axis annotation
         cost_note = Text(
-            "Moverse por el eje X = pagar con falsas alarmas",
+            "Moving along X axis = paying with false alarms",
             font_size=13, color=ORANGE,
         )
         cost_note.to_edge(RIGHT, buff=0.3).shift(UP * 2.2)
         gain_note = Text(
-            "Subir en el eje Y = ganar: detectar enfermos",
+            "Moving up Y axis = gain: detecting sick",
             font_size=13, color=GREEN,
         )
         gain_note.next_to(cost_note, DOWN, buff=0.2)
@@ -308,7 +308,7 @@ class S07_Metricas(Scene):
                   FadeIn(gain_note, shift=LEFT * 0.2), run_time=0.7)
         self.wait(0.5)
 
-        # Curva ROC dibujandose (modelo bueno: y = x^0.3)
+        # ROC curve drawing itself (good model: y = x^0.3)
         roc_curve = axes.plot(
             lambda x: x ** 0.28,
             x_range=[0.001, 1],
@@ -317,13 +317,13 @@ class S07_Metricas(Scene):
         )
         self.play(Create(roc_curve), run_time=2.0, rate_func=linear)
 
-        # Punto de operacion anotado
+        # Annotated operating point
         op_point = Dot(axes.c2p(0.2, 0.78), color=YELLOW, radius=0.1)
         op_line_h = DashedLine(axes.c2p(0, 0.78), axes.c2p(0.2, 0.78),
                                stroke_color=GREEN, stroke_width=1.2, dash_length=0.08)
         op_line_v = DashedLine(axes.c2p(0.2, 0), axes.c2p(0.2, 0.78),
                                stroke_color=RED, stroke_width=1.2, dash_length=0.08)
-        op_note = Text("78% sens.\n20% falsas alarmas",
+        op_note = Text("78% sens.\n20% false alarms",
                        font_size=12, color=YELLOW)
         op_note.next_to(op_point, UP, buff=0.12)
 
@@ -342,14 +342,14 @@ class S07_Metricas(Scene):
         )
 
         # ══════════════════════════════════════════════════════════════════════
-        # ACTO 4 — El AUC: la Calificacion Final
+        # ACT 4 — The AUC: the Final Score
         # ══════════════════════════════════════════════════════════════════════
-        act4 = Text("La Calificación Final — AUC",
+        act4 = Text("The Final Score -- AUC",
                     font_size=26, color=GREEN, weight=BOLD)
         act4.to_edge(UP, buff=0.35)
         self.play(ReplacementTransform(act3, act4))
 
-        # Rellenar area bajo la curva ROC
+        # Fill area under the ROC curve
         area = axes.get_area(
             roc_curve,
             x_range=[0, 1],
@@ -368,7 +368,7 @@ class S07_Metricas(Scene):
         self.play(ChangeDecimalToValue(auc_val, 0.85), run_time=1.5)
         self.wait(0.8)
 
-        # ── Estado B: modelo inutil (curva → diagonal) ────────────────────
+        # ── State B: useless model (curve -> diagonal) ────────────────────
         useless_curve = axes.plot(lambda x: x, x_range=[0, 1],
                                   color=RED, stroke_width=3)
         useless_area = axes.get_area(
@@ -382,14 +382,14 @@ class S07_Metricas(Scene):
             auc_prefix.animate.set_color(RED),
             run_time=1.4,
         )
-        useless_lbl = Text("Modelo inútil\n(igual que lanzar una moneda)",
+        useless_lbl = Text("Useless model\n(same as flipping a coin)",
                            font_size=14, color=RED)
         useless_lbl.to_edge(RIGHT, buff=0.4).shift(UP * 1.5)
         self.play(FadeIn(useless_lbl))
         self.wait(1.0)
 
-        # ── Estado C: modelo perfecto (curva → angulo recto) ──────────────
-        # Angulo recto: (0,0) → (0,1) → (1,1)
+        # ── State C: perfect model (curve -> right angle) ─────────────────
+        # Right angle: (0,0) -> (0,1) -> (1,1)
         perfect_curve = axes.plot_line_graph(
             x_values=[0, 0, 1],
             y_values=[0, 1, 1],
@@ -411,13 +411,13 @@ class S07_Metricas(Scene):
             auc_prefix.animate.set_color(GREEN),
             run_time=1.6,
         )
-        perfect_lbl = Text("Modelo perfecto\n100% sensibilidad + 100% especificidad",
+        perfect_lbl = Text("Perfect model\n100% sensitivity + 100% specificity",
                            font_size=14, color=GREEN)
         perfect_lbl.to_edge(RIGHT, buff=0.4).shift(UP * 1.5)
         self.play(FadeIn(perfect_lbl))
         self.wait(0.8)
 
-        # ── Volver al modelo real (AUC 0.932 del paper) ────────────────────
+        # ── Return to real model (AUC 0.932 from the paper) ───────────────
         real_curve = axes.plot(
             lambda x: x ** 0.28, x_range=[0.001, 1],
             color=YELLOW, stroke_width=3,
@@ -435,16 +435,16 @@ class S07_Metricas(Scene):
             run_time=1.4,
         )
 
-        # Desplazar el grafico a la izquierda para dejar espacio al caption
+        # Shift chart to the left to make room for the caption
         chart_grp = VGroup(axes, x_label, y_label, diagonal, diag_lbl,
                            roc_curve, area, auc_group)
         self.play(chart_grp.animate.shift(LEFT * 1.5), run_time=0.7)
 
-        # Caption final — lineas separadas para espaciado correcto
-        cap_line1 = Text("AUC resume que tan bien", font_size=15, color=GRAY_A)
-        cap_line2 = Text("el modelo separa enfermos", font_size=15, color=GRAY_A)
-        cap_line3 = Text("de sanos a cualquier", font_size=15, color=GRAY_A)
-        cap_line4 = Text("umbral de decision", font_size=15, color=GRAY_A)
+        # Final caption — separate lines for correct spacing
+        cap_line1 = Text("AUC  summarizes  how  well", font_size=16, color=GRAY_A)
+        cap_line2 = Text("the  model  separates  sick", font_size=16, color=GRAY_A)
+        cap_line3 = Text("from  healthy  at  any", font_size=16, color=GRAY_A)
+        cap_line4 = Text("decision  threshold", font_size=16, color=GRAY_A)
         final_cap = VGroup(cap_line1, cap_line2, cap_line3, cap_line4)
         final_cap.arrange(DOWN, buff=0.22, aligned_edge=LEFT)
         final_cap.move_to(RIGHT * 4.5 + UP * 0.3)

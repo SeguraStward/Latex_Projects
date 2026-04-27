@@ -1,0 +1,49 @@
+% =============================================================================
+% Portada UNA reutilizable para investigaciones
+% Basada en el estilo usado en projects/avance2/main.tex
+% =============================================================================
+
+% Campos configurables (sobrescribir antes de \input)
+\providecommand{\PortadaLogo}{../../templates/assets/Logo-UNA-Rojo_FondoTransparente.png}
+\providecommand{\PortadaUniversidad}{Universidad Nacional}
+\providecommand{\PortadaSede}{Sede Región Brunca}
+\providecommand{\PortadaCarrera}{Ingeniería en Sistemas de Información}
+\providecommand{\PortadaTitulo}{Seguimiento Parte II}
+\providecommand{\PortadaSubtitulo}{Pruebas a Proyecto Asignado}
+\providecommand{\PortadaCurso}{Ingeniería en Sistemas III}
+\providecommand{\PortadaProfesora}{Saray Castro Mora}
+\providecommand{\PortadaResponsables}{Angel Segura Méndez \\ Francisco Mora Cabezas}
+\providecommand{\PortadaFecha}{3 de abril de 2026}
+
+\thispagestyle{empty}
+\begin{center}
+  \vspace*{0.8cm}
+  \includegraphics[width=4.4cm]{\PortadaLogo}
+  \vspace{0.9cm}
+
+  {\LARGE\bfseries \PortadaUniversidad}\\[0.3cm]
+  {\large \PortadaSede}\\[0.25cm]
+  {\large \PortadaCarrera}
+
+  \vspace{1.25cm}
+  {\LARGE\bfseries \PortadaTitulo}\\[0.3cm]
+  {\Large \PortadaSubtitulo}
+
+  \vspace{1.2cm}
+  \rule{0.65\linewidth}{0.5pt}
+
+  \vspace{0.65cm}
+  \renewcommand{\arraystretch}{1.6}
+  \setlength{\tabcolsep}{8pt}
+  \begin{tabular}{rl}
+    \textbf{Curso:}        & \PortadaCurso \\
+    \textbf{Profesor:}     & \PortadaProfesora \\[0.3cm]
+    \textbf{Responsables:} & \begin{tabular}[t]{@{}l@{}}\PortadaResponsables\end{tabular} \\[0.3cm]
+    \textbf{Fecha:}        & \PortadaFecha \\
+  \end{tabular}
+
+  \vspace{0.45cm}
+  \rule{0.65\linewidth}{0.5pt}
+  \vfill
+\end{center}
+\newpage

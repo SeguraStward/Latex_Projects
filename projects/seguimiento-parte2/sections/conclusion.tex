@@ -1,0 +1,143 @@
+% ==============================================================================
+% SECCIÓN: CONCLUSIÓN DE DESARROLLO
+% ==============================================================================
+\section{Conclusión de Desarrollo}
+
+\subsection{Pendientes Desarrollados en este Periodo}
+
+Durante el periodo de seguimiento comprendido entre el 3 y el 8 de abril de 2026, el equipo completó el desarrollo de los módulos que se encontraban pendientes en la iteración anterior del \textbf{Sistema de Gestión de Calidad (SGC)} de la Universidad Nacional, Sede Región Brunca. A continuación se detallan todos los entregables finalizados:
+
+\begin{enumerate}
+
+  \item \textbf{Módulo de Gestión de Tiempos de Jornada (completo)} \\
+  Se finalizaron las vistas de administración de asignaciones, la gestión de cohortes por carrera y año, la tabla de resumen anual de jornadas por campus y el panel de totales por sede. El módulo permite distribuir jornadas, revisar campus, controlar el saldo anual y validar consistencia entre horas requeridas y asignadas.
+
+  \item \textbf{Módulo de Capacidad Externa y Proyectos} \\
+  Se completaron los sub-módulos de \textit{Proyectos Institucionales} (listado, registro y seguimiento con horas requeridas/asignadas) y de \textit{Proveedores Externos} (conveniados, jornadas externas y estado de convenios activos).
+
+  \item \textbf{Módulo de Gestión SINAES} \\
+  Se implementó la estructura jerárquica completa (Dimensiones $\to$ Componentes $\to$ Criterios $\to$ Estándares $\to$ Evidencias), la consulta de documentos probatorios con filtros, la subida de documentos y la gestión de tipos de documento.
+
+  \item \textbf{Módulo de Reportes de Cumplimiento SINAES} \\
+  Se desarrolló la generación de reportes parametrizados por Dimensión SINAES, Componente, Criterio y carrera, con exportación de resultados.
+
+  \item \textbf{Suite Completa de Pruebas} \\
+  Se redactaron y ejecutaron 60 casos de prueba unitaria (CP-U-001 a CP-U-060) y 23 casos de prueba modular (CP-M-001 a CP-M-023), logrando un \textbf{100\% de tasa de aprobación}.
+
+\end{enumerate}
+
+% ==============================================================================
+\subsection{Evidencia de los Desarrollos Completados}
+% ==============================================================================
+
+A continuación se presenta evidencia visual de cada uno de los módulos finalizados durante este periodo.
+
+% ------------------------------------------------------------------------------
+\subsubsection{Capacidad Externa y Proyectos — Proyectos Institucionales}
+% ------------------------------------------------------------------------------
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{../../fotos/1.png}
+  \caption{Vista principal del módulo \textbf{Capacidad Externa y Proyectos} en la pestaña \textit{Proyectos Institucionales}. Se muestran 10 proyectos registrados, 2 activos, 245 unidades inscritas y 2 jornadas asignadas. La tabla lista cada proyecto con su código, título, tipo (Institucional), horas requeridas/asignadas, estado (Active/Pending) y acciones disponibles.}
+  \label{fig:proyectos-institucionales}
+\end{figure}
+
+% ------------------------------------------------------------------------------
+\subsubsection{Capacidad Externa y Proyectos — Proveedores Externos}
+% ------------------------------------------------------------------------------
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{../../fotos/2.png}
+  \caption{Pestaña de \textbf{Proveedores Externos} dentro del módulo de Capacidad. Se registran 7 proveedores con un total de 152 jornadas externas, 7 convenios activos y un promedio de 22 jornadas por proveedor. La tabla incluye instituciones como TEC, Universidad de Costa Rica, MEP y LALAB/PACS con sus horas provistas, tipo de vínculo y estado de cada convenio.}
+  \label{fig:proveedores-externos}
+\end{figure}
+
+% ------------------------------------------------------------------------------
+\subsubsection{Gestión de Tiempos de Jornada — Resumen Anual}
+% ------------------------------------------------------------------------------
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{../../fotos/3.png}
+  \caption{\textbf{Resumen Anual de Jornadas} del año 2026, con distribución por campus. El sistema muestra 1\,094 jornadas disponibles, una docencia requerida de 6{,}25 horas, 108 horas de proyectos y gestión, generando un saldo disponible de 979{,}75 horas. La tabla inferior desglosa la distribución por sede (Brunca P2, Coto, Pérez Zeledón) con ciclos, créditos y estado de ejecución.}
+  \label{fig:resumen-anual}
+\end{figure}
+
+% ------------------------------------------------------------------------------
+\subsubsection{Gestión de Tiempos de Jornada — Administración de Asignaciones}
+% ------------------------------------------------------------------------------
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{../../fotos/4.png}
+  \caption{Vista de \textbf{Administración} del módulo de Tiempos de Jornada. Se listan cursos con su código, carrera (Ciencias de la Computación), horas y número de estudiantes. El estado \textit{PENDING} indica asignaciones pendientes de confirmación. El botón \textit{Agregar Replicencia} permite registrar nuevas asignaciones de docente.}
+  \label{fig:admin-asignaciones}
+\end{figure}
+
+% ------------------------------------------------------------------------------
+\subsubsection{Gestión de Tiempos de Jornada — Cohortes}
+% ------------------------------------------------------------------------------
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{../../fotos/5.png}
+  \caption{Pestaña de \textbf{Cohortes} en la Gestión de Tiempos de Jornada. Se visualizan generaciones de estudiantes agrupadas por carrera y año académico. Se muestran dos cohortes activas: Grupo A con 40 estudiantes y Grupo B con 50 estudiantes, ambas de carreras de Computación. El botón \textit{Nuevo cohorte} permite agregar nuevas generaciones.}
+  \label{fig:cohortes}
+\end{figure}
+
+% ------------------------------------------------------------------------------
+\subsubsection{Gestión de Tiempos de Jornada — Totales por Campus}
+% ------------------------------------------------------------------------------
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{../../fotos/6.png}
+  \caption{Panel de \textbf{totales de jornada por campus} dentro del módulo de Administración. Los indicadores globales muestran: 1\,050 asignaciones, 1\,967 convenios revisados, 14{,}00 horas de jornada diaria y un saldo de $-163{,}00$ horas. La tabla inferior desglosa los totales por sede regional con ciclos asignados.}
+  \label{fig:totales-campus}
+\end{figure}
+
+% ------------------------------------------------------------------------------
+\subsubsection{Gestión SINAES — Estructura Jerárquica}
+% ------------------------------------------------------------------------------
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{../../fotos/10.png}
+  \caption{Módulo de \textbf{Gestión SINAES} en la pestaña \textit{Estructura SINAES}. Se visualiza la jerarquía completa: Dimensiones (DIM-01 a DIM-05), Componentes (COMP-01-01, COMP-01-02), Criterios (CRT-01-01-01, CRT-01-01-02), Estándares (STD-01-01-01-01) y Evidencias (EV-01-01-01-01). Cada nivel permite agregar nuevos registros y editarlos directamente desde la interfaz.}
+  \label{fig:estructura-sinaes}
+\end{figure}
+
+% ------------------------------------------------------------------------------
+\subsubsection{Gestión SINAES — Consulta de Documentos Probatorios}
+% ------------------------------------------------------------------------------
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{../../fotos/7.png}
+  \caption{Vista de \textbf{Consulta de Documentos Probatorios} en el módulo SINAES. La tabla muestra documentos con su código (RP-001, RP-002, ACTN-002), gestión asociada, tipo (por ejemplo actN o pdf), evidencia, fechas de inicio/fin, tamaño de archivo y estado. Las acciones permiten visualizar, descargar, editar y eliminar cada documento.}
+  \label{fig:consulta-documentos}
+\end{figure}
+
+% ------------------------------------------------------------------------------
+\subsubsection{Reportes de Cumplimiento SINAES — Listado de Reportes}
+% ------------------------------------------------------------------------------
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{../../fotos/8.png}
+  \caption{Sección de \textbf{Reportes de Cumplimiento SINAES} mostrando los reportes generados. Se listan reportes por código de dimensión SINAES (CP-SGE-01, CP-SGE-02, CP-SGE-03, CP-SGE-21) con fecha de generación (31/03/2026, 07/01/2026) y otros reportes periódicos (12/03/2026, 30/03/2026). Cada reporte incluye el botón \textit{Ver Reporte} para su consulta en línea.}
+  \label{fig:reportes-listado}
+\end{figure}
+
+% ------------------------------------------------------------------------------
+\subsubsection{Reportes de Cumplimiento SINAES — Generación de Reportes}
+% ------------------------------------------------------------------------------
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{../../fotos/9.png}
+  \caption{Formulario de \textbf{generación de Reportes de Cumplimiento}. El formulario parametriza el reporte por: Título, Descripción General, Dimensión SINAES (selección de dimensiones SINAES acreditadas), Componente, Criterio, Carrera (Enseñanza/otro) y Nota. Al completar los campos se presiona \textit{Generar Reporte} para producir el documento de cumplimiento.}
+  \label{fig:reportes-form}
+\end{figure}

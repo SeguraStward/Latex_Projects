@@ -1,0 +1,938 @@
+% ==============================================================================
+% CAPÍTULO V: PRUEBAS UNITARIAS
+% ==============================================================================
+\section{Capítulo V: Pruebas — Pruebas Unitarias}
+
+\begin{center}
+  \textbf{Responsable:} Ángel Segura Méndez \quad|\quad
+  \textbf{Total de casos:} 60 \quad|\quad
+  \textbf{Aprobados:} \textcolor{successgreen}{\textbf{60}} \quad|\quad
+  \textbf{Fallidos:} 0
+\end{center}
+
+Las pruebas unitarias validan el comportamiento aislado de cada servicio y controlador del sistema, utilizando mocks de \texttt{PrismaService} y \texttt{JwtService} para desacoplar la capa de datos. Se ejecutaron con \textbf{Jest} en el framework \textbf{NestJS}.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: AuthService (CP-U-001 a CP-U-007)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-001}{Autenticación Google — credenciales faltantes lanzan UnauthorizedException}{08/04/2026}{AuthService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{AuthService} instanciado con mocks de \texttt{PrismaService} y \texttt{JwtService}. Datos: \texttt{email}: vacío / \texttt{googleId}: vacío.
+
+\begin{tcpasos}
+  1. Llamar \texttt{googleLogin(\{ email: '', googleId: '' \})} & El servicio valida campos obligatorios \\
+  2. Verificar que no consulta la BD & No se llama a \texttt{prisma.user.findFirst} \\
+  3. Verificar excepción & Se lanza \texttt{UnauthorizedException} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar UnauthorizedException si faltan email o googleId} pasa. El servicio valida campos obligatorios antes de consultar la base de datos.}
+
+\tcsep
+
+\tcheader{CP-U-002}{Autenticación Google — usuario nuevo se crea con estado PRE\_REGISTRATION}{08/04/2026}{AuthService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} No existe usuario con el \texttt{googleId} en la BD mock. Datos: \texttt{email}: \texttt{nuevo@una.cr}, \texttt{googleId}: \texttt{google-123}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{googleLogin(\{ email, googleId, fullName \})} & Servicio busca usuario por \texttt{googleId} \\
+  2. \texttt{prisma.user.findFirst} retorna \texttt{null} & Se detecta usuario nuevo \\
+  3. Verificar llamada a \texttt{prisma.user.create} & Se crea con \texttt{status: PRE\_REGISTRATION} \\
+  4. Verificar respuesta & Retorna \texttt{\{ needsProfileCompletion: true \}} sin tokens \\
+\end{tcpasos}
+\tcresult{El test \textit{debe crear un usuario nuevo con estado PRE\_REGISTRATION} pasa. El servicio no emite tokens JWT para usuarios nuevos.}
+
+\tcsep
+
+\tcheader{CP-U-003}{Autenticación Google — usuario INACTIVE lanza UnauthorizedException}{08/04/2026}{AuthService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Existe usuario con \texttt{status: INACTIVE} en BD mock. Datos: \texttt{email}: \texttt{inactivo@una.cr}, \texttt{googleId}: \texttt{google-inactive}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{googleLogin(\{ email, googleId \})} & Servicio busca y encuentra usuario \\
+  2. Mock retorna usuario con \texttt{status: INACTIVE} & Servicio evalúa estado \\
+  3. Verificar excepción & Se lanza \texttt{UnauthorizedException} \\
+  4. Verificar que no se emiten tokens & No se llama a \texttt{jwtService.sign} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar UnauthorizedException para usuarios INACTIVE} pasa. El acceso es bloqueado para cuentas inactivas.}
+
+\tcsep
+
+\tcheader{CP-U-004}{Autenticación Google — usuario ACTIVE recibe tokens y needsProfileCompletion=false}{08/04/2026}{AuthService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Existe usuario con \texttt{status: ACTIVE} en BD mock. Datos: \texttt{email}: \texttt{activo@una.cr}, \texttt{googleId}: \texttt{google-active}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{googleLogin(\{ email, googleId \})} & Servicio encuentra usuario activo \\
+  2. Verificar generación de tokens & \texttt{jwtService.sign} es llamado \\
+  3. Verificar respuesta & \texttt{\{ needsProfileCompletion: false, accessToken, refreshToken \}} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe retornar tokens y needsProfileCompletion=false para usuarios ACTIVE} pasa correctamente.}
+
+\tcsep
+
+\tcheader{CP-U-005}{Refresh token — ciclo completo de renovación}{08/04/2026}{AuthService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Existe refresh token activo (\texttt{isUsed: false}) en BD mock. Datos: \texttt{refreshToken}: \texttt{raw-refresh-token}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{refreshTokens('raw-refresh-token')} & Servicio verifica token en BD \\
+  2. \texttt{updateMany} marca el token como usado & \texttt{isUsed: true} \\
+  3. Se generan nuevos tokens & Par \texttt{accessToken + refreshToken} fresco \\
+  4. Nuevo refresh token persiste en BD & Hash guardado correctamente \\
+\end{tcpasos}
+\tcresult{El test \textit{debe marcar el refresh token como usado y emitir un nuevo par de tokens} pasa. La rotación de tokens funciona correctamente previniendo reutilización.}
+
+\tcsep
+
+\tcheader{CP-U-006}{Revocar token — token ya revocado se omite sin error}{08/04/2026}{AuthService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Token ya fue previamente revocado en BD. Datos: \texttt{refreshToken}: \texttt{already-revoked-token}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{revokeRefreshToken('already-revoked-token')} & Servicio busca el token \\
+  2. Mock retorna token con \texttt{isRevoked: true} & Detección de token revocado \\
+  3. Verificar que no se actualiza BD & \texttt{prisma.refreshToken.update} no es llamado \\
+  4. Verificar que no lanza excepción & Operación idempotente \\
+\end{tcpasos}
+\tcresult{El test \textit{debe omitir la operación si el token ya fue revocado} pasa. La revocación es idempotente y segura.}
+
+\tcsep
+
+\tcheader{CP-U-007}{setActiveRole — lanza UnauthorizedException si el usuario no tiene el rol}{08/04/2026}{AuthService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Usuario existe en BD con roles \texttt{['COORDINADOR']}. Datos: \texttt{userId}: \texttt{u1}, \texttt{roleName}: \texttt{ADMIN}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{setActiveRole('u1', 'ADMIN')} & Servicio busca usuario con sus roles \\
+  2. El rol \texttt{ADMIN} no está entre los roles del usuario & Detección de rol inválido \\
+  3. Verificar excepción & Se lanza \texttt{UnauthorizedException} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar UnauthorizedException si el usuario no tiene el rol} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: UsersService (CP-U-008 a CP-U-011)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-008}{updateProfile — campos vacíos o nulos son ignorados}{08/04/2026}{UsersService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{UsersService} instanciado con mocks, usuario \texttt{u1} existe. Datos: \texttt{payload}: \texttt{\{ fullName: '', email: null, nationalId: '12345' \}}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{updateProfile('u1', payload)} & Servicio procesa el payload \\
+  2. \texttt{fullName: ''} — campo vacío & Omitido del update \\
+  3. \texttt{email: null} — campo nulo & Omitido del update \\
+  4. \texttt{nationalId: '12345'} — valor real & Incluido en el update \\
+\end{tcpasos}
+\tcresult{El test \textit{debe ignorar campos vacíos o nulos} pasa. Evita sobrescrituras accidentales de datos en producción.}
+
+\tcsep
+
+\tcheader{CP-U-009}{setUserRoles — roleId inexistente lanza BadRequestException}{08/04/2026}{UsersService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Solo existe el rol \texttt{r1} en BD mock. Datos: \texttt{userId}: \texttt{u1}, \texttt{roleIds}: \texttt{['r1', 'r2-inexistente']}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{setUserRoles('u1', ['r1', 'r2-inexistente'])} & Servicio consulta roles existentes \\
+  2. \texttt{r2-inexistente} no está en BD & Detección de ID inválido \\
+  3. Verificar excepción & Se lanza \texttt{BadRequestException} \\
+  4. Verificar mensaje & Indica roles no existen o no están activos \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar error si algún roleId no existe o está inactivo} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-010}{deleteById — ejecuta transacción completa y retorna true}{08/04/2026}{UsersService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Usuario \texttt{u1} existe en BD mock.
+
+\begin{tcpasos}
+  1. Llamar \texttt{deleteById('u1')} & Servicio inicia transacción Prisma \\
+  2. Verificar transacción & \texttt{prisma.\$transaction} es llamado \\
+  3. Verificar eliminación & Usuario removido dentro de la transacción \\
+  4. Verificar retorno & Retorna \texttt{true} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe ejecutar la transacción completa y retornar true} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-011}{bulkImportProfessors — omite usuarios que ya tienen el rol PROFESOR}{08/04/2026}{UsersService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Usuario \texttt{cedula: '222'} ya existe con rol PROFESOR en BD mock. Datos: \texttt{[\{ cedula: '111', nombre: 'Nuevo' \}, \{ cedula: '222', nombre: 'Existente' \}]}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{bulkImportProfessors(data)} & Servicio procesa cada registro \\
+  2. Para \texttt{cedula: '111'} — no existe & Se crea usuario nuevo con rol PROFESOR \\
+  3. Para \texttt{cedula: '222'} — ya tiene rol PROFESOR & Se omite sin error \\
+  4. Verificar conteos & \texttt{created: 1}, \texttt{skipped: 1} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe omitir usuario existente que ya tiene el rol PROFESOR} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: StandardsService (CP-U-012 a CP-U-013)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-012}{save — nombre duplicado lanza ConflictException}{08/04/2026}{StandardsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.existsByName} retorna \texttt{true}. Datos: \texttt{name}: \texttt{Estándar Existente}, \texttt{criterionId}: \texttt{crit-1}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{save(\{ name: 'Estándar Existente', criterionId: 'crit-1' \})} & Servicio verifica existencia por nombre \\
+  2. \texttt{repo.existsByName} retorna \texttt{true} & Duplicado detectado \\
+  3. Verificar excepción & Se lanza \texttt{ConflictException} \\
+  4. Verificar que \texttt{repo.save} no fue llamado & No se persiste el duplicado \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar ConflictException si el nombre ya existe} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-013}{deleteById — con evidencias activas lanza BadRequestException}{08/04/2026}{StandardsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.count} retorna \texttt{1} para relación \texttt{evidences} con status ACTIVE. Datos: \texttt{id}: \texttt{std-1}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{deleteById('std-1')} & Servicio verifica relaciones activas \\
+  2. \texttt{repo.count} retorna \texttt{1} para evidencias & Relación activa detectada \\
+  3. Verificar excepción & Se lanza \texttt{BadRequestException} \\
+  4. Verificar que \texttt{repo.deleteById} no fue llamado & Registro no eliminado \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar BadRequestException si tiene evidences activas} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: CareersService (CP-U-014 a CP-U-015)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-014}{deleteById — con cursos activos lanza BadRequestException}{08/04/2026}{CareersService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.count} retorna \texttt{1} para relación \texttt{courses} con status ACTIVE. Datos: \texttt{id}: \texttt{career-1}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{deleteById('career-1')} & Servicio verifica relaciones activas \\
+  2. \texttt{repo.count} retorna \texttt{1} para cursos & Relación activa detectada \\
+  3. Verificar excepción & Se lanza \texttt{BadRequestException} \\
+  4. Verificar que \texttt{repo.deleteById} no fue llamado & Carrera no eliminada \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar BadRequestException si la carrera tiene cursos activos} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-015}{softDeleteById — permite inactivar si relaciones están todas INACTIVE}{08/04/2026}{CareersService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.count} retorna \texttt{0} para todas las relaciones activas. Datos: \texttt{id}: \texttt{career-1}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{softDeleteById('career-1')} & Servicio verifica relaciones activas \\
+  2. \texttt{repo.count} retorna \texttt{0} para cursos y proyectos & Sin relaciones activas \\
+  3. Verificar llamada al repositorio & \texttt{repo.softDeleteById} es llamado \\
+  4. Verificar estado resultado & Carrera marcada como \texttt{INACTIVE} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe marcar la carrera como INACTIVE si no tiene relaciones activas} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: CommissionsService (CP-U-016 a CP-U-017)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-016}{deleteById — con proyectos activos lanza BadRequestException}{08/04/2026}{CommissionsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.count} retorna \texttt{1} para relación \texttt{projects} ACTIVE. Datos: \texttt{id}: \texttt{comm-1}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{deleteById('comm-1')} & Servicio verifica \texttt{relationCheckConfig} \\
+  2. \texttt{repo.count} retorna \texttt{1} & Relación activa encontrada \\
+  3. Verificar excepción & Se lanza \texttt{BadRequestException} \\
+  4. Verificar que no se elimina & \texttt{repo.deleteById} no llamado \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar BadRequestException si tiene projects activos} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-017}{deleteById — con miembros activos lanza BadRequestException}{08/04/2026}{CommissionsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.count} retorna \texttt{1} para relación \texttt{members} ACTIVE. Datos: \texttt{id}: \texttt{comm-1}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{deleteById('comm-1')} & Servicio evalúa los 4 \texttt{relationFields} \\
+  2. Solo \texttt{members} tiene conteo \texttt{1} & Relación activa detectada \\
+  3. Verificar excepción & Se lanza \texttt{BadRequestException} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar BadRequestException si tiene members activos} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: ProjectsService (CP-U-018)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-018}{deleteById — con documentos y reviews activos lanza BadRequestException}{08/04/2026}{ProjectsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.count} retorna \texttt{1} tanto para \texttt{documents} como para \texttt{reviews} ACTIVE. Datos: \texttt{id}: \texttt{proj-1}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{deleteById('proj-1')} & Servicio verifica ambas relaciones \\
+  2. Ambos \texttt{documents} y \texttt{reviews} tienen conteo \texttt{1} & Múltiples relaciones activas \\
+  3. Verificar excepción & Se lanza \texttt{BadRequestException} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar BadRequestException si tiene ambas relaciones activas} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: AcademicCyclesService (CP-U-019 a CP-U-020)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-019}{deleteById — con cargas académicas activas lanza BadRequestException}{08/04/2026}{AcademicCyclesService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.count} retorna \texttt{1} para \texttt{academicLoads} ACTIVE. Datos: \texttt{id}: \texttt{cycle-1}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{deleteById('cycle-1')} & Servicio verifica relaciones \\
+  2. \texttt{academicLoads} tiene conteo \texttt{1} & Relación activa detectada \\
+  3. Verificar excepción & Se lanza \texttt{BadRequestException} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar BadRequestException si el ciclo tiene cargas académicas activas} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-020}{save — crea y retorna el ciclo académico}{08/04/2026}{AcademicCyclesService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.save} retorna el ciclo creado con \texttt{id}. Datos: \texttt{name}: \texttt{I-2024}, \texttt{year}: \texttt{2024}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{save(\{ name: 'I-2024', year: 2024 \})} & Servicio valida y delega al repo \\
+  2. \texttt{repo.save} persiste el registro & Ciclo almacenado en BD \\
+  3. Verificar retorno & Retorna objeto con \texttt{id} generado \\
+\end{tcpasos}
+\tcresult{El test \textit{debe guardar y retornar el ciclo creado} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: CohortsService (CP-U-021 a CP-U-022)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-021}{save — usa status ACTIVE por defecto si no se proporciona}{08/04/2026}{CohortsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.save} mockeado con respuesta válida. Datos: \texttt{\{ name: '2024-A', careerId: 'career-1' \}} (sin status).
+
+\begin{tcpasos}
+  1. Llamar \texttt{save(dto)} sin campo \texttt{status} & Servicio aplica default \\
+  2. Verificar payload enviado al repo & \texttt{status: 'ACTIVE'} incluido \\
+  3. Verificar retorno & Cohorte creada correctamente \\
+\end{tcpasos}
+\tcresult{El test \textit{debe usar status ACTIVE por defecto si no se proporciona} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-022}{findById — lanza NotFoundException si la cohorte no existe}{08/04/2026}{CohortsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.findById} retorna \texttt{null}. Datos: \texttt{id}: \texttt{no-existe}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{findById('no-existe')} & Servicio busca en repositorio \\
+  2. Repositorio retorna \texttt{null} & Cohorte no encontrada \\
+  3. Verificar excepción & Se lanza \texttt{NotFoundException} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar NotFoundException si la cohorte no existe} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: AcademicLoadsService (CP-U-023 a CP-U-028)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-023}{save — calcula availableSeats = maximumCapacity - enrolledCapacity}{08/04/2026}{AcademicLoadsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Mocks de repositorio y \texttt{PrismaService} configurados. Datos: \texttt{maximumCapacity}: 30, \texttt{enrolledCapacity}: 20.
+
+\begin{tcpasos}
+  1. Llamar \texttt{save(payload)} con capacidades & Servicio calcula seats disponibles \\
+  2. Verificar cálculo $30 - 20 = 10$ & \texttt{availableSeats: 10} en payload \\
+  3. Verificar llamada a \texttt{repo.save} & Llamado con \texttt{availableSeats: 10} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe calcular availableSeats y crear la carga} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-024}{save — fecha string YYYY-MM-DD se convierte a objeto Date}{08/04/2026}{AcademicLoadsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Mocks configurados. Datos: \texttt{date}: \texttt{'2024-06-01'}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{save(\{ ..., date: '2024-06-01' \})} & Servicio procesa la fecha \\
+  2. Se agrega \texttt{T00:00:00.000Z} & Fecha completa formada \\
+  3. Verificar llamada a \texttt{repo.save} & \texttt{date} es instancia de \texttt{Date} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe parsear fecha string YYYY-MM-DD correctamente} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-025}{save — fecha inválida no se incluye en el payload}{08/04/2026}{AcademicLoadsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Mocks configurados. Datos: \texttt{date}: \texttt{'not-a-date'}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{save(\{ ..., date: 'not-a-date' \})} & Servicio intenta parsear \\
+  2. \texttt{isNaN(tempDate.getTime())} resulta \texttt{true} & Fecha inválida detectada \\
+  3. Verificar payload enviado & \texttt{date} es \texttt{undefined} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe manejar fecha inválida (Invalid Date) sin incluirla} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-026}{delete — lanza Error si el registro no existe}{08/04/2026}{AcademicLoadsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.findById} retorna \texttt{null}. Datos: \texttt{id}: \texttt{no-existe}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{delete('no-existe')} & Servicio busca el registro \\
+  2. \texttt{findById} retorna \texttt{null} & No existe el registro \\
+  3. Verificar excepción & Se lanza \texttt{Error} con mensaje descriptivo \\
+  4. Verificar que no se elimina & \texttt{repo.deleteById} no llamado \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar Error si el registro no existe} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-027}{bulkImportAcademicLoads — campus no encontrado registra error}{08/04/2026}{AcademicLoadsService — bulkImport}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{prisma.campus.findFirst} retorna \texttt{null}. Datos: \texttt{campus}: \texttt{'Campus Inexistente'}, \texttt{nrc}: \texttt{'NRC-100'}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{bulkImportAcademicLoads([load])} & Servicio busca el campus \\
+  2. \texttt{campus.findFirst} retorna \texttt{null} & Campus no encontrado \\
+  3. Verificar contadores & \texttt{errors: 1}, \texttt{created: 0} \\
+  4. Verificar mensaje de error & Contiene \texttt{'Campus'} y nombre del campus \\
+\end{tcpasos}
+\tcresult{El test \textit{debe registrar error si campus no se encuentra} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-028}{bulkImportAcademicLoads — actualiza carga existente por NRC}{08/04/2026}{AcademicLoadsService — bulkImport}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Camino feliz configurado, \texttt{prisma.academicLoad.findFirst} retorna \texttt{\{ id: 'al-existing' \}}. Datos: \texttt{nrc}: \texttt{'NRC-100'}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{bulkImportAcademicLoads([load])} & Servicio resuelve todos los lookups \\
+  2. \texttt{academicLoad.findFirst} retorna carga existente & Flujo de actualización \\
+  3. \texttt{academicLoad.update} es llamado & Carga actualizada \\
+  4. Verificar contadores & \texttt{updated: 1}, \texttt{created: 0} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe actualizar carga existente por NRC} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: ProfessorAssignmentsService (CP-U-029 a CP-U-032)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-029}{save — professorId vacío lanza BadRequestException}{08/04/2026}{ProfessorAssignmentsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Mocks configurados. Datos: \texttt{professorId}: \texttt{''} (vacío).
+
+\begin{tcpasos}
+  1. Llamar \texttt{save(\{ ..., professorId: '' \})} & Servicio valida campo \\
+  2. \texttt{!payload.professorId?.trim()} resulta \texttt{true} & Campo vacío detectado \\
+  3. Verificar excepción & Se lanza \texttt{BadRequestException} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar BadRequestException si professorId falta} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-030}{save — tipo FULL calcula calculatedJourneyTime=40}{08/04/2026}{ProfessorAssignmentsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{config.fullTimeValue: 40}. Datos: \texttt{assignmentType}: \texttt{FULL}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{save(\{ ..., assignmentType: 'FULL' \})} & Servicio llama \texttt{calcJourney} \\
+  2. Switch retorna \texttt{config.fullTimeValue} & Valor \texttt{40} \\
+  3. Verificar payload a \texttt{prisma.create} & \texttt{calculatedJourneyTime: 40} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe crear asignación FULL con calculatedJourneyTime=40} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-031}{save — THREE\_QUARTER usa 0.75 si threeQuarterTimeValue es null}{08/04/2026}{ProfessorAssignmentsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{config.threeQuarterTimeValue: null}. Datos: \texttt{assignmentType}: \texttt{THREE\_QUARTER}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{save(\{ ..., assignmentType: 'THREE\_QUARTER' \})} & Servicio llama \texttt{calcJourney} \\
+  2. \texttt{config.threeQuarterTimeValue ?? 0.75} & Usa fallback \texttt{0.75} \\
+  3. Verificar payload & \texttt{calculatedJourneyTime: 0.75} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe usar 0.75 si threeQuarterTimeValue es null/undefined} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-032}{save — campusAllocation conecta si existe en BD}{08/04/2026}{ProfessorAssignmentsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{prisma.campusJourneyTimeAllocation.findUnique} retorna \texttt{\{ id: 'alloc-1' \}}. Datos: \texttt{campusAllocationId}: \texttt{alloc-1}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{save(\{ ..., campusAllocationId: 'alloc-1' \})} & Servicio busca la asignación \\
+  2. \texttt{findUnique} retorna el registro & Relación encontrada \\
+  3. Verificar payload a \texttt{prisma.create} & \texttt{campusAllocation: \{ connect: \{ id: 'alloc-1' \} \}} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe conectar campusAllocation si existe} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: ProfessorPortalService (CP-U-033 a CP-U-036)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-033}{generateToken — invalida tokens previos y crea uno nuevo}{08/04/2026}{ProfessorPortalService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{professorPortalToken.updateMany} y \texttt{create} mockeados. Datos: \texttt{cedula}: 123456, \texttt{campusId}: \texttt{campus-1}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{generateToken(dto)} & Servicio invalida tokens anteriores \\
+  2. \texttt{updateMany(\{ data: \{ status: 'EXPIRED' \} \})} & Tokens previos expirados \\
+  3. \texttt{randomUUID()} genera token único & UUID generado \\
+  4. \texttt{professorPortalToken.create} persiste el token & Token nuevo activo \\
+\end{tcpasos}
+\tcresult{El test \textit{debe invalidar tokens previos y crear uno nuevo} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-034}{access — token expirado por fecha se marca EXPIRED y lanza UnauthorizedException}{08/04/2026}{ProfessorPortalService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Token con \texttt{status: ACTIVE} pero \texttt{expiresAt} en el pasado.
+
+\begin{tcpasos}
+  1. Llamar \texttt{access(\{ token, cedula \})} & Pasa validaciones de existencia y cédula \\
+  2. \texttt{new Date() > portalToken.expiresAt} resulta \texttt{true} & Fecha vencida detectada \\
+  3. \texttt{professorPortalToken.update(\{ status: 'EXPIRED' \})} & Token invalidado \\
+  4. Verificar excepción & Se lanza \texttt{UnauthorizedException} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar UnauthorizedException si el token está vencido por fecha} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-035}{submitReport — informe final marca token como USED}{08/04/2026}{ProfessorPortalService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Usuario existe por cédula en BD mock. Datos: \texttt{isFinal}: \texttt{true}, \texttt{matriculados}: 30, \texttt{aprobados}: 25, \texttt{reprobados}: 5.
+
+\begin{tcpasos}
+  1. Llamar \texttt{submitReport(cedula, ..., \{ ...dto, isFinal: true \})} & Servicio valida aprobados+reprobados \\
+  2. $25 + 5 \leq 30$ — validación pasa & Informe procesado \\
+  3. \texttt{courseReport.upsert} guarda el informe & Registro creado/actualizado \\
+  4. \texttt{professorPortalToken.update(\{ status: 'USED' \})} & Token marcado como usado \\
+\end{tcpasos}
+\tcresult{El test \textit{debe marcar el token como USED al enviar informe final} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-036}{submitReport — aprobados + reprobados > matriculados lanza BadRequestException}{08/04/2026}{ProfessorPortalService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Sin prerrequisitos de BD. Datos: \texttt{matriculados}: 30, \texttt{aprobados}: 20, \texttt{reprobados}: 15.
+
+\begin{tcpasos}
+  1. Llamar \texttt{submitReport(...)} con $20 + 15 > 30$ & Servicio valida suma \\
+  2. $35 > 30$ resulta \texttt{true} & Validación fallida \\
+  3. Verificar excepción & Se lanza \texttt{BadRequestException} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar BadRequestException si aprobados + reprobados > matriculados} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: AnnualJourneyTimeAllocationsService (CP-U-037 a CP-U-038)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-037}{getActive — retorna null si no hay asignación activa}{08/04/2026}{AnnualJourneyTimeAllocationsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.findAll} retorna solo asignaciones con status \texttt{INACTIVE}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{getActive()} & Servicio busca asignaciones \\
+  2. \texttt{result.data.find(a => a.status === 'ACTIVE')} — no encuentra & Sin asignación activa \\
+  3. Verificar retorno & Retorna \texttt{null} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe retornar null si no hay asignación activa} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-038}{getYearSummary — campus sobreconsumo no genera disponible negativo}{08/04/2026}{AnnualJourneyTimeAllocationsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Campus con \texttt{allocatedJourneyTime: 5}, profesor activo con \texttt{calculatedJourneyTime: 50}. Datos: \texttt{year}: 2024.
+
+\begin{tcpasos}
+  1. Llamar \texttt{getYearSummary(2024)} & Servicio calcula disponible \\
+  2. \texttt{available = 5 - 50 = -45} & Valor negativo calculado \\
+  3. Lógica protectora aplicada & \texttt{available < 0 ? 0 : available} \\
+  4. Verificar resultado & \texttt{campus.available === 0} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe poner available=0 si el consumo supera lo asignado} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: InstitutionalProjectsService (CP-U-039 a CP-U-040)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-039}{create — campusAllocationId se convierte a formato connect de Prisma}{08/04/2026}{InstitutionalProjectsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.save} mockeado con respuesta válida. Datos: \texttt{name}: \texttt{Proyecto Alpha}, \texttt{campusAllocationId}: \texttt{alloc-1}, \texttt{directorId}: \texttt{user-1}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{create(dto)} & Servicio desestructura el DTO \\
+  2. Verificar \texttt{campusAllocationId} & Convertido a \texttt{\{ connect: \{ id: 'alloc-1' \} \}} \\
+  3. Verificar \texttt{directorId} & Convertido a \texttt{\{ connect: \{ id: 'user-1' \} \}} \\
+  4. Verificar llamada a \texttt{repo.save} & Llamado con estructura Prisma correcta \\
+\end{tcpasos}
+\tcresult{El test \textit{debe crear proyecto con campusAllocationId y directorId como connect} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-040}{calculateTotalAssignedTime — retorna objeto \{ total \}}{08/04/2026}{InstitutionalProjectsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.calculateTotalAssignedTime} retorna \texttt{42}. Datos: \texttt{campusAllocationId}: \texttt{alloc-1}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{calculateTotalAssignedTime('alloc-1')} & Servicio delega al repo \\
+  2. Repo retorna \texttt{42} (número primitivo) & Valor recibido \\
+  3. Verificar retorno del servicio & Retorna \texttt{\{ total: 42 \}} (objeto) \\
+\end{tcpasos}
+\tcresult{El test \textit{debe retornar el total envuelto en objeto \{ total \}} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: RepitenciasService (CP-U-041 a CP-U-042)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-041}{calculateTotalAdditionalHours — retorna objeto \{ total \}}{08/04/2026}{RepitenciasService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.calculateTotalAdditionalHours} retorna \texttt{42}. Datos: \texttt{campusAllocationId}: \texttt{alloc-1}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{calculateTotalAdditionalHours('alloc-1')} & Servicio delega al repo \\
+  2. Repo retorna \texttt{42} & Valor recibido \\
+  3. Verificar retorno & Retorna \texttt{\{ total: 42 \}} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe retornar el total envuelto en objeto} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-042}{findByCampus / findByCourse / findByAcademicCycle — delegan al repositorio}{08/04/2026}{RepitenciasService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Métodos del repositorio mockeados con \texttt{[repitencia]}. Datos: \texttt{campusId}: \texttt{campus-1}, \texttt{courseId}: \texttt{course-1}, \texttt{academicCycleId}: \texttt{cycle-1}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{findByCampus('campus-1')} & \texttt{repo.findByCampus} llamado \\
+  2. Llamar \texttt{findByCourse('course-1')} & \texttt{repo.findByCourse} llamado \\
+  3. Llamar \texttt{findByAcademicCycle('cycle-1')} & \texttt{repo.findByAcademicCycle} llamado \\
+  4. Verificar retornos & Cada uno retorna \texttt{[repitencia]} \\
+\end{tcpasos}
+\tcresult{Los tres tests de filtrado pasan. Los métodos delegan correctamente al repositorio.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: ProofDocumentTypesService (CP-U-043)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-043}{deleteById — tipo con documentos activos lanza BadRequestException}{08/04/2026}{ProofDocumentTypesService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.findById} retorna tipo con \texttt{proofDocuments: [\{ status: 'ACTIVE' \}]}. \texttt{repo.count} retorna \texttt{1}. Datos: \texttt{id}: \texttt{type-1}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{deleteById('type-1')} & Servicio obtiene tipo con documentos \\
+  2. Detecta \texttt{1} documento activo & \texttt{logger.warn} llamado \\
+  3. \texttt{super.deleteById} verifica \texttt{relationCheckConfig} & \texttt{repo.count} retorna \texttt{1} \\
+  4. Verificar excepción & Se lanza \texttt{BadRequestException} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar BadRequestException si tiene documentos activos} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: ProofDocumentsService (CP-U-044 a CP-U-046)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-044}{save — genera código automático y registra en historial}{08/04/2026}{ProofDocumentsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.generateNextCode} retorna \texttt{'DOC-001'}. Datos: \texttt{name}: \texttt{Convenio UNA}, \texttt{proofDocumentTypeId}: \texttt{type-1}, \texttt{evidenceId}: \texttt{ev-1}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{save(dto)} & Servicio llama \texttt{generateNextCode} \\
+  2. Código \texttt{DOC-001} generado & Incluido en \texttt{dataWithCode} \\
+  3. \texttt{repo.save} llamado con \texttt{code: 'DOC-001'} & Documento creado \\
+  4. \texttt{historyService.logChange(\{ changeType: 'CREATED' \})} & Historial registrado \\
+\end{tcpasos}
+\tcresult{El test \textit{debe generar el código automático y crear el documento} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-045}{save — fallo en historial no interrumpe la operación}{08/04/2026}{ProofDocumentsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{historyService.logChange} lanza \texttt{Error('History DB error')}. Datos: DTO válido de creación de documento.
+
+\begin{tcpasos}
+  1. Llamar \texttt{save(dto)} & Documento se crea correctamente \\
+  2. \texttt{historyService.logChange} lanza excepción & Error capturado en bloque \texttt{try/catch} \\
+  3. Verificar que no re-lanza & La operación principal continúa \\
+  4. Verificar retorno & Documento retornado correctamente \\
+\end{tcpasos}
+\tcresult{El test \textit{no debe fallar si el historial lanza error (operación no crítica)} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-046}{deleteById — continúa eliminación de BD aunque Drive falle}{08/04/2026}{ProofDocumentsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{googleDriveService.deleteFile} lanza \texttt{Error('Drive error')}. Datos: \texttt{id}: \texttt{doc-1}, \texttt{googleDriveFileId}: \texttt{drive-file-1}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{deleteById('doc-1')} & Servicio intenta borrar de Drive \\
+  2. \texttt{deleteFile} lanza error & Error capturado en \texttt{try/catch} interno \\
+  3. Flujo continúa & \texttt{super.deleteById} es llamado \\
+  4. Verificar retorno & Retorna \texttt{true} (eliminación de BD exitosa) \\
+\end{tcpasos}
+\tcresult{El test \textit{debe continuar con eliminación de BD aunque Drive falle} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: SinaesDocumentHistoryService (CP-U-047 a CP-U-049)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-047}{detectChanges — campos de auditoría son ignorados}{08/04/2026}{SinaesDocumentHistoryService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Servicio instanciado con mocks. Datos: \texttt{oldDocument}: \texttt{\{ id, name: 'Nombre', createdAt, updatedAt \}}, \texttt{newDocument}: \texttt{\{ name: 'Nombre Nuevo', createdAt, updatedAt \}}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{detectChanges(oldDoc, newDoc)} & Servicio compara campos \\
+  2. \texttt{name} cambió & Incluido en resultado \\
+  3. \texttt{id}, \texttt{createdAt}, \texttt{updatedAt} cambiaron & Todos ignorados \\
+  4. Verificar resultado & Solo \texttt{[\{ field: 'name', ... \}]} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe ignorar campos de auditoría (id, createdAt, updatedAt)} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-048}{detectChanges — objetos se serializan como JSON para comparación}{08/04/2026}{SinaesDocumentHistoryService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Servicio instanciado con mocks. Datos: \texttt{oldDocument}: \texttt{\{ metadata: \{ key: 'old' \} \}}, \texttt{newDocument}: \texttt{\{ metadata: \{ key: 'new' \} \}}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{detectChanges(oldDoc, newDoc)} & Servicio detecta cambio en \texttt{metadata} \\
+  2. \texttt{JSON.stringify} aplicado a ambos valores & Comparación de strings JSON \\
+  3. Verificar resultado & \texttt{[\{ field: 'metadata', oldValue: '\{"key":"old"\}', newValue: '\{"key":"new"\}' \}]} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe serializar objetos como JSON} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-049}{getActivityStatistics — agrupa actividad reciente por día}{08/04/2026}{SinaesDocumentHistoryService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} BD mock con 3 cambios en \texttt{2024-01-15} y 2 cambios en \texttt{2024-01-16}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{getActivityStatistics()} & Servicio consulta toda la actividad \\
+  2. Registros agrupados por día & \texttt{2024-01-15: 3}, \texttt{2024-01-16: 2} \\
+  3. Verificar estructura & \texttt{\{ recentActivity: [\{ date, count \}] \}} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe agrupar actividad reciente por día correctamente} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: UserRolesService (CP-U-050)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-050}{findRoleWithPermissions — lista rol con sus permisos integrados}{08/04/2026}{UserRolesService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Rol \texttt{r1} existe con permisos \texttt{[\{ id: 'p1', name: 'READ\_USERS' \}]}. Datos: \texttt{roleId}: \texttt{r1}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{findRoleWithPermissions('r1')} & Servicio busca rol con permisos \\
+  2. Rol encontrado con permisos & Estructura completa retornada \\
+  3. Verificar formato de permisos & Permisos estructurados correctamente \\
+\end{tcpasos}
+\tcresult{El test \textit{Lista rol con sus respectivos permisos integrados} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: GenericController (CP-U-051 a CP-U-052)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-051}{findAll — parsea orderBy desde JSON y transforma filtros numéricos}{08/04/2026}{GenericController}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{GenericController} instanciado con mock de \texttt{GenericService}. Datos: \texttt{orderBy}: \texttt{'\{"name":"asc"\}'}, \texttt{filters}: \texttt{\{ page: '1', limit: '10' \}}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{findAll(\{ orderBy: '\{"name":"asc"\}', page: '1', limit: '10' \})} & Controlador parsea orderBy \\
+  2. \texttt{JSON.parse('\{"name":"asc"\}')} & Objeto \texttt{\{ name: 'asc' \}} \\
+  3. \texttt{page} y \texttt{limit} convertidos a número & \texttt{page: 1}, \texttt{limit: 10} \\
+  4. Verificar llamada al servicio & Llamado con tipos correctos \\
+\end{tcpasos}
+\tcresult{El test \textit{debe parsear orderBy desde JSON y pasar filtros transformados} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-052}{findById — lanza NotFoundException si el registro no existe}{08/04/2026}{GenericController}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{service.findById} retorna \texttt{null}. Datos: \texttt{id}: \texttt{no-existe}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{findById('no-existe')} & Controlador llama al servicio \\
+  2. Servicio retorna \texttt{null} & Registro no encontrado \\
+  3. Verificar excepción & Se lanza \texttt{NotFoundException} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar NotFoundException cuando el registro no existe} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: FinalReportsService (CP-U-053 a CP-U-054)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-053}{save — crea FinalReport validando el DTO correctamente}{08/04/2026}{FinalReportsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.save} mockeado con respuesta válida. Datos: \texttt{projectId}: \texttt{proj-1}, \texttt{status}: \texttt{PENDING}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{save(\{ projectId: 'proj-1', status: 'PENDING' \})} & Servicio valida DTO \\
+  2. Validación pasa & \texttt{repo.save} llamado \\
+  3. Verificar retorno & FinalReport creado con \texttt{id} \\
+\end{tcpasos}
+\tcresult{El test \textit{Crea un FinalReport exitosamente validando el DTO} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-054}{cron — actualiza reportes PENDING a EVALUATED}{08/04/2026}{FinalReportsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{repo.findAll} retorna \texttt{[\{ id: 'r1', status: 'PENDING' \}]}. Datos: Reportes pendientes: 1.
+
+\begin{tcpasos}
+  1. Ejecutar job cron & Servicio busca reportes pendientes \\
+  2. \texttt{repo.findAll} retorna \texttt{[r1]} & Reporte encontrado \\
+  3. \texttt{repo.update('r1', \{ status: 'EVALUATED' \})} & Estado actualizado \\
+  4. Verificar llamada al update & Cada reporte actualizado \\
+\end{tcpasos}
+\tcresult{El test \textit{Actualiza a EVALUATED a cada reporte devuelto} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: GoogleDriveService (CP-U-055 a CP-U-058)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-055}{createFolderStructure — reutiliza carpeta existente en Drive}{08/04/2026}{GoogleDriveService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{drive.files.list} retorna carpeta existente \texttt{\{ id: 'existing-folder' \}}. Datos: \texttt{dimensionCode}: \texttt{D-01}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{createFolderStructure(folderStructure, accessToken)} & Servicio busca carpeta existente \\
+  2. \texttt{drive.files.list} retorna carpeta & Carpeta reutilizada \\
+  3. Verificar que \texttt{drive.files.create} no fue llamado & Sin creación duplicada \\
+\end{tcpasos}
+\tcresult{El test \textit{debe reutilizar carpeta existente si ya existe en Drive} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-056}{uploadFile — token expirado lanza UnauthorizedException}{08/04/2026}{GoogleDriveService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{drive.files.list} lanza error con código \texttt{401}. Datos: \texttt{accessToken}: \texttt{expired-token}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{uploadFile(file, folderId, careers, accessToken)} & Servicio intenta subir \\
+  2. Drive retorna error \texttt{401} & Token expirado detectado \\
+  3. Verificar excepción & Se lanza \texttt{UnauthorizedException} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar UnauthorizedException si el token expira durante la subida} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-057}{uploadFile — lanza BadRequestException si archivo ya existe en carpeta}{08/04/2026}{GoogleDriveService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{drive.files.list} retorna archivo con mismo nombre. Datos: \texttt{file.originalname}: \texttt{DOC-001\_convenio.pdf}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{uploadFile(file, folderId, ...)} & Servicio verifica duplicados \\
+  2. \texttt{drive.files.list} retorna archivo existente & Duplicado detectado \\
+  3. Verificar excepción & Se lanza \texttt{BadRequestException} \\
+\end{tcpasos}
+\tcresult{El test \textit{debe lanzar BadRequestException si el archivo ya existe en la carpeta} pasa.}
+
+\tcsep
+
+\tcheader{CP-U-058}{updateCarrerasFile — actualiza archivo existente con update en lugar de create}{08/04/2026}{GoogleDriveService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} \texttt{drive.files.list} retorna \texttt{\_carreras.txt} con \texttt{id: 'carreras-file-id'}. Datos: \texttt{folderId}: \texttt{folder-1}, \texttt{careerNames}: \texttt{['Carrera A']}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{updateCarrerasFile(folderId, code, careerNames, token)} & Servicio busca \texttt{\_carreras.txt} \\
+  2. Archivo encontrado & Flujo de actualización activado \\
+  3. \texttt{drive.files.update} llamado & Archivo actualizado, no creado de nuevo \\
+  4. \texttt{drive.files.create} no llamado & Sin duplicado \\
+\end{tcpasos}
+\tcresult{El test \textit{debe actualizar archivo existente con update en lugar de create} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: QuestionsService (CP-U-059)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-059}{findByStep — agrupa preguntas por nombre de grupo}{08/04/2026}{QuestionsService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} BD mock con preguntas de \texttt{step: 1} en grupos distintos. Datos: \texttt{step}: 1.
+
+\begin{tcpasos}
+  1. Llamar método de búsqueda por paso & Servicio consulta preguntas del paso \\
+  2. Preguntas agrupadas por nombre de grupo & Estructura jerárquica \\
+  3. Verificar formato & \texttt{[\{ groupName, questions: [...] \}]} \\
+\end{tcpasos}
+\tcresult{El test \textit{Debe agrupar preguntas por nombre de grupo} pasa.}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Módulo: UsersService — extra (CP-U-060)}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\tcheader{CP-U-060}{getUserActiveRolesWithPermissions — filtra permisos inactivos}{08/04/2026}{UsersService}{Unitaria}
+\tcstatus
+
+\textbf{Precondición:} Usuario con rol que tiene permisos activos e inactivos mezclados. Datos: \texttt{userId}: \texttt{u1}, permisos: \texttt{[\{ id: 'p1', active: true \}, \{ id: 'p2', active: false \}]}.
+
+\begin{tcpasos}
+  1. Llamar \texttt{getUserActiveRolesWithPermissions('u1')} & Servicio obtiene roles del usuario \\
+  2. Filtra permisos por \texttt{active: true} & Solo \texttt{p1} incluido \\
+  3. Verificar retorno & Solo permisos activos en la respuesta \\
+\end{tcpasos}
+\tcresult{El test \textit{debe filtrar permisos que no están activos en el permissionMap} pasa.}
+
+\vspace{1em}
+\noindent\rule{\linewidth}{0.6pt}
+
+\begin{center}
+  \textbf{Resumen de Pruebas Unitarias:} \quad
+  \textcolor{successgreen}{\textbf{60 / 60 casos aprobados}} \quad|\quad
+  Tasa de éxito: \textcolor{successgreen}{\textbf{100\%}}
+\end{center}

@@ -1,27 +1,27 @@
 from manim import *
 
-Text.set_default(font="Noto Sans")
+Text.set_default(font="Noto Sans", line_spacing=1.1)
 
 
 class S10_Conclusiones(Scene):
     """
-    Conclusiones finales + perspectivas futuras + galería de imágenes.
+    Final conclusions + future perspectives + image gallery.
     """
 
     def construct(self):
 
-        # ── Título ───────────────────────────────────────────────────────────
-        title = Text("Conclusiones", font_size=40, color=GREEN, weight=BOLD)
+        # ── Title ────────────────────────────────────────────────────────────
+        title = Text("Conclusions", font_size=40, color=GREEN, weight=BOLD)
         title.to_edge(UP, buff=0.35)
         self.play(Write(title), run_time=0.8)
 
-        # ── Síntesis de hallazgos ────────────────────────────────────────────
+        # ── Findings summary ─────────────────────────────────────────────────
         conclusions = [
-            ("AUC 93.2% en gliomas · 89.6% en cáncer de mama",         GREEN),
-            ("Sensibilidad > 90% en hemorragia intracraneal (Aidoc)",   BLUE_B),
-            ("U-Net: estándar para segmentación médica",                TEAL_C),
-            ("873 algoritmos FDA autorizados en radiología (2025)",      YELLOW),
-            ("Adopción plena: solo 2% en EE.UU.",                       ORANGE),
+            ("AUC 93.2% in gliomas . 89.6% in breast cancer",           GREEN),
+            ("Sensitivity > 90% in intracranial hemorrhage (Aidoc)",     BLUE_B),
+            ("U-Net: standard for medical segmentation",                  TEAL_C),
+            ("873 FDA-authorized algorithms in radiology (2025)",         YELLOW),
+            ("Full adoption: only 2% in the U.S.",                        ORANGE),
         ]
 
         conc_items = VGroup()
@@ -44,19 +44,19 @@ class S10_Conclusiones(Scene):
 
         self.wait(1.5)
 
-        # ── Perspectivas futuras ─────────────────────────────────────────────
+        # ── Future perspectives ──────────────────────────────────────────────
         self.play(FadeOut(conc_items), FadeOut(conc_bullets), run_time=0.5)
 
-        future_title = Text("Perspectivas Futuras", font_size=26,
+        future_title = Text("Future Perspectives", font_size=26,
                             color=PURPLE_B, weight=BOLD)
         future_title.move_to(UP * 2.0)
         self.play(FadeIn(future_title, shift=DOWN * 0.15), run_time=0.5)
 
         future_items_data = [
-            ("IA Explicable (XAI) para eliminar la caja negra",         YELLOW),
-            ("Modelos multimodales: imagen + historial + laboratorio",   TEAL_C),
-            ("IA Adaptativa con marcos regulatorios flexibles",          BLUE_C),
-            ("Aprendizaje Federado entre hospitales sin compartir datos", GREEN),
+            ("Explainable AI (XAI) to eliminate the black box",          YELLOW),
+            ("Multimodal models: image + history + lab results",          TEAL_C),
+            ("Adaptive AI with flexible regulatory frameworks",           BLUE_C),
+            ("Federated Learning across hospitals without sharing data",  GREEN),
         ]
 
         future_items = VGroup()
@@ -67,7 +67,7 @@ class S10_Conclusiones(Scene):
 
         future_arrows = VGroup()
         for item in future_items:
-            arr = Text("→", font_size=15, color=PURPLE_B)
+            arr = Text("->", font_size=15, color=PURPLE_B)
             arr.next_to(item, LEFT, buff=0.15)
             future_arrows.add(arr)
             self.play(
@@ -78,29 +78,29 @@ class S10_Conclusiones(Scene):
 
         self.wait(1.8)
 
-        # ── Galería de imágenes reales ───────────────────────────────────────
+        # ── Real image gallery ───────────────────────────────────────────────
         self.play(
             FadeOut(title), FadeOut(future_title),
             FadeOut(future_items), FadeOut(future_arrows),
             run_time=0.6,
         )
 
-        gallery_title = Text("Imágenes Reales del Dominio", font_size=28,
+        gallery_title = Text("Real-World Domain Images", font_size=28,
                              color=TEAL_C, weight=BOLD)
         gallery_title.to_edge(UP, buff=0.40)
         self.play(FadeIn(gallery_title, shift=DOWN * 0.12), run_time=0.5)
 
         images_data = [
-            ("../imgs/mri.jpg",              "Resonancia Magnética"),
-            ("../imgs/segmentation.jpg",     "Segmentación de Tumor"),
-            ("../imgs/radiologia.jpg",       "Radiología Digital"),
-            ("../imgs/layers.jpg",           "Capas de una CNN"),
-            ("../imgs/unet.jpg",             "Arquitectura U-Net"),
-            ("../imgs/neuron.jpg",           "Neurona Artificial"),
-            ("../imgs/odontology.jpg",       "Diagnóstico Dental"),
-            ("../imgs/abdomentomografy.jpg", "Tomografía Abdominal"),
-            ("../imgs/example.jpg",          "Ejemplo de Clasificación"),
-            ("../imgs/portada.png",          "IA en Diagnóstico Médico"),
+            ("../imgs/mri.jpg",              "Magnetic Resonance Imaging"),
+            ("../imgs/segmentation.jpg",     "Tumor Segmentation"),
+            ("../imgs/radiologia.jpg",       "Digital Radiology"),
+            ("../imgs/layers.jpg",           "CNN Layers"),
+            ("../imgs/unet.jpg",             "U-Net Architecture"),
+            ("../imgs/neuron.jpg",           "Artificial Neuron"),
+            ("../imgs/odontology.jpg",       "Dental Diagnosis"),
+            ("../imgs/abdomentomografy.jpg", "Abdominal CT Scan"),
+            ("../imgs/example.jpg",          "Classification Example"),
+            ("../imgs/portada.png",          "AI in Medical Diagnosis"),
         ]
 
         prev_group = None

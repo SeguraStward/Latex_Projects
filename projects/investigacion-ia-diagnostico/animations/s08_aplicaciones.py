@@ -1,32 +1,32 @@
 from manim import *
 
-Text.set_default(font="Noto Sans")
+Text.set_default(font="Noto Sans", line_spacing=1.1)
 
 
 class S08_Aplicaciones(Scene):
     """
-    Aplicaciones reales de CNN en diagnóstico médico:
-    5 casos concretos de implementación + impacto clínico.
+    Real CNN applications in medical diagnosis:
+    5 concrete implementation cases + clinical impact.
     """
 
     def construct(self):
 
-        title = Text("Aplicaciones Reales", font_size=36, color=BLUE_B, weight=BOLD)
+        title = Text("Real Applications", font_size=36, color=BLUE_B, weight=BOLD)
         title.to_edge(UP, buff=0.35)
         self.play(Write(title), run_time=0.8)
 
-        # ── 5 casos en lista con datos clave ─────────────────────────────────
+        # ── 5 cases in list with key data ─────────────────────────────────────
         cases = [
-            ("Viz.ai",       "Detección de ACV",           "AUC > 0.90",
-             "1,600+ hospitales  ·  −66 min tratamiento",   TEAL_C),
-            ("Mirai (MIT)",  "Riesgo cáncer de mama",      "C-index 0.69–0.78",
-             "Validado en 5 países  ·  Predicción a 5 años", GREEN_C),
-            ("Aidoc",        "Hemorragia intracraneal",    "Sens. > 90%",
-             "Triaje automático  ·  Prioriza casos críticos", ORANGE),
-            ("Qure.ai",     "Nódulos pulmonares",          "FDA cleared",
-             "Segmentación en CT  ·  Cribado de cáncer",    BLUE_C),
-            ("Shockmatrix", "Triaje en trauma",             "1,292 casos",
-             "IA y médicos son complementarios",             PURPLE_B),
+            ("Viz.ai",       "Stroke detection",           "AUC > 0.90",
+             "1,600+ hospitals  .  -66 min treatment",      TEAL_C),
+            ("Mirai (MIT)",  "Breast cancer risk",         "C-index 0.69-0.78",
+             "Validated in 5 countries  .  5-year prediction", GREEN_C),
+            ("Aidoc",        "Intracranial hemorrhage",    "Sens. > 90%",
+             "Automatic triage  .  Prioritizes critical cases", ORANGE),
+            ("Qure.ai",     "Pulmonary nodules",           "FDA cleared",
+             "CT segmentation  .  Cancer screening",         BLUE_C),
+            ("Shockmatrix", "Trauma triage",               "1,292 cases",
+             "AI and doctors are complementary",             PURPLE_B),
         ]
 
         all_cards = VGroup()
@@ -70,20 +70,20 @@ class S08_Aplicaciones(Scene):
 
         self.wait(1.5)
 
-        # ── Impacto en la práctica clínica ────────────────────────────────────
+        # ── Clinical impact ───────────────────────────────────────────────────
         self.play(FadeOut(all_cards), run_time=0.5)
 
-        impact_title = Text("Impacto Clínico",
+        impact_title = Text("Clinical Impact",
                             font_size=22, color=TEAL_C, weight=BOLD)
         impact_title.move_to(UP * 2.2)
         self.play(FadeIn(impact_title, shift=DOWN * 0.2), run_time=0.5)
 
         items = [
-            ("Triaje en tiempo real antes de que el radiólogo abra el caso",  TEAL_C),
-            ("Reducción de 66 minutos en tratamiento de ACV",                 GREEN),
-            ("Detección complementaria: IA y médicos se cubren mutuamente",   YELLOW),
-            ("Cribado personalizado según riesgo individual",                  BLUE_C),
-            ("873 algoritmos FDA autorizados en radiología (2025)",            ORANGE),
+            ("Real-time triage before the radiologist opens the case",  TEAL_C),
+            ("66-minute reduction in stroke treatment time",             GREEN),
+            ("Complementary detection: AI and doctors cover each other", YELLOW),
+            ("Personalized screening based on individual risk",          BLUE_C),
+            ("873 FDA-authorized algorithms in radiology (2025)",        ORANGE),
         ]
 
         impact_group = VGroup()

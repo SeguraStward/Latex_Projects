@@ -1,29 +1,29 @@
 from manim import *
 
-Text.set_default(font="Noto Sans")
+Text.set_default(font="Noto Sans", line_spacing=1.1)
 
 
 class S09_Limitaciones(Scene):
     """
-    Limitaciones y desafíos éticos — 6 temas clave.
+    Limitations and ethical challenges -- 6 key topics.
     """
 
     def construct(self):
 
-        title = Text("Limitaciones y Desafíos", font_size=36,
+        title = Text("Limitations and Challenges", font_size=36,
                      color=ORANGE, weight=BOLD)
         title.to_edge(UP, buff=0.35)
         self.play(Write(title), run_time=0.7)
 
         # ══════════════════════════════════════════════════════════════════════
-        # ACT 1 — Sesgo y Generalización
+        # ACT 1 — Bias and Generalization
         # ══════════════════════════════════════════════════════════════════════
-        act1_lbl = Text("1.  Sesgo y Generalización",
+        act1_lbl = Text("1.  Bias and Generalization",
                         font_size=20, color=YELLOW, weight=BOLD)
         act1_lbl.next_to(title, DOWN, buff=0.28)
         self.play(FadeIn(act1_lbl, shift=DOWN * 0.1), run_time=0.45)
 
-        # Dos hospitales comparados
+        # Two hospitals compared
         hosp_a = RoundedRectangle(
             width=3.8, height=2.2, corner_radius=0.10,
             fill_color="#0a1a0a", fill_opacity=0.80,
@@ -31,9 +31,9 @@ class S09_Limitaciones(Scene):
         ).move_to(LEFT * 2.8 + DOWN * 0.8)
         ha_title = Text("Hospital A", font_size=14, color=GREEN_C, weight=BOLD)
         ha_title.move_to(hosp_a.get_top() + DOWN * 0.25)
-        ha_acc = Text("95% precisión", font_size=20, color=GREEN_C, weight=BOLD)
+        ha_acc = Text("95% accuracy", font_size=20, color=GREEN_C, weight=BOLD)
         ha_acc.move_to(hosp_a.get_center())
-        ha_note = Text("Mismo equipo y\npoblación del training",
+        ha_note = Text("Same equipment and\ntraining population",
                        font_size=10, color="#999999", line_spacing=1.2)
         ha_note.move_to(hosp_a.get_bottom() + UP * 0.35)
 
@@ -44,9 +44,9 @@ class S09_Limitaciones(Scene):
         ).move_to(RIGHT * 2.8 + DOWN * 0.8)
         hb_title = Text("Hospital B", font_size=14, color=RED, weight=BOLD)
         hb_title.move_to(hosp_b.get_top() + DOWN * 0.25)
-        hb_acc = Text("~80% precisión", font_size=20, color=RED, weight=BOLD)
+        hb_acc = Text("~80% accuracy", font_size=20, color=RED, weight=BOLD)
         hb_acc.move_to(hosp_b.get_center())
-        hb_note = Text("Distinto equipo,\npoblación diferente",
+        hb_note = Text("Different equipment,\ndifferent population",
                        font_size=10, color="#999999", line_spacing=1.2)
         hb_note.move_to(hosp_b.get_bottom() + UP * 0.35)
 
@@ -54,7 +54,7 @@ class S09_Limitaciones(Scene):
             hosp_a.get_right(), hosp_b.get_left(),
             buff=0.15, color=YELLOW, stroke_width=2.5, tip_length=0.18,
         )
-        drop_lbl = Text("−15%", font_size=16, color=YELLOW, weight=BOLD)
+        drop_lbl = Text("-15%", font_size=16, color=YELLOW, weight=BOLD)
         drop_lbl.next_to(arrow_drop, UP, buff=0.08)
 
         self.play(FadeIn(hosp_a), FadeIn(ha_title), FadeIn(ha_acc),
@@ -70,14 +70,14 @@ class S09_Limitaciones(Scene):
         self.play(FadeOut(act1_all), run_time=0.45)
 
         # ══════════════════════════════════════════════════════════════════════
-        # ACT 2 — Caja negra + XAI
+        # ACT 2 — Black Box + XAI
         # ══════════════════════════════════════════════════════════════════════
-        act2_lbl = Text("2.  Interpretabilidad — Caja Negra",
+        act2_lbl = Text("2.  Interpretability -- Black Box",
                         font_size=20, color=ORANGE, weight=BOLD)
         act2_lbl.next_to(title, DOWN, buff=0.28)
         self.play(FadeIn(act2_lbl, shift=DOWN * 0.1), run_time=0.45)
 
-        # Caja negra simplificada
+        # Simplified black box
         bbox = Rectangle(width=3.5, height=2.0,
                          fill_color="#040408", fill_opacity=1,
                          stroke_color=GRAY_C, stroke_width=2)
@@ -87,20 +87,20 @@ class S09_Limitaciones(Scene):
 
         arr_in = Arrow(LEFT * 4.5 + DOWN * 0.5, bbox.get_left(),
                        buff=0.12, color=BLUE_C, stroke_width=2, tip_length=0.18)
-        lbl_in = Text("Imagen", font_size=12, color=BLUE_C)
+        lbl_in = Text("Image", font_size=12, color=BLUE_C)
         lbl_in.next_to(arr_in, UP, buff=0.06)
 
         arr_out = Arrow(bbox.get_right(), RIGHT * 4.5 + DOWN * 0.5,
                         buff=0.12, color=GREEN, stroke_width=2, tip_length=0.18)
-        lbl_out = Text("Maligno 94.7%", font_size=12, color=GREEN, weight=BOLD)
+        lbl_out = Text("Malignant 94.7%", font_size=12, color=GREEN, weight=BOLD)
         lbl_out.next_to(arr_out, UP, buff=0.06)
 
         self.play(FadeIn(bbox), FadeIn(q_mark), run_time=0.4)
         self.play(GrowArrow(arr_in), FadeIn(lbl_in),
                   GrowArrow(arr_out), FadeIn(lbl_out), run_time=0.5)
 
-        xai_note = Text("XAI (Grad-CAM, SHAP) intenta explicar,\n"
-                        "pero radiólogos lo encuentran insuficiente",
+        xai_note = Text("XAI (Grad-CAM, SHAP) tries to explain,\n"
+                        "but radiologists find it insufficient",
                         font_size=12, color=YELLOW, line_spacing=1.2)
         xai_note.to_edge(DOWN, buff=0.50)
         self.play(FadeIn(xai_note, shift=UP * 0.15), run_time=0.5)
@@ -111,25 +111,25 @@ class S09_Limitaciones(Scene):
         self.play(FadeOut(act2_all), run_time=0.45)
 
         # ══════════════════════════════════════════════════════════════════════
-        # ACT 3 — 4 desafíos restantes (compactos)
+        # ACT 3 — 4 remaining challenges (compact)
         # ══════════════════════════════════════════════════════════════════════
-        act3_lbl = Text("Desafíos Adicionales",
+        act3_lbl = Text("Additional Challenges",
                         font_size=20, color=RED, weight=BOLD)
         act3_lbl.next_to(title, DOWN, buff=0.28)
         self.play(FadeIn(act3_lbl, shift=DOWN * 0.1), run_time=0.45)
 
         challenges = [
-            ("Regulación",      "FDA/MDR aprueban versiones\nestáticas; "
-                                "actualizar requiere\nnueva autorización",
+            ("Regulation",    "FDA/MDR approve static\nversions; updates require\n"
+                              "new authorization",
              YELLOW,   LEFT * 3.2 + DOWN * 0.3),
-            ("Responsabilidad", "El radiólogo firma y es\nlegalmente responsable\n"
-                                "del diagnóstico",
+            ("Accountability","The radiologist signs and is\nlegally responsible\n"
+                              "for the diagnosis",
              RED,      RIGHT * 3.2 + DOWN * 0.3),
-            ("Integración",     "Sistemas legados dificultan\n"
-                                "integrar IA en PACS/RIS",
+            ("Integration",   "Legacy systems make it hard\n"
+                              "to integrate AI into PACS/RIS",
              BLUE_C,   LEFT * 3.2 + DOWN * 2.5),
-            ("Escalabilidad",   "GPUs costosas + etiquetado\n"
-                                "experto = prohibitivo\npara clínicas pequeñas",
+            ("Scalability",   "Expensive GPUs + expert\n"
+                              "labeling = prohibitive\nfor small clinics",
              PURPLE_B, RIGHT * 3.2 + DOWN * 2.5),
         ]
 
@@ -153,9 +153,9 @@ class S09_Limitaciones(Scene):
         )
         self.wait(1.2)
 
-        # Cierre
+        # Closing
         close_txt = Text(
-            "La IA es un copiloto, no un reemplazo del especialista",
+            "AI is a co-pilot, not a replacement for the specialist",
             font_size=16, color=TEAL_C, weight=BOLD,
         )
         close_txt.to_edge(DOWN, buff=0.30)

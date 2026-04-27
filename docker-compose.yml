@@ -24,6 +24,10 @@ services:
   manim:
     image: manimcommunity/manim:stable
     user: "${UID:-1000}:${GID:-1000}"
+    environment:
+      - LANG=C.UTF-8
+      - LC_ALL=C.UTF-8
+      - PYTHONUTF8=1
     volumes:
       - .:/workspace
     working_dir: /workspace

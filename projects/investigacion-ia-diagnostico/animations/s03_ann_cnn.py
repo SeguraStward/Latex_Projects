@@ -1,12 +1,12 @@
 from manim import *
 import numpy as np
 
-Text.set_default(font="Noto Sans")
+Text.set_default(font="Noto Sans", line_spacing=1.1)
 from helpers import make_eye
 
 
 class S03_ANN_CNN(Scene):
-    """ANN vs CNN: neurona basica, red completa y el ojo (corteza visual)."""
+    """ANN vs CNN: basic neuron, full network and the eye (visual cortex)."""
 
     def _make_ann_network(self):
         layer_cfg = [(4, BLUE_C), (4, BLUE_D), (2, GREEN_C)]
@@ -31,13 +31,13 @@ class S03_ANN_CNN(Scene):
         return VGroup(edges, *layers), layers
 
     def construct(self):
-        title = Text("Redes Neuronales: ANN vs CNN",
+        title = Text("Neural Networks: ANN vs CNN",
                      font_size=38, color=BLUE_B, weight=BOLD)
         title.to_edge(UP, buff=0.35)
         self.play(Write(title), run_time=0.8)
 
-        # ── BLOQUE IZQUIERDO — ANN ────────────────────────────────────────
-        ann_title = Text("Red Neuronal Artificial (ANN)",
+        # ── LEFT BLOCK — ANN ──────────────────────────────────────────────
+        ann_title = Text("Artificial Neural Network (ANN)",
                          font_size=20, color=BLUE_C, weight=BOLD)
         ann_title.move_to(LEFT * 3.5 + UP * 2.7)
         self.play(FadeIn(ann_title, shift=DOWN * 0.2))
@@ -45,7 +45,7 @@ class S03_ANN_CNN(Scene):
         neuron = Circle(radius=0.35, fill_color=BLUE_D, fill_opacity=0.4,
                         stroke_color=BLUE_C, stroke_width=2)
         neuron.move_to(LEFT * 3.5 + UP * 1.1)
-        sigma = Text("Σ", font_size=22, color=WHITE)
+        sigma = Text("S", font_size=22, color=WHITE)
         sigma.move_to(neuron.get_center())
 
         inputs_pos = [LEFT * 5.2 + UP * 1.7, LEFT * 5.2 + UP * 1.1,
@@ -77,37 +77,37 @@ class S03_ANN_CNN(Scene):
         ann_net, ann_layers = self._make_ann_network()
         ann_net.scale(0.85).move_to(LEFT * 3.5 + DOWN * 0.9)
         ann_lbl = VGroup(
-            Text("Entrada", font_size=12, color=BLUE_C),
-            Text("Oculta", font_size=12, color=BLUE_D),
-            Text("Salida", font_size=12, color=GREEN_C),
+            Text("Input",  font_size=12, color=BLUE_C),
+            Text("Hidden", font_size=12, color=BLUE_D),
+            Text("Output", font_size=12, color=GREEN_C),
         )
         for lbl, layer in zip(ann_lbl, ann_layers):
             lbl.next_to(layer, DOWN, buff=0.1)
         self.play(Create(ann_net), FadeIn(ann_lbl), run_time=1.0)
 
         flat_group = VGroup(
-            Text("Imagen 2D a vector 1D", font_size=14, color=RED),
-            Text("Pierde estructura espacial", font_size=12, color=RED),
+            Text("2D image to 1D vector", font_size=14, color=RED),
+            Text("Loses spatial structure", font_size=12, color=RED),
         ).arrange(DOWN, buff=0.08)
         flat_group.move_to(LEFT * 3.5 + DOWN * 2.6)
         flat_box = SurroundingRectangle(flat_group, color=RED,
                                         buff=0.12, corner_radius=0.08)
         self.play(FadeIn(flat_group), Create(flat_box), run_time=0.7)
 
-        # ── DIVISOR CENTRAL ───────────────────────────────────────────────
+        # ── CENTER DIVIDER ────────────────────────────────────────────────
         divider = DashedLine(UP * 3, DOWN * 3.5, color=GRAY_D,
                              stroke_width=1.2, dash_length=0.15)
         center_arrow = Arrow(LEFT * 0.6, RIGHT * 0.6, color=TEAL_C,
                              stroke_width=2, tip_length=0.16)
         center_arrow.move_to(ORIGIN + UP * 0.15)
-        center_lbl = Text("Inspirada en\nla corteza visual",
+        center_lbl = Text("Inspired by\nthe visual cortex",
                           font_size=14, color=TEAL_C)
         center_lbl.next_to(center_arrow, DOWN, buff=0.1)
         self.play(Create(divider), run_time=0.5)
         self.play(GrowArrow(center_arrow), FadeIn(center_lbl), run_time=0.6)
 
-        # ── BLOQUE DERECHO — CNN con el OJO ──────────────────────────────
-        cnn_title = Text("Red Neuronal Convolucional (CNN)",
+        # ── RIGHT BLOCK — CNN with EYE ───────────────────────────────────
+        cnn_title = Text("Convolutional Neural Network (CNN)",
                          font_size=20, color=TEAL_C, weight=BOLD)
         cnn_title.move_to(RIGHT * 3.2 + UP * 2.7)
         self.play(FadeIn(cnn_title, shift=DOWN * 0.2))
@@ -115,15 +115,15 @@ class S03_ANN_CNN(Scene):
         eye = make_eye()
         eye.scale(1.1).move_to(RIGHT * 3.2 + DOWN * 0.2)
         sclera_w = eye[0].width
-        eyeball = VGroup(eye[1], eye[2], eye[3])  # iris + pupila + brillo
+        eyeball = VGroup(eye[1], eye[2], eye[3])  # iris + pupil + shine
 
-        cortex_lbl = Text("Corteza Visual Humana", font_size=14, color=GRAY_B)
+        cortex_lbl = Text("Human Visual Cortex", font_size=14, color=GRAY_B)
         cortex_lbl.next_to(eye, DOWN, buff=0.2)
 
         self.play(FadeIn(eye), FadeIn(cortex_lbl), run_time=0.6)
         self.wait(0.5)
 
-        # Cornea se mueve de lado a lado
+        # Cornea moves side to side
         move = sclera_w * 0.18
         self.play(eyeball.animate.shift(RIGHT * move), run_time=0.55)
         self.wait(0.2)
