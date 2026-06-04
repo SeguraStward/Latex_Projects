@@ -129,8 +129,24 @@ class S04_CapasCNN(MovingCameraScene):
                            weight=BOLD)
                 lbl.move_to(sq.get_center())
                 g.add(VGroup(sq, lbl))
+        g._rows, g._cols, g._cell = rows, cols, cell
         g.move_to(ORIGIN)
         return g
+
+    def _update_number_grid(self, grid, mat, fmt="{:+.2f}", text_color=WHITE,
+                            sign_colors=False, font_size=12):
+        rows, cols = mat.shape
+        cols_idx = getattr(grid, "_cols", cols)
+        for r in range(rows):
+            for c in range(cols):
+                v = float(mat[r, c])
+                cell = grid[r * cols_idx + c]
+                color = text_color
+                if sign_colors:
+                    color = GREEN if v > 0 else RED_C if v < 0 else GRAY_B
+                lbl = Text(fmt.format(v), font_size=font_size, color=color)
+                lbl.move_to(cell[0].get_center())
+                cell[1].become(lbl)
 
     def _conv2d_raw(self, x, k):
         H, W = x.shape
@@ -270,68 +286,72 @@ class S04_CapasCNN(MovingCameraScene):
         out_hl.move_to(self._gcell(fmap_grid, 0, 0).get_center())
         self.play(FadeIn(rf), FadeIn(out_hl), run_time=0.3)
 
-        slow = [(0, 0), (1, 4), (4, 4), (7, 7)]
-        for r, c in slow:
+        calc_patch_grid = self._number_grid(digit[0:3, 0:3], cell=0.32,
+                                            fmt="{:.1f}", font_size=9)
+        calc_patch_lbl = Text("3x3 patch", font_size=10, color=BLUE_C)
+        calc_patch_group = VGroup(calc_patch_grid, calc_patch_lbl).arrange(DOWN, buff=0.06)
+        calc_kernel_grid = self._number_grid(K_HORIZ, cell=0.32, fmt="{:+.0f}",
+                                             sign_colors=True, font_size=10)
+        calc_kernel_lbl = Text("Kernel: horizontal", font_size=10, color=YELLOW)
+        calc_kernel_group = VGroup(calc_kernel_grid, calc_kernel_lbl).arrange(DOWN, buff=0.06)
+        calc_sum = Text("Sum = +0.00", font_size=12, color=WHITE)
+        calc_panel = VGroup(
+            calc_patch_group,
+            Text("x", font_size=14, color=GRAY_B),
+            calc_kernel_group,
+            Text("=", font_size=14, color=GRAY_B),
+            calc_sum,
+        ).arrange(RIGHT, buff=0.16)
+        calc_panel.scale(0.85)
+        calc_panel.to_edge(DOWN, buff=0.50).shift(LEFT * 0.2)
+        self.play(FadeIn(calc_panel), run_time=0.5)
+
+        scan_positions = [(r, c) for r in range(oH) for c in range(oW)]
+        for r, c in scan_positions:
+            patch = digit[r:r + 3, c:c + 3]
+            raw_val = float((patch * K_HORIZ).sum())
+            self._update_number_grid(calc_patch_grid, patch, fmt="{:.1f}", font_size=9)
+            new_sum = Text(f"Sum = {raw_val:+.2f}", font_size=12, color=WHITE)
+            new_sum.move_to(calc_sum.get_center())
+            calc_sum.become(new_sum)
             val = fmap_h_raw_norm[r, c]
             col = BLUE_C if val > 0 else RED_C
             self.play(
                 rf.animate.move_to(self._gcell(img, r + 1, c + 1).get_center()),
                 out_hl.animate.move_to(self._gcell(fmap_grid, r, c).get_center()),
-                run_time=0.55,
+                self._light_cell(fmap_grid, r, c, abs(val), col),
+                run_time=0.05,
             )
-            self.play(self._light_cell(fmap_grid, r, c, abs(val), col), run_time=0.22)
 
         demo_r, demo_c = 4, 4
-        demo_patch = digit[demo_r:demo_r + 3, demo_c:demo_c + 3]
-        demo_raw = float((demo_patch * K_HORIZ).sum())
-        demo_patch_grid = self._number_grid(demo_patch, cell=0.36, fmt="{:.1f}", font_size=10)
-        demo_patch_lbl = Text("3x3 patch", font_size=11, color=BLUE_C)
-        demo_patch_group = VGroup(demo_patch_grid, demo_patch_lbl).arrange(DOWN, buff=0.08)
-        demo_kernel_grid = self._number_grid(K_HORIZ, cell=0.36, fmt="{:+.0f}", sign_colors=True, font_size=11)
-        demo_kernel_lbl = Text("Kernel", font_size=11, color=YELLOW)
-        demo_kernel_group = VGroup(demo_kernel_grid, demo_kernel_lbl).arrange(DOWN, buff=0.08)
-        demo_sum = Text(f"Sum = {demo_raw:+.2f}", font_size=13, color=WHITE)
-        demo_panel = VGroup(
-            demo_patch_group,
-            Text("x", font_size=16, color=GRAY_B),
-            demo_kernel_group,
-            Text("=", font_size=16, color=GRAY_B),
-            demo_sum,
-        ).arrange(RIGHT, buff=0.18)
-        demo_panel.scale(0.75)
-        demo_panel.to_edge(DOWN, buff=0.55).shift(LEFT * 0.3)
-
         self.play(
             rf.animate.move_to(self._gcell(img, demo_r + 1, demo_c + 1).get_center()),
             out_hl.animate.move_to(self._gcell(fmap_grid, demo_r, demo_c).get_center()),
-            FadeOut(legend),
-            run_time=0.5,
+            run_time=0.4,
         )
-        self.play(FadeIn(demo_panel), run_time=0.6)
-        self.wait(2.0)
-        self.play(FadeOut(demo_panel), run_time=0.4)
+        demo_patch = digit[demo_r:demo_r + 3, demo_c:demo_c + 3]
+        self._update_number_grid(calc_patch_grid, demo_patch, fmt="{:.1f}", font_size=9)
+        demo_raw_h = float((demo_patch * K_HORIZ).sum())
+        calc_sum.become(Text(f"Sum = {demo_raw_h:+.2f}", font_size=12, color=WHITE)
+                .move_to(calc_sum.get_center()))
 
-        # Row-by-row sweep — fills the rest in reading order.
-        for r in range(oH):
-            row_anims = []
-            last_c_in_row = -1
-            for c in range(oW):
-                if (r, c) in slow:
-                    continue
-                val = fmap_h_raw_norm[r, c]
-                col = BLUE_C if val > 0 else RED_C
-                row_anims.append(self._light_cell(fmap_grid, r, c, abs(val), col))
-                last_c_in_row = c
-            if not row_anims:
-                continue
-            self.play(
-                rf.animate.move_to(self._gcell(img, r + 1, last_c_in_row + 1).get_center()),
-                out_hl.animate.move_to(self._gcell(fmap_grid, r, last_c_in_row).get_center()),
-                LaggedStart(*row_anims, lag_ratio=0.18),
-                run_time=0.32,
-            )
+        def show_kernel_calc(K, name, color):
+            self._update_number_grid(calc_kernel_grid, K, fmt="{:+.0f}",
+                                     sign_colors=True, font_size=10)
+            demo_raw = float((demo_patch * K).sum())
+            new_sum_local = Text(f"Sum = {demo_raw:+.2f}", font_size=12, color=WHITE)
+            new_sum_local.move_to(calc_sum.get_center())
+            calc_sum.become(new_sum_local)
+            new_lbl = Text(f"Kernel: {name}", font_size=10, color=color)
+            new_lbl.move_to(calc_kernel_lbl.get_center())
+            self.play(Transform(calc_kernel_lbl, new_lbl), run_time=0.3)
+            self.wait(0.4)
 
-        self.play(FadeOut(rf), FadeOut(out_hl), run_time=0.4)
+        show_kernel_calc(K_VERT, "vertical", ORANGE)
+        show_kernel_calc(K_LAPL, "laplacian", "#9D7BFF")
+
+        self.play(FadeOut(calc_panel), FadeOut(legend), run_time=0.4)
+        self.play(FadeOut(rf), FadeOut(out_hl), run_time=0.3)
 
         # ═════════════════════════════════════════════════════════════════════
         # STEP 3 — Activation Function (ReLU)
@@ -377,35 +397,43 @@ class S04_CapasCNN(MovingCameraScene):
                              font_size=13, color=BLUE_C)
         fmap_lbl_relu.next_to(fmap_grid, UP, buff=0.18)
         self.play(Transform(fmap_lbl, fmap_lbl_relu), run_time=0.4)
-        fmap_lbl = fmap_lbl_relu
 
-        # Show multiple kernels quickly
-        k1_tag = Text("horizontal\nedges", font_size=11, color=BLUE_C, weight=BOLD)
-        k1_tag.next_to(kernel_box, LEFT, buff=0.18)
-        self.play(FadeIn(k1_tag), run_time=0.25)
-
+        # Show multiple kernels quickly (uniform sizes + visible labels)
         ROW_SCALE = 0.55
-        kernel_pair_1 = VGroup(kernel_box, k1_tag)
-        fmap_pair_1 = VGroup(fmap_grid, fmap_lbl)
-        self.play(
-            kernel_pair_1.animate.scale(ROW_SCALE).move_to(LEFT * 0.2 + UP * 1.9),
-            fmap_pair_1.animate.scale(ROW_SCALE).move_to(RIGHT * 3.0 + UP * 1.9),
-            run_time=0.7,
-        )
 
-        def build_row(K, fmap, color, name, y):
-            kbox = self._kernel_box(K, cell=0.42 * ROW_SCALE, label_size=10)
+        def build_row(K, fmap, color, tag_text, map_text, y):
+            kbox = self._kernel_box(K, cell=0.42, label_size=14)
+            kbox.scale(ROW_SCALE)
             kbox.move_to(LEFT * 0.2 + UP * y)
-            tag = Text(name, font_size=11, color=color, weight=BOLD)
+            tag = Text(tag_text, font_size=11, color=color, weight=BOLD)
             tag.next_to(kbox, LEFT, buff=0.18)
-            fg = self._grid(fmap, cell=FM_CELL * ROW_SCALE, fill_color=color)
+            fg = self._grid(fmap, cell=FM_CELL, fill_color=color)
+            fg.scale(ROW_SCALE)
             fg.move_to(RIGHT * 3.0 + UP * y)
-            flbl = Text(f"{name}", font_size=11, color=color)
-            flbl.next_to(fg, UP, buff=0.10)
+            flbl = Text(map_text, font_size=10, color=color)
+            flbl.next_to(fg, RIGHT, buff=0.12)
             return VGroup(kbox, tag), VGroup(fg, flbl)
 
-        kpair_2, fpair_2 = build_row(K_VERT, fmap_v, ORANGE, "vertical\nedges", 0.0)
-        kpair_3, fpair_3 = build_row(K_LAPL, fmap_l, "#9D7BFF", "Laplacian\n(omni)", -1.9)
+        row_y = 2.0
+        kpair_1_new, fpair_1_new = build_row(
+            K_HORIZ, fmap_h, BLUE_C, "horizontal\nedges", "map: horizontal", row_y,
+        )
+        self.play(
+            Transform(kernel_box, kpair_1_new[0]),
+            Transform(fmap_grid, fpair_1_new[0]),
+            Transform(fmap_lbl, fpair_1_new[1]),
+            FadeIn(kpair_1_new[1]),
+            run_time=0.7,
+        )
+        kernel_pair_1 = VGroup(kernel_box, kpair_1_new[1])
+        fmap_pair_1 = VGroup(fmap_grid, fmap_lbl)
+
+        kpair_2, fpair_2 = build_row(
+            K_VERT, fmap_v, ORANGE, "vertical\nedges", "map: vertical", 0.0,
+        )
+        kpair_3, fpair_3 = build_row(
+            K_LAPL, fmap_l, "#9D7BFF", "Laplacian\n(omni)", "map: laplacian", -2.0,
+        )
 
         self.play(FadeIn(kpair_2), FadeIn(fpair_2), run_time=0.7)
         self.play(FadeIn(kpair_3), FadeIn(fpair_3), run_time=0.7)
@@ -437,30 +465,29 @@ class S04_CapasCNN(MovingCameraScene):
         pool_v = self._maxpool(fmap_v, k=2)
         pool_l = self._maxpool(fmap_l, k=2)
         POOL_CELL = 0.26
-        pg1 = self._grid(pool_h, cell=POOL_CELL, fill_color=BLUE_C)
+        pg1 = self._grid(np.zeros_like(pool_h), cell=POOL_CELL, fill_color=BLUE_C)
         pg2 = self._grid(pool_v, cell=POOL_CELL, fill_color=ORANGE)
         pg3 = self._grid(pool_l, cell=POOL_CELL, fill_color="#9D7BFF")
         pg1.move_to(LEFT * 1.7 + UP * 1.9)
         pg2.move_to(LEFT * 1.7 + UP * 0.0)
         pg3.move_to(LEFT * 1.7 + DOWN * 1.9)
-        pa1 = Arrow(fmap_pair_1.get_right(), pg1.get_left(), buff=0.15,
+        pa1 = Arrow(fmap_grid.get_right(), pg1.get_left(), buff=0.15,
                     color=GRAY_C, stroke_width=1.5, tip_length=0.13)
+        cell_size = self._gcell(fmap_grid, 0, 0).get_width()
+        pool_window = Rectangle(width=cell_size * 2, height=cell_size * 2,
+                                stroke_color=YELLOW, stroke_width=3, fill_opacity=0)
+        pool_max_box = Square(side_length=cell_size, stroke_color=GREEN,
+                              stroke_width=2.0, fill_opacity=0)
+        pool_out_hl = Square(side_length=POOL_CELL, stroke_color=GREEN,
+                             stroke_width=2.2, fill_opacity=0)
 
-        # Mini-demo of max-pool 2x2 over the horizontal feature map
-        demo_pr, demo_pc = 2, 4
-        win_cells = VGroup(*[self._gcell(fmap_grid, demo_pr + dr, demo_pc + dc)
-                             for dr in range(2) for dc in range(2)])
-        pool_window = SurroundingRectangle(win_cells, color=YELLOW,
-                                           stroke_width=3, buff=0.01)
-        demo_patch_p = fmap_h[demo_pr:demo_pr + 2, demo_pc:demo_pc + 2]
-        pmax = float(demo_patch_p.max())
-        ppatch_grid = self._number_grid(demo_patch_p, cell=0.34, fmt="{:.2f}",
+        ppatch_grid = self._number_grid(np.zeros((2, 2)), cell=0.34, fmt="{:.2f}",
                                         font_size=10)
         ppatch_lbl = Text("2x2 patch", font_size=10, color=BLUE_C)
         ppatch_group = VGroup(ppatch_grid, ppatch_lbl).arrange(DOWN, buff=0.06)
         pmax_box = Square(side_length=0.34, fill_color=GREEN, fill_opacity=0.35,
                           stroke_color=GREEN, stroke_width=1.2)
-        pmax_text = Text(f"{pmax:.2f}", font_size=11, color=WHITE)
+        pmax_text = Text("0.00", font_size=11, color=WHITE)
         pmax_text.move_to(pmax_box.get_center())
         pmax_grp = VGroup(pmax_box, pmax_text)
         pmax_lbl = Text("max", font_size=10, color=GREEN)
@@ -476,15 +503,48 @@ class S04_CapasCNN(MovingCameraScene):
         ppanel_full.scale(0.95)
         ppanel_full.to_edge(DOWN, buff=0.45)
 
+        init_patch = fmap_h[0:2, 0:2]
+        init_max = float(init_patch.max())
+        self._update_number_grid(ppatch_grid, init_patch, fmt="{:.2f}", font_size=10)
+        pmax_text.become(Text(f"{init_max:.2f}", font_size=11, color=WHITE).move_to(pmax_text.get_center()))
+        start_top_left = self._gcell(fmap_grid, 0, 0).get_center()
+        pool_window.move_to(start_top_left + RIGHT * (cell_size / 2) + DOWN * (cell_size / 2))
+        pool_max_box.move_to(self._gcell(fmap_grid, 0, 0).get_center())
+        pool_out_hl.move_to(self._gcell(pg1, 0, 0).get_center())
+
         self.play(GrowArrow(pa1), FadeIn(pg1), run_time=0.6)
-        self.play(FadeIn(pool_window), FadeIn(ppanel_full), run_time=0.6)
-        self.wait(2.0)
-        self.play(FadeOut(pool_window), FadeOut(ppanel_full), run_time=0.4)
+        self.play(FadeIn(pool_window), FadeIn(pool_max_box),
+                  FadeIn(pool_out_hl), FadeIn(ppanel_full), run_time=0.6)
+
+        for r in range(pool_h.shape[0]):
+            for c in range(pool_h.shape[1]):
+                patch = fmap_h[r * 2:(r + 1) * 2, c * 2:(c + 1) * 2]
+                max_val = float(patch.max())
+                max_idx = np.unravel_index(np.argmax(patch), patch.shape)
+                max_r = r * 2 + max_idx[0]
+                max_c = c * 2 + max_idx[1]
+                self._update_number_grid(ppatch_grid, patch, fmt="{:.2f}", font_size=10)
+                new_pmax = Text(f"{max_val:.2f}", font_size=11, color=WHITE)
+                new_pmax.move_to(pmax_text.get_center())
+                pmax_text.become(new_pmax)
+
+                top_left = self._gcell(fmap_grid, r * 2, c * 2).get_center()
+                pool_center = top_left + RIGHT * (cell_size / 2) + DOWN * (cell_size / 2)
+                self.play(
+                    pool_window.animate.move_to(pool_center),
+                    pool_max_box.animate.move_to(self._gcell(fmap_grid, max_r, max_c).get_center()),
+                    pool_out_hl.animate.move_to(self._gcell(pg1, r, c).get_center()),
+                    self._light_cell(pg1, r, c, max_val, BLUE_C),
+                    run_time=0.12,
+                )
+
+        self.play(FadeOut(pool_window), FadeOut(pool_max_box),
+                  FadeOut(pool_out_hl), FadeOut(ppanel_full), run_time=0.4)
 
         # Now the other two: same operation
-        pa2 = Arrow(fpair_2.get_right(), pg2.get_left(), buff=0.15,
+        pa2 = Arrow(fpair_2[0].get_right(), pg2.get_left(), buff=0.15,
                     color=GRAY_C, stroke_width=1.5, tip_length=0.13)
-        pa3 = Arrow(fpair_3.get_right(), pg3.get_left(), buff=0.15,
+        pa3 = Arrow(fpair_3[0].get_right(), pg3.get_left(), buff=0.15,
                     color=GRAY_C, stroke_width=1.5, tip_length=0.13)
         same_op_lbl = Text("(same operation applied to each map)",
                            font_size=12, color=GRAY_B)

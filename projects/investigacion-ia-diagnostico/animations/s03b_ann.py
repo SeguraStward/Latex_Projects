@@ -3,12 +3,12 @@ from manim import *
 Text.set_default(font="Noto Sans", line_spacing=1.1)
 
 
-class S03b_Matematicas(Scene):
-    """Artificial neuron with formula, loss, and simple learning."""
+class S03b_ANN(Scene):
+    """Artificial Neural Networks: neuron, loss, and gradient descent."""
 
     def construct(self):
         title = Text(
-            "Artificial neuron: learns with backprop",
+            "Artificial Neural Networks",
             font_size=34,
             color=BLUE_B,
             weight=BOLD,
