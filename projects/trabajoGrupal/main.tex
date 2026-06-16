@@ -1,0 +1,94 @@
+% =============================================================================
+%  ANEXO C — ETAPA I: INFORME DE INVESTIGACIÓN (TRABAJO GRUPAL)
+%  Ciencia, Tecnología y Sociedad / TIC desde el Nuevo Humanismo
+%  -------------------------------------------------------------------------
+%  Este documento es ÚNICAMENTE el informe escrito de la Etapa I (5–7 págs
+%  sin portada ni referencias). La Etapa II (propuesta de innovación +
+%  producto comunicativo) se desarrolla en el proyecto hermano:
+%      projects/trabajoGrupal_etapa2/
+%  Orden de secciones (convencional; la justificación motiva antes de la teoría):
+%    Planteamiento → Justificación → Pregunta generadora → Marco de referencia
+%  Formato exigido:
+%    · Letra tamaño 12
+%    · Interlineado 1,5
+%    · Márgenes estándar (2,54 cm)
+%    · Citas y referencias en formato APA
+%  Compilar con:  ./compile.sh trabajoGrupal   (usa biber)
+% =============================================================================
+\documentclass[12pt,letterpaper]{article}
+
+% --- Idioma y codificación ---------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noshorthands]{babel}
+\usepackage{csquotes}
+
+% --- Tipografía (Times 12 pt, estándar APA) ----------------------------------
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+
+% --- Márgenes estándar -------------------------------------------------------
+\usepackage[letterpaper,margin=2.54cm]{geometry}
+
+% --- Gráficos ----------------------------------------------------------------
+\usepackage{graphicx}
+\usepackage{xcolor}
+\graphicspath{{figs/}}
+
+% --- Encabezado / pie --------------------------------------------------------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\small Etapa I — Informe de investigación}
+\fancyhead[L]{\small\nouppercase{\leftmark}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% --- Referencias APA (biblatex + biber) --------------------------------------
+\usepackage[backend=biber,style=apa,language=spanish]{biblatex}
+\DeclareLanguageMapping{spanish}{spanish-apa}
+\addbibresource{referencias/referencias.bib}
+
+% --- Hipervínculos -----------------------------------------------------------
+\usepackage[colorlinks=true,linkcolor=black,citecolor=blue,urlcolor=blue]{hyperref}
+
+% --- Interlineado 1,5 --------------------------------------------------------
+% Cambia a 2.0 si requieres interlineado doble.
+\linespread{1.5}\selectfont
+
+% =============================================================================
+%  DATOS DE LA PORTADA  (editar a conveniencia)
+% =============================================================================
+\newcommand{\TituloProyecto}{Aislamiento Físico por medio de Redes Sociales en Estudiantes de Primer Ingreso}
+\newcommand{\CarreraGrupo}{Estudios Generales}
+\newcommand{\NombreCurso}{Ciencia, Técnica, Sociedad. Umbral del Siglo XXI}
+\newcommand{\Ciclo}{I Ciclo}
+\newcommand{\Grupo}{Grupo \#2}
+\newcommand{\FechaEntrega}{26/05/2026}
+% Integrantes del grupo (uno por línea, separados por \\)
+\newcommand{\Integrantes}{%
+  Aarón Cardoza, Ángel Rojas Arce \\
+  Ashlee Villanueva, Pablo Arbustini \\
+  Stward Segura %
+}
+
+% =============================================================================
+\begin{document}
+
+% --- Portada (NO cuenta para la extensión de 5–7 páginas) --------------------
+\input{portada.tex}
+
+% --- Cuerpo del informe (Etapa I) --------------------------------------------
+% Orden convencional: la justificación va tras el planteamiento.
+\setcounter{page}{1}
+
+\input{secciones/planteamiento.tex}
+\input{secciones/justificacion.tex}
+\input{secciones/pregunta_generadora.tex}
+\input{secciones/marco_referencia.tex}
+
+% --- Referencias (NO cuentan para la extensión de 5–7 páginas) ---------------
+\newpage
+\printbibliography[title={Referencias}]
+
+\end{document}

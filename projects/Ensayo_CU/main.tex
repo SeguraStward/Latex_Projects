@@ -1,0 +1,83 @@
+% =============================================================================
+%  ANEXO E — ENSAYO CRÍTICO
+%  Ciencia, TIC y sociedad contemporánea desde el Nuevo Humanismo
+%  -------------------------------------------------------------------------
+%  Formato exigido por la consigna:
+%    · Letra tamaño 12
+%    · Interlineado 1,5
+%    · Márgenes estándar (2,54 cm)
+%    · Citas y referencias en formato APA
+%    · Extensión 3–5 páginas (SIN portada ni referencias)
+%  Compilar con:  ./compilar.sh   o   latexmk -pdf main.tex   (usa biber)
+% =============================================================================
+\documentclass[12pt,letterpaper]{article}
+
+% --- Idioma y codificación ---------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noshorthands]{babel}
+\usepackage{csquotes}
+
+% --- Tipografía (Times 12 pt, estándar APA) ----------------------------------
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+
+% --- Márgenes estándar -------------------------------------------------------
+\usepackage[letterpaper,margin=2.54cm]{geometry}
+
+% --- Gráficos ----------------------------------------------------------------
+\usepackage{graphicx}
+\usepackage{xcolor}
+\graphicspath{{figs/}}
+
+% --- Encabezado / pie --------------------------------------------------------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\small Ensayo crítico}
+\fancyhead[L]{\small\nouppercase{\leftmark}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% --- Referencias APA (biblatex + biber) --------------------------------------
+\usepackage[backend=biber,style=apa,language=spanish]{biblatex}
+\DeclareLanguageMapping{spanish}{spanish-apa}
+\addbibresource{referencias/referencias.bib}
+
+% --- Hipervínculos -----------------------------------------------------------
+\usepackage[colorlinks=true,linkcolor=black,citecolor=blue,urlcolor=blue]{hyperref}
+
+% --- Interlineado 1,5 --------------------------------------------------------
+% Se ajusta con \linespread para evitar el conflicto de setspace con babel
+% al parchear \@makecaption. Cambia a 2.0 si requieres interlineado doble.
+\linespread{1.5}\selectfont
+
+% =============================================================================
+%  DATOS DE LA PORTADA  (editar a conveniencia)
+% =============================================================================
+\newcommand{\TituloEnsayo}{Título del ensayo crítico}
+\newcommand{\SubtituloEnsayo}{Subtítulo aclaratorio (opcional)}
+\newcommand{\NombreEstudiante}{Nombre del estudiante}
+\newcommand{\CarreraEstudiante}{Ingeniería en Sistemas de Información}
+\newcommand{\NombreCurso}{Nombre del curso}
+\newcommand{\NombreProfesor}{Nombre del profesor(a)}
+\newcommand{\FechaEntrega}{\today}
+
+% =============================================================================
+\begin{document}
+
+% --- Portada (NO cuenta para la extensión de 3–5 páginas) --------------------
+\input{portada.tex}
+
+% --- Cuerpo del ensayo -------------------------------------------------------
+\setcounter{page}{1}
+
+\input{secciones/introduccion.tex}
+\input{secciones/desarrollo.tex}
+\input{secciones/conclusiones.tex}
+
+% --- Referencias (NO cuentan para la extensión de 3–5 páginas) ---------------
+\newpage
+\printbibliography[title={Referencias}]
+
+\end{document}

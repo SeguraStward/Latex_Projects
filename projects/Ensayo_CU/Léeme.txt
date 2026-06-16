@@ -1,0 +1,37 @@
+ANEXO E — ENSAYO CRÍTICO
+========================
+
+Estructura del proyecto
+-----------------------
+main.tex                  -> Documento maestro (formato, portada, orden de secciones).
+portada.tex               -> Portada UNA (NO cuenta para la extensión de 3–5 páginas).
+secciones/
+  introduccion.tex        -> Introducción (tema, relevancia, vínculo con la carrera, pregunta central).
+  desarrollo.tex          -> Desarrollo (análisis crítico, contraste con CTS, fuentes).
+  conclusiones.tex        -> Conclusiones (reflexión, impacto TIC, retos/oportunidades).
+referencias/
+  referencias.bib         -> Fuentes en formato APA (biblatex/biber).
+figs/
+  logo_una.png            -> Logo para la portada.
+
+Formato ya configurado (según la consigna)
+-------------------------------------------
+- Letra tamaño 12 (Times, estándar APA).
+- Interlineado 1,5  (en main.tex: \linespread{1.5}; cambia a 2.0 para doble).
+- Márgenes estándar 2,54 cm.
+- Citas y referencias en formato APA.
+
+Cómo escribir
+-------------
+- Coloca tu texto en los archivos de secciones/ (reemplaza los comentarios guía).
+- Edita los datos de la portada en main.tex (título, estudiante, curso, profesor).
+- Para citar: \parencite{clave}  ó  \textcite{clave}  (la clave viene de referencias.bib).
+
+Cómo compilar
+-------------
+Desde la raíz del repositorio:
+    ./compile.sh Ensayo_CU
+El PDF se genera en projects/Ensayo_CU/main.pdf
+
+Nota: el logo es .png y el .gitignore global ignora *.png; si deseas versionarlo,
+agrégalo con:  git add -f projects/Ensayo_CU/figs/logo_una.png
