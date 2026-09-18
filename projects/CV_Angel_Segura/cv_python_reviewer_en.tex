@@ -1,0 +1,77 @@
+% =============================================================================
+%  CV — Angel Stward Segura Mendez — Junior Python Developer / Code Reviewer
+%  Compile:
+%    docker compose run --rm latex "cd projects/CV_Angel_Segura && latexmk -pdf cv_python_reviewer_en.tex"
+% =============================================================================
+\documentclass[10pt]{article}
+\input{cvstyle.tex}
+
+% Slightly tighter vertical rhythm to keep this denser CV to one page.
+\titlespacing*{\section}{0pt}{5pt}{3pt}
+\setlist[itemize]{topsep=0pt,itemsep=0pt}
+\geometry{top=0.6cm,bottom=0.6cm,headsep=0pt,footskip=3.6pt}
+
+\begin{document}
+\cvheader{Junior Python Developer \textbullet\ Code Reviewer \& Maintainer}
+\small
+
+% --- SUMMARY -----------------------------------------------------------------
+\section{Professional Summary}
+Information Systems Engineering student and detail-oriented Python developer who reads code
+as carefully as I write it. Solid foundation in Data Structures \& Algorithms, Git/GitHub
+workflows, and clean-code principles (\textbf{SOLID}, \textbf{TDD}). Comfortable reviewing
+pull requests, spotting bugs and design smells, and writing clear, actionable feedback. I use
+AI-assisted tools (Claude Code, GitHub Copilot) deliberately -- to verify reasoning and catch
+what a first pass misses, never as a substitute for understanding the code. Looking for an
+entry-level role reviewing and maintaining Python codebases.
+
+% --- SKILLS ------------------------------------------------------------------
+\section{Technical Skills}
+\cvskill{Languages}{Python (primary), C++, Java, TypeScript/JavaScript (basic)}
+\cvskill{Code quality \& review}{PEP 8, type hints, docstrings, \texttt{black}, \texttt{ruff}/\texttt{flake8}, \texttt{mypy}, pre-commit hooks, reading diffs \& pull requests critically}
+\cvskill{Software design}{SOLID principles, TDD (red-green-refactor), clean/layered architecture, basic design patterns}
+\cvskill{Version control}{Git (branching, rebasing, resolving merge conflicts), GitHub (pull requests, issues, code review, GitHub Actions basics)}
+\cvskill{Data Structures \& Algorithms}{Arrays, linked lists, trees, graphs, hashing, sorting/searching, complexity analysis -- practiced on \href{\MyLeetCodeURL}{LeetCode}}
+\cvskill{Testing}{pytest, unittest, Jest (Node.js), writing tests before fixing bugs}
+\cvskill{Databases \& tools}{SQL (PostgreSQL/MySQL), Firebase/NoSQL, Docker, Linux, Bash}
+\cvskill{AI-assisted development}{Claude Code, GitHub Copilot, ChatGPT -- for code review support, debugging, and accelerated learning}
+\cvskill{Currently strengthening}{Contributing to open-source Python repositories, CI/CD pipelines (GitHub Actions), advanced design patterns, Sphinx documentation}
+
+% --- PROJECTS ----------------------------------------------------------------
+\section{Key Projects}
+
+\cventry{Andromeda API}{Personal project --- Python (FastAPI) + Firebase}{2025}{github.com/SeguraStward}
+\begin{itemize}
+  \item Designed and built a production-style Python REST API with validated endpoints, authentication, and a maintainable, layered architecture reviewable by others.
+  \item Kept a clean commit history and used Git branching to isolate features, mirroring a real code-review workflow.
+\end{itemize}
+
+\cventry{DocParser --- Document Data Extraction}{Personal project --- Python}{2025}{github.com/SeguraStward}
+\begin{itemize}
+  \item Built a parsing pipeline that extracts structured data (e.g., invoices) from documents, applying validation and normalization for reliable output.
+  \item Refactored early versions for readability and single-responsibility, applying SOLID principles as the codebase grew.
+\end{itemize}
+
+\cventry{Spam Classifier}{Personal project --- Python}{2024--2025}{github.com/SeguraStward}
+\begin{itemize}
+  \item Test-first text-classification script: unit tests for preprocessing and prediction logic written before hardening the code, then self-reviewed with linting and type hints.
+\end{itemize}
+
+% --- EDUCATION ---------------------------------------------------------------
+\section{Education}
+\cventry{B.Sc. in Information Systems Engineering}{Universidad Nacional (UNA), Costa Rica}{In progress}{Expected 2026--2027}
+\begin{itemize}
+  \item Relevant coursework: Data Structures \& Algorithms, Databases, Software Engineering, Operating Systems, Statistics.
+\end{itemize}
+
+% --- CERTIFICATIONS ----------------------------------------------------------
+\section{Learning Roadmap \& Target Certifications}
+\begin{itemize}
+  \item \textbf{In progress / planned:} PCEP/PCAP (Python Institute), \texttt{pytest}/CI pipelines, deeper static analysis (\texttt{mypy} strict, \texttt{ruff}); weekly LeetCode practice to keep DSA sharp for review and interviews.
+\end{itemize}
+
+% --- LANGUAGES ---------------------------------------------------------------
+\section{Languages}
+\cvskill{Spanish}{Native} \quad\textbullet\quad \textbf{English:} Professional working proficiency (B2), written and spoken
+
+\end{document}

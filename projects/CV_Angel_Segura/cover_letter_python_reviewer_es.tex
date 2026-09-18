@@ -1,0 +1,69 @@
+% =============================================================================
+%  CARTA DE PRESENTACI\'ON — Angel Stward Segura Mendez
+%  Puesto: Desarrollador Python Junior / Revisor y Mantenedor de C\'odigo
+%  Tono: elegante, simple, seguro y c\'alido.
+%  Completar [Nombre de la Empresa] / [Nombre del Reclutador] antes de enviar.
+%  Compilar:
+%    docker compose run --rm latex "cd projects/CV_Angel_Segura && latexmk -pdf cover_letter_python_reviewer_es.tex"
+% =============================================================================
+\documentclass[11pt]{article}
+\input{cvstyle_es.tex}
+
+\linespread{1.12}\selectfont
+\setlength{\parskip}{6pt}
+
+\begin{document}
+
+% --- Encabezado (coincide con el CV) -----------------------------------------
+{\color{cvprimary}\Huge\bfseries \MyName}\\[2pt]
+{\color{cvaccent}\large Desarrollador Python Junior \textbullet\ Revisor y Mantenedor de C\'odigo}\\[6pt]
+{\small\color{cvlight}%
+  \faMapMarker* \, \MyLocation \quad\textbullet\quad
+  \faPhone* \, \MyPhone \\[2pt]
+  \faEnvelope \, \href{mailto:\MyEmail}{\MyEmail} \quad\textbullet\quad
+  \faLinkedin \, \href{\MyLinkedInURL}{linkedin.com/in/\MyLinkedIn} \quad\textbullet\quad
+  \faGithub \, \href{\MyGitHubURL}{github.com/\MyGitHub}%
+}\\[-2pt]
+{\color{cvaccent}\rule{\linewidth}{1.2pt}}
+
+\vspace{10pt}
+{\color{cvlight}\small \today}
+
+\vspace{8pt}
+{\color{cvprimary}\bfseries Estimado/a [Nombre del Reclutador]}\\
+{\itshape [Nombre de la Empresa]}
+
+\vspace{12pt}
+Escribo para postularme al puesto de \textbf{Desarrollador Python Junior / Revisor de
+C\'odigo} en [Nombre de la Empresa]. Disfruto la disciplina de leer c\'odigo con la misma
+atenci\'on con la que lo escribo, y me gustar\'ia contribuir a mantener una base de c\'odigo
+Python limpia, probada y f\'acil de mantener para quien venga despu\'es.
+
+Como estudiante de Ingenier\'ia en Sistemas de Informaci\'on, he construido y mantenido
+proyectos reales en Python por mi cuenta -- un servicio con FastAPI (Andromeda API), un
+pipeline de extracci\'on de datos de documentos (DocParser) y un clasificador de texto --
+aplicando principios SOLID, escribiendo pruebas antes de corregir errores, y usando
+herramientas como \texttt{black}, \texttt{ruff} y \texttt{mypy} para mantener el c\'odigo
+honesto. Manejo con soltura los flujos de trabajo de Git y GitHub: branching, resoluci\'on de
+conflictos de merge y revisi\'on cr\'itica de pull requests. Adem\'as, practico Estructuras de
+Datos y Algoritmos regularmente en LeetCode, lo que mantiene afilado mi razonamiento sobre
+correctitud y complejidad -- justo lo que necesita un buen revisor.
+
+Hago uso deliberado de herramientas de IA como Claude Code y GitHub Copilot: me ayudan a
+verificar mi razonamiento, investigar patrones desconocidos con rapidez y detectar lo que una
+primera revisi\'on pasa por alto, pero nunca sustituyen mi propio entendimiento del c\'odigo
+que entrego. Traigo esa misma disciplina al revisar el trabajo de otros -- verificando no
+solo que funcione, sino que sea correcto, legible y mantenible.
+
+Agradecer\'ia la oportunidad de aportar esta atenci\'on al detalle, y mi entusiasmo genuino
+por el c\'odigo Python limpio y bien probado, a su equipo. Gracias por su tiempo y
+consideraci\'on -- quedo a la espera de la posibilidad de conversar con ustedes.
+
+\vspace{8pt}
+Atentamente,
+
+\vspace{16pt}
+{\color{cvprimary}\bfseries \MyName}\\
+{\color{cvlight}\small Estudiante de Ingenier\'ia en Sistemas de Informaci\'on --- Universidad Nacional (UNA), Costa Rica}
+
+\end{document}

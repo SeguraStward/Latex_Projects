@@ -1,0 +1,115 @@
+% =============================================================================
+%  cvstyle.tex — Shared style & commands for Angel Stward Segura Mendez CVs
+%  -------------------------------------------------------------------------
+%  Single-column, ATS-friendly, compiles with pdfLaTeX (default engine).
+%  Used via \input{cvstyle.tex} in the preamble of each cv_*.tex file.
+% =============================================================================
+
+% --- Encoding & language -----------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+
+% --- Typography (clean sans-serif, ATS-safe) ---------------------------------
+% Prefer Lato; fall back to standard sans (Helvetica/LM) if Lato is missing.
+\IfFileExists{lato.sty}{\usepackage[default]{lato}}{\usepackage{helvet}}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{microtype}
+
+% --- Geometry ----------------------------------------------------------------
+\usepackage[a4paper,top=1.05cm,bottom=1.05cm,left=1.5cm,right=1.5cm]{geometry}
+
+% --- Colors ------------------------------------------------------------------
+\usepackage{xcolor}
+\definecolor{cvprimary}{HTML}{1F4E79}   % deep professional blue
+\definecolor{cvaccent}{HTML}{2E86AB}    % lighter accent
+\definecolor{cvgray}{HTML}{4D4D4D}      % body text gray
+\definecolor{cvlight}{HTML}{777777}     % muted (dates, locations)
+\color{cvgray}
+
+% --- Icons & links -----------------------------------------------------------
+% Use FontAwesome icons if available; otherwise define no-op fallbacks so the
+% CV still compiles cleanly (labels remain readable without icons).
+\IfFileExists{fontawesome5.sty}{%
+  \usepackage{fontawesome5}%
+}{%
+  \newcommand{\faMapMarker}{}\let\faMapMarkerStar\faMapMarker
+  \expandafter\newcommand\csname faMapMarker*\endcsname{}%
+  \newcommand{\faPhone}{}\expandafter\newcommand\csname faPhone*\endcsname{}%
+  \newcommand{\faEnvelope}{}\newcommand{\faLinkedin}{}\newcommand{\faGithub}{}%
+  \newcommand{\faCode}{}%
+  \newcommand{\faAngleRight}{\textbullet}%
+}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{fancyhdr}
+
+% --- No page numbers / clean header-footer -----------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\setlength{\headheight}{0pt}
+\setlength{\parindent}{0pt}
+
+% --- Section formatting ------------------------------------------------------
+\titleformat{\section}
+  {\color{cvprimary}\large\bfseries}
+  {}{0em}{\MakeUppercase}[\vspace{1pt}{\color{cvaccent}\titlerule[1.2pt]}\vspace{-2pt}]
+\titlespacing*{\section}{0pt}{7pt}{4pt}
+
+% --- List spacing ------------------------------------------------------------
+\setlist[itemize]{leftmargin=1.2em,topsep=1pt,itemsep=1pt,parsep=0pt,
+  before=\color{cvgray}}
+\renewcommand{\labelitemi}{\textcolor{cvaccent}{\small\faAngleRight}}
+
+% =============================================================================
+%  PERSONAL DATA  (shared across all CVs — edit once here)
+% =============================================================================
+\newcommand{\MyName}{Angel Stward Segura Mendez}
+\newcommand{\MyPhone}{+506 6328 5911}
+\newcommand{\MyEmail}{stwardsegura239@gmail.com}
+\newcommand{\MyLocation}{San Jos\'e, P\'erez Zeled\'on, Costa Rica}
+\newcommand{\MyLinkedIn}{stward-segura-603312217}
+\newcommand{\MyLinkedInURL}{https://www.linkedin.com/in/stward-segura-603312217/}
+\newcommand{\MyGitHub}{SeguraStward}
+\newcommand{\MyGitHubURL}{https://github.com/SeguraStward}
+\newcommand{\MyLeetCode}{SeguraStward}
+\newcommand{\MyLeetCodeURL}{https://leetcode.com/SeguraStward}
+
+% =============================================================================
+%  HEADER  —  \cvheader{Role / Target title}
+% =============================================================================
+\newcommand{\cvheader}[1]{%
+  {\color{cvprimary}\Huge\bfseries \MyName}\\[2pt]
+  {\color{cvaccent}\large #1}\\[6pt]
+  {\small\color{cvlight}%
+    \faMapMarker* \, \MyLocation \quad\textbullet\quad
+    \faPhone* \, \MyPhone \quad\textbullet\quad
+    \faEnvelope \, \href{mailto:\MyEmail}{\MyEmail} \\[2pt]
+    \faLinkedin \, \href{\MyLinkedInURL}{linkedin.com/in/\MyLinkedIn} \quad\textbullet\quad
+    \faGithub \, \href{\MyGitHubURL}{github.com/\MyGitHub} \quad\textbullet\quad
+    \faCode \, \href{\MyLeetCodeURL}{leetcode.com/\MyLeetCode}%
+  }\\[-2pt]
+  {\color{cvaccent}\rule{\linewidth}{1.2pt}}\vspace{2pt}
+}
+
+% =============================================================================
+%  ENTRY  —  \cventry{Title}{Org}{Right (dates)}{Sub-line / location}
+% =============================================================================
+\newcommand{\cventry}[4]{%
+  \vspace{2pt}
+  \noindent\begin{tabularx}{\linewidth}{@{}X@{}r@{}}
+    {\color{cvprimary}\bfseries #1} & {\color{cvlight}\small #3}\\
+    {\color{cvaccent}\itshape #2} & {\color{cvlight}\small\itshape #4}\\
+  \end{tabularx}
+}
+
+% --- Skill line:  \cvskill{Category}{items} ----------------------------------
+\newcommand{\cvskill}[2]{%
+  \noindent{\color{cvprimary}\bfseries #1:}\, {\color{cvgray}#2}\par\vspace{2pt}}
+
+% --- Compact two-col project/cert tag ----------------------------------------
+\newcommand{\cvtag}[1]{\colorbox{cvprimary!8}{\small\color{cvprimary}\,#1\,}}

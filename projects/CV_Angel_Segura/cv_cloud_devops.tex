@@ -1,0 +1,68 @@
+% =============================================================================
+%  CV — Angel Stward Segura Mendez — Cloud / DevOps / Platform Engineer
+%  Compile:  ./compile.sh CV_Angel_Segura   (then open cv_cloud_devops.pdf)
+%  or:       latexmk -pdf cv_cloud_devops.tex
+% =============================================================================
+\documentclass[10pt]{article}
+\input{cvstyle.tex}
+
+\begin{document}
+\cvheader{Cloud / DevOps / Platform Engineer}
+
+% --- SUMMARY -----------------------------------------------------------------
+\section{Professional Summary}
+Systems Engineering student and aspiring \textbf{Cloud / DevOps Engineer} who already builds,
+containerizes, and automates the deployment of real applications. Comfortable on Linux, with
+Docker-based environments, CI-style automation, and Infrastructure-as-Code fundamentals.
+Seeking a remote/hybrid platform role to grow into Kubernetes, cloud architecture, and SRE.
+
+% --- SKILLS ------------------------------------------------------------------
+\section{Technical Skills}
+\cvskill{Cloud (learning)}{AWS \& GCP fundamentals (EC2, S3, IAM, Cloud Run), Firebase}
+\cvskill{Containers}{Docker, Docker Compose, multi-stage builds, container-based dev environments}
+\cvskill{CI/CD \& Automation}{Bash scripting, build pipelines, GitHub Actions (fundamentals), Make/automation scripts}
+\cvskill{OS \& Networking}{Linux administration, shell, SSH, networking basics, system services}
+\cvskill{IaC \& Config}{Infrastructure-as-Code fundamentals (Terraform — learning), YAML, environment management}
+\cvskill{Languages \& Tools}{Python, Bash, JavaScript/TypeScript, Git/GitHub, SQL}
+\cvskill{Currently strengthening}{Kubernetes (CKA path), Terraform, Prometheus/Grafana observability, AWS Solutions Architect, GitOps (ArgoCD)}
+
+% --- PROJECTS ----------------------------------------------------------------
+\section{Key Projects}
+
+\cventry{Dockerized LaTeX Build Environment}{Personal project — Docker, Bash}{2025}{github.com/SeguraStward}
+\begin{itemize}
+  \item Built a fully containerized build system (Dockerfile + Docker Compose) giving reproducible builds across machines with zero local dependencies, eliminating "works on my machine" issues.
+  \item Wrote a Bash automation CLI (\texttt{compile.sh}) supporting build, clean, watch-and-rebuild, multi-engine selection, and project scaffolding.
+\end{itemize}
+
+\cventry{Andromeda API}{Personal project — FastAPI, Firebase, Docker}{2025}{github.com/SeguraStward}
+\begin{itemize}
+  \item Containerized a Python REST API and configured environment-based deployment for cloud-ready delivery.
+  \item Designed a clean, maintainable service structure with separated configuration and secrets handling.
+\end{itemize}
+
+\cventry{BotFlow — SaaS Platform (Architecture)}{Personal project — Backend / Infra}{2025}{In development}
+\begin{itemize}
+  \item Defined deployment architecture, service boundaries, and scalability considerations for a multi-tenant SaaS chatbot platform.
+  \item Applied infrastructure and pricing/operational-cost reasoning to design decisions.
+\end{itemize}
+
+% --- EDUCATION ---------------------------------------------------------------
+\section{Education}
+\cventry{B.Sc. in Information Systems Engineering}{Universidad Nacional (UNA), Costa Rica}{In progress}{Expected 2026--2027}
+\begin{itemize}
+  \item Relevant coursework: Operating Systems, Networks, Databases, Software Engineering, Algorithms.
+\end{itemize}
+
+% --- CERTIFICATIONS ----------------------------------------------------------
+\section{Learning Roadmap \& Target Certifications}
+\begin{itemize}
+  \item \textbf{In progress / planned:} AWS Certified Cloud Practitioner $\rightarrow$ Solutions Architect Associate; Certified Kubernetes Administrator (CKA); HashiCorp Terraform Associate; Docker Certified Associate.
+  \item Building home-lab CI/CD pipelines and Kubernetes clusters for hands-on practice.
+\end{itemize}
+
+% --- LANGUAGES ---------------------------------------------------------------
+\section{Languages}
+\cvskill{Spanish}{Native} \quad\textbullet\quad \textbf{English:} Professional working proficiency (B2)
+
+\end{document}

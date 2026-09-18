@@ -1,0 +1,272 @@
+% =============================================================================
+%  2. Estudio de Mercado
+% =============================================================================
+\section{Estudio de Mercado}
+
+\subsection{Definición del producto}
+(Ver sección~1). En resumen, \NombreProducto{} es una solución de seguridad
+automatizada para el ciclo de vida del desarrollo de software (SDLC), entregada como
+suscripción en la nube y orientada al mercado centroamericano, con interfaz y soporte
+en español.
+
+\subsection{Análisis de la demanda}
+
+\subsubsection{Distribución geográfica del mercado de consumo}
+El mercado se concentra en empresas con equipos de desarrollo de software. En el
+contexto regional:
+
+\begin{itemize}
+  \item \textbf{Costa Rica} es el hub tecnológico de Centroamérica: alberga más de 600
+        empresas de TI y operaciones de 29 de las 100 empresas Fortune 100 (Amazon,
+        Intel, IBM, HPE, P\&G, entre otras). [Ref.~8]
+  \item Costa Rica y Panamá son los países centroamericanos que están desarrollando
+        ecosistemas favorables para la entrada de proveedores de ciberseguridad,
+        gracias a su estabilidad política y atractivo para inversión extranjera.
+        [Ref.~6, Ref.~9]
+  \item A nivel Latinoamérica, el mercado de ciberseguridad se concentra en Brasil
+        ($\sim$39\,\% de la región), México, Argentina y Colombia; Centroamérica forma
+        parte del segmento «Resto de Latinoamérica», de menor tamaño pero con alto
+        potencial de crecimiento. [Ref.~7, Ref.~10]
+\end{itemize}
+
+\noindent\textbf{Segmentación del mercado meta de \NombreProducto:}
+\begin{enumerate}
+  \item Empresas de desarrollo de software y \emph{software factories} (Costa Rica
+        concentra la mayoría).
+  \item Sector financiero (BFSI): bancos, fintech y cooperativas, el vertical de mayor
+        inversión en ciberseguridad de la región. [Ref.~7, Ref.~10]
+  \item Centros de servicios compartidos y operaciones nearshore de multinacionales.
+  \item Sector gobierno, impulsado tras los ataques de ransomware de 2022. [Ref.~9]
+\end{enumerate}
+
+\subsubsection{Comportamiento histórico de la demanda}
+La demanda de soluciones DevSecOps ha mostrado crecimiento exponencial sostenido a
+nivel global:
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{cc}
+    \toprule
+    \textbf{Año} & \textbf{Tamaño mercado global DevSecOps (USD miles de millones)} \\
+    \midrule
+    2024 & $\sim$8.8 -- 9.7 \\
+    2025 & $\sim$9.0 -- 10.3 \\
+    2026 & $\sim$10.9 -- 11.7 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Fuentes: [Ref.~1, Ref.~2, Ref.~3, Ref.~5]}
+\end{table}
+
+Factores que han impulsado la demanda histórica: aumento de ciberataques y filtraciones
+de datos, adopción creciente de metodología DevOps, mayores exigencias de cumplimiento
+regulatorio y la popularización de servicios en la nube. [Ref.~4]
+
+En Centroamérica, el detonante más fuerte fue el \textbf{ataque de ransomware
+Conti/Hive a Costa Rica en 2022}, que provocó un estado de emergencia nacional,
+paralizó sistemas de Hacienda y de la CCSS, y generó pérdidas estimadas en USD 30
+millones por día. Este evento elevó drásticamente la conciencia y el gasto en
+ciberseguridad en la región. [Ref.~9]
+
+\subsubsection{Proyección de la demanda}
+Las proyecciones de las principales firmas de investigación coinciden en un crecimiento
+de dos dígitos:
+
+\begin{table}[ht]
+  \centering
+  \begin{tabularx}{\linewidth}{Yl}
+    \toprule
+    \textbf{Indicador} & \textbf{Valor} \\
+    \midrule
+    CAGR global DevSecOps (2026--2031/2035) & 22\,\% -- 28\,\% (conservadoras: 13\,\% -- 14\,\%) \\
+    Mercado global DevSecOps proyectado 2030--2031 & USD 27 -- 30 mil millones \\
+    Segmento de mayor crecimiento & PYMEs (SMEs) y despliegues en la nube \\
+    CAGR del segmento Servicios & $\sim$25\,\% -- 27\,\% \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Fuentes: [Ref.~1, Ref.~4, Ref.~5]}
+\end{table}
+
+Para el mercado latinoamericano de ciberseguridad, la proyección es crecer de
+USD 11.7 mil millones (2025) a USD 18.4 mil millones (2030), con un CAGR de 9.5\,\%.
+El segmento de seguridad en la nube y los servicios gestionados son los de mayor
+crecimiento. [Ref.~7, Ref.~10]
+
+\noindent\textbf{Proyección específica para \NombreProducto{} (escenario base
+conservador, captación gradual y modesta):}
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{cccc}
+    \toprule
+    \textbf{Año} & \textbf{Clientes (empresas)} & \textbf{Devs prom./cliente} & \textbf{Suscripciones (seats)} \\
+    \midrule
+    1 & 4  & 10 & 40  \\
+    2 & 9  & 11 & 99  \\
+    3 & 16 & 12 & 192 \\
+    4 & 25 & 13 & 325 \\
+    5 & 38 & 14 & 532 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\emph{Estas cifras suponen una startup pequeña y bootstrapped, que crece de boca en
+boca y con pocos recursos comerciales — un escenario prudente y defendible para un
+mercado emergente como el centroamericano.}
+
+\subsubsection{Tabulación de datos de fuentes primarias (propuesta metodológica)}
+Como parte del estudio de mercado se plantea la aplicación de una \textbf{encuesta a
+fuentes primarias} dirigida al mercado meta (empresas con equipos de desarrollo de
+software en Costa Rica: software factories, áreas de TI de bancos y fintech, startups
+tecnológicas y centros de servicios de multinacionales). A continuación se describe el
+instrumento propuesto y se presenta una \textbf{tabulación con valores ilustrativos}
+que ejemplifica el tipo de resultados esperados.
+
+\noindent\textbf{Ficha técnica propuesta del estudio:}
+\begin{itemize}
+  \item \emph{Instrumento:} cuestionario estructurado en línea (Google Forms / Microsoft Forms).
+  \item \emph{Población objetivo:} empresas con equipos de desarrollo de software en Costa Rica.
+  \item \emph{Muestra sugerida:} 30--40 empresas del sector TI.
+  \item \emph{Método de contacto:} correo, LinkedIn y comunidades de desarrolladores.
+  \item \emph{Tiempo de respuesta estimado:} 3 minutos por participante.
+\end{itemize}
+
+\noindent\textbf{Modelo de tabulación (valores ilustrativos a modo de ejemplo):}
+
+\begin{table}[ht]
+  \centering
+  \begin{tabularx}{\linewidth}{Y Y c}
+    \toprule
+    \textbf{Pregunta} & \textbf{Respuesta} & \textbf{\%} \\
+    \midrule
+    ¿Su equipo usa pipelines CI/CD?                       & Sí                        & 78\,\% \\
+    ¿Realiza pruebas de seguridad automatizadas hoy?      & No / parcialmente         & 65\,\% \\
+    ¿Ha sufrido un incidente de seguridad (últimos 2 años)? & Sí                      & 42\,\% \\
+    ¿Pagaría por una solución SaaS de seguridad integrada? & Sí                       & 58\,\% \\
+    Rango de pago mensual aceptable por desarrollador     & USD 15 -- 40              & 61\,\% \\
+    Principal barrera de adopción                         & Presupuesto / falta de talento & 70\,\% \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\emph{Nota: los porcentajes anteriores son valores de referencia ilustrativos que
+muestran el tipo de información que el instrumento permitiría obtener; al aplicar la
+encuesta en campo, estos datos se sustituirían por los resultados reales tabulados.}
+
+\noindent\textbf{Lectura de los datos ilustrativos:} el patrón esperado es consistente
+con el análisis de fuentes secundarias: la mayoría de los equipos ya usa CI/CD, pero
+pocos realizan pruebas de seguridad automatizadas, y la principal barrera es el
+presupuesto y la falta de talento especializado.
+
+\noindent\textbf{Conclusión de la demanda:} existe una demanda real, creciente e
+insatisfecha, especialmente en PYMEs que tienen pipelines CI/CD pero carecen de
+especialistas en seguridad — exactamente el perfil que un modelo SaaS asequible y en
+español puede capturar.
+
+\subsection{Análisis de la oferta}
+
+\subsubsection{Características de los principales productores / competencia}
+Los competidores globales son consolidados y dominan el mercado mundial:
+
+\begin{table}[ht]
+  \centering
+  \begin{tabularx}{\linewidth}{l Y Y}
+    \toprule
+    \textbf{Competidor} & \textbf{Fortaleza} & \textbf{Debilidad frente a \NombreProducto} \\
+    \midrule
+    \textbf{Snyk} & Líder en SCA y experiencia de desarrollador & Precio alto, soporte y facturación en inglés/USD \\
+    \textbf{Checkmarx} & SAST robusto, enfoque enterprise & Complejo y costoso para PYMEs \\
+    \textbf{GitLab (Ultimate)} & Seguridad integrada en su plataforma & Solo sirve a quienes usan GitLab \\
+    \textbf{Veracode} & Cumplimiento y reportería & Orientado a grandes corporaciones \\
+    \textbf{Palo Alto (Prisma Cloud)} & Suite completa cloud & Sobredimensionado y caro para el mercado local \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Fuentes: [Ref.~1, Ref.~4]}
+\end{table}
+
+A nivel regional, han surgido firmas latinoamericanas relevantes como \textbf{Hackmetrix,
+Conviso, UNXPOSE, Clavis Security y Cipher}, que compiten agregando servicios y
+conocimiento local. [Ref.~10]
+
+\noindent\textbf{Ventaja competitiva de \NombreProducto:}
+\begin{itemize}
+  \item Precio accesible y facturación en moneda local/USD adaptada a PYMEs.
+  \item Interfaz, documentación y soporte técnico en español, en zona horaria local.
+  \item Plantillas de cumplimiento mapeadas a la Ley 8968 de Costa Rica y normativa regional.
+  \item Onboarding asistido para empresas sin especialistas en seguridad.
+\end{itemize}
+
+\subsubsection{Proyección de la oferta}
+La oferta global de soluciones DevSecOps se expande de forma acelerada, con las
+soluciones tipo plataforma representando $\sim$70\,\% del mercado. [Ref.~1] Sin embargo,
+\textbf{la oferta especializada y localizada para PYMEs centroamericanas es escasa}:
+los grandes proveedores priorizan grandes cuentas en inglés y los proveedores locales
+se enfocan más en servicios de consultoría que en producto SaaS propio. Esto deja un
+nicho desatendido que \NombreProducto{} puede ocupar en los próximos 3--5 años antes
+de que la competencia internacional regionalice su oferta.
+
+\subsection{Importaciones del producto o servicio}
+Al ser un SaaS, no hay «importación» física, pero sí una dependencia tecnológica
+importante: prácticamente toda la oferta consumida actualmente en Costa Rica y
+Centroamérica es \textbf{importada} (Snyk, Checkmarx, GitHub Advanced Security, etc.),
+facturada en dólares desde el exterior. Esto implica:
+
+\begin{itemize}
+  \item Salida de divisas por suscripciones a proveedores extranjeros.
+  \item Costos de infraestructura cloud (AWS/Azure/GCP) que también se pagan en USD.
+  \item \NombreProducto{} usaría infraestructura de hyperscalers (importada), pero
+        generaría valor agregado, empleo y propiedad intelectual local, sustituyendo
+        parcialmente la importación del servicio final.
+\end{itemize}
+
+\subsection{Análisis de precios}
+
+\subsubsection{Determinación del costo promedio}
+El precio de mercado de soluciones DevSecOps se cobra típicamente \emph{por
+desarrollador/mes}. Rango de referencia internacional: USD 25 -- 60 por
+desarrollador/mes en planes profesionales.
+
+\noindent\textbf{Estructura de precios propuesta para \NombreProducto:}
+
+\begin{table}[ht]
+  \centering
+  \begin{tabularx}{\linewidth}{l c Y}
+    \toprule
+    \textbf{Plan} & \textbf{Precio (USD/dev/mes)} & \textbf{Público} \\
+    \midrule
+    Starter    & 18 & PYMEs, startups (hasta 10 devs) \\
+    Business   & 30 & Empresas medianas \\
+    Enterprise & 45 + soporte dedicado & Banca, gobierno, multinacionales \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\noindent\textbf{Precio promedio ponderado estimado:} $\sim$USD 28 por desarrollador/mes.
+
+\subsubsection{Análisis histórico y proyección de precios}
+Históricamente, los precios por \emph{seat} han tendido a mantenerse o subir levemente,
+pero la aparición de modelos de \textbf{precio por consumo} (pay-as-you-go) está
+reduciendo la barrera de entrada, sobre todo para PYMEs. [Ref.~5] La volatilidad
+cambiaria en la región empuja a los clientes hacia suscripciones en USD y planes
+flexibles en lugar de licencias plurianuales. [Ref.~11]
+
+\noindent\textbf{Proyección de precio promedio de \NombreProducto:} mantener USD 28/seat
+los primeros 2 años (penetración), con incrementos anuales de $\sim$3--5\,\% a partir
+del año 3, alineados a la inflación y a mejoras de producto (IA de remediación).
+
+\subsection{Canales de comercialización y distribución}
+
+\subsubsection{Descripción de los canales de distribución}
+Al ser un producto digital (SaaS), la distribución es 100\,\% en línea:
+
+\begin{enumerate}
+  \item \textbf{Venta directa (self-service):} registro y prueba gratuita desde el
+        sitio web; el cliente conecta su repositorio y empieza a usar la plataforma.
+  \item \textbf{Venta consultiva B2B:} equipo comercial para cuentas medianas y grandes
+        (banca, gobierno), con demos personalizadas.
+  \item \textbf{Marketplaces de nube:} publicación en AWS Marketplace y Microsoft Azure
+        Marketplace para llegar a clientes que ya compran ahí.
+  \item \textbf{Alianzas con partners:} integradores de TI y consultoras locales que
+        revenden o recomiendan la plataforma (modelo de canal con comisión).
+  \item \textbf{Marketing de contenido y comunidad:} blog técnico, webinars y presencia
+        en comunidades de desarrolladores para generar \emph{leads}.
+\end{enumerate}

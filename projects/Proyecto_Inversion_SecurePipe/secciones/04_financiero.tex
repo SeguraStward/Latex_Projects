@@ -1,0 +1,263 @@
+% =============================================================================
+%  4. Estudio Financiero
+% =============================================================================
+\section{Estudio Financiero}
+
+\begin{quote}
+\emph{Cifras en USD. Modelo a 5 años, escenario base. Las cifras son estimaciones para
+fines académicos del proyecto.}
+\end{quote}
+
+\subsection{Componentes de pre-inversión}
+
+\begin{table}[ht]
+  \centering
+  \begin{tabularx}{\linewidth}{Y r}
+    \toprule
+    \textbf{Componente} & \textbf{Costo (USD)} \\
+    \midrule
+    Estudio de mercado y validación & 1\,500 \\
+    Constitución legal de la empresa y marca & 2\,000 \\
+    Diseño de arquitectura y prototipo (MVP inicial) & 8\,000 \\
+    Asesoría legal (términos, protección de datos, IP) & 1\,500 \\
+    \midrule
+    \textbf{Total pre-inversión} & \textbf{13\,000} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Inversiones requeridas (Año 0)}
+
+\begin{table}[ht]
+  \centering
+  \begin{tabularx}{\linewidth}{Y r}
+    \toprule
+    \textbf{Inversión} & \textbf{Costo (USD)} \\
+    \midrule
+    Desarrollo del producto hasta lanzamiento comercial & 45\,000 \\
+    Equipos de trabajo (laptops, periféricos) & 6\,000 \\
+    Configuración de infraestructura cloud inicial & 3\,000 \\
+    Licencias y herramientas de desarrollo & 2\,000 \\
+    Identidad de marca y sitio web & 2\,500 \\
+    Capital de trabajo inicial & 11\,500 \\
+    \midrule
+    \textbf{Total inversión inicial} & \textbf{70\,000} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\noindent\textbf{Inversión total del proyecto (pre-inversión + inversión):
+USD 83\,000.}
+
+\subsection{Costo de cada componente para producir (anual, estabilizado)}
+
+\subsubsection{Mercadeo y/o divulgación}
+Marketing digital, contenido y webinars (de bajo costo, enfoque orgánico):
+\textbf{USD 6\,000/año} (año 1), creciendo con las ventas.
+
+\subsubsection{Costo de reuniones y prospección de clientes}
+Demos, viáticos y herramienta de CRM básica: \textbf{USD 4\,000/año} (año 1).
+
+\subsubsection{Costos de producción (operación del servicio)}
+Infraestructura cloud, feeds de vulnerabilidades y cómputo escalable:
+\textbf{USD 4\,000/año} (año 1), variable según número de clientes
+($\sim$USD 12/seat/año).
+
+\subsubsection{Costos de mantenimiento}
+Actualizaciones, soporte técnico y corrección de errores: \textbf{USD 6\,000/año}
+(año 1).
+
+\subsection{Gastos del proceso: fijos y variables}
+
+\begin{table}[ht]
+  \centering
+  \begin{tabularx}{\linewidth}{l Y r}
+    \toprule
+    \textbf{Tipo} & \textbf{Concepto} & \textbf{Monto anual (USD)} \\
+    \midrule
+    Fijos     & Salarios equipo base (3 personas, fundadores con salario modesto) & 60\,000 \\
+    Fijos     & Coworking / oficina pequeña & 4\,800 \\
+    Fijos     & Servicios, contabilidad, seguros & 5\,000 \\
+    Fijos     & Licencias y herramientas & 3\,000 \\
+    Variables & Infraestructura cloud (escala con clientes) & $\sim$12 / seat / año \\
+    Variables & Comisiones de venta y marketplaces & $\sim$5\,\% de ingresos \\
+    Variables & Soporte adicional por cliente & $\sim$8 / seat / año \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Análisis económico financiero}
+
+\subsubsection{Egresos}
+\textbf{Inversiones:} USD 83\,000 (año 0).
+
+\noindent\textbf{Costos + Gastos operativos por año (USD):}
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{c r r r r}
+    \toprule
+    \textbf{Año} & \textbf{Salarios y fijos} & \textbf{Mkt. + ventas} & \textbf{Prod. + mant. (var.)} & \textbf{Total egresos op.} \\
+    \midrule
+    1 & 70\,000  & 10\,000 & 6\,000  & 86\,000  \\
+    2 & 85\,000  & 12\,000 & 10\,000 & 107\,000 \\
+    3 & 100\,000 & 18\,000 & 16\,000 & 134\,000 \\
+    4 & 120\,000 & 25\,000 & 24\,000 & 169\,000 \\
+    5 & 145\,000 & 32\,000 & 34\,000 & 211\,000 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsubsection{Ingresos}
+\textbf{a) Venta de productos (suscripciones):} ingreso principal $=$ seats activos
+$\times$ precio promedio (USD 28/mes $\times$ 12).
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{c r r}
+    \toprule
+    \textbf{Año} & \textbf{Seats activos} & \textbf{Ingreso anual suscripciones (USD)} \\
+    \midrule
+    1 & 40  & 13\,440  \\
+    2 & 99  & 33\,264  \\
+    3 & 192 & 64\,512  \\
+    4 & 325 & 109\,200 \\
+    5 & 532 & 178\,752 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\noindent\textbf{b) Venta de activos:} no aplica de forma relevante (SaaS sin activos
+físicos significativos); eventual venta de equipo depreciado al año 5
+($\sim$USD 3\,000).
+
+\noindent\textbf{c) Venta de desechos o subproductos:} como «subproducto», la empresa
+puede ofrecer \textbf{servicios de consultoría y reportes de inteligencia de amenazas}
+derivados de los datos agregados y anonimizados, y capacitaciones. Ingreso estimado:
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{c r}
+    \toprule
+    \textbf{Año} & \textbf{Ingreso subproductos/servicios (USD)} \\
+    \midrule
+    1 & 2\,000  \\
+    2 & 5\,000  \\
+    3 & 10\,000 \\
+    4 & 16\,000 \\
+    5 & 24\,000 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\noindent\textbf{Ingresos totales por año (USD):}
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{c r r r}
+    \toprule
+    \textbf{Año} & \textbf{Suscripciones} & \textbf{Servicios/subproductos} & \textbf{Total ingresos} \\
+    \midrule
+    1 & 13\,440  & 2\,000           & 15\,440  \\
+    2 & 33\,264  & 5\,000           & 38\,264  \\
+    3 & 64\,512  & 10\,000          & 74\,512  \\
+    4 & 109\,200 & 16\,000          & 125\,200 \\
+    5 & 178\,752 & 24\,000 + 2\,000 & 204\,752 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsubsection*{Flujo de caja del proyecto (USD)}
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{c r r r r}
+    \toprule
+    \textbf{Año} & \textbf{Ingresos} & \textbf{Egresos op.} & \textbf{Inversión} & \textbf{Flujo neto} \\
+    \midrule
+    0 & 0        & 0        & 83\,000 & \textbf{$-83\,000$} \\
+    1 & 15\,440  & 86\,000  & 0       & \textbf{$-70\,560$} \\
+    2 & 38\,264  & 107\,000 & 0       & \textbf{$-68\,736$} \\
+    3 & 74\,512  & 134\,000 & 0       & \textbf{$-59\,488$} \\
+    4 & 125\,200 & 169\,000 & 0       & \textbf{$-43\,800$} \\
+    5 & 204\,752 & 211\,000 & 0       & \textbf{$-6\,248$}  \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Criterio de decisión: VAN y TIR}
+Se utiliza una \textbf{tasa de descuento del 15\,\%} (refleja el alto riesgo de una
+startup tecnológica y el costo de oportunidad del capital).
+
+\noindent\textbf{Cálculo del Valor Actual Neto (VAN):}
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{c r r r}
+    \toprule
+    \textbf{Año} & \textbf{Flujo neto (USD)} & \textbf{Factor $(1.15)^t$} & \textbf{Valor presente (USD)} \\
+    \midrule
+    0 & $-83\,000$ & 1.0000 & $-83\,000$ \\
+    1 & $-70\,560$ & 1.1500 & $-61\,357$ \\
+    2 & $-68\,736$ & 1.3225 & $-51\,973$ \\
+    3 & $-59\,488$ & 1.5209 & $-39\,114$ \\
+    4 & $-43\,800$ & 1.7490 & $-25\,043$ \\
+    5 & $-6\,248$  & 2.0114 & $-3\,106$  \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\noindent\textbf{VAN (al 15\,\%) $\approx -$USD 263\,593}
+
+\begin{quote}
+El VAN es \textbf{negativo} en el horizonte de 5 años. Esto es característico de los
+proyectos SaaS pequeños: la inversión y los costos fijos iniciales pesan más que los
+ingresos tempranos, y la rentabilidad llega después del periodo evaluado. Lo positivo
+es que el flujo neto mejora cada año y el año 5 casi alcanza el punto de equilibrio
+($-6\,248$), lo que anticipa flujos positivos a partir del año 6.
+\end{quote}
+
+\noindent\textbf{Tasa Interna de Retorno (TIR):} dado que todos los flujos del proyecto
+son negativos durante los 5 años (flujo acumulado $\approx -$USD 331\,832),
+\textbf{no existe una TIR positiva dentro del horizonte de 5 años}; el proyecto aún no
+recupera la inversión en ese plazo.
+
+\subsubsection{Justificación y recomendación}
+Con los supuestos del escenario base, en un horizonte de \textbf{5 años el proyecto NO
+es viable} según el VAN (negativo) ni la TIR (no alcanza retorno). Sin embargo, hay
+matices importantes para la recomendación:
+
+\begin{enumerate}
+  \item \textbf{Tendencia positiva clara:} el flujo neto anual mejora cada año, pasando
+        de $-70\,560$ (año 1) a $-6\,248$ (año 5). El negocio escala de forma sana y se
+        acerca al punto de equilibrio al final del periodo.
+  \item \textbf{Naturaleza del modelo SaaS:} estos negocios típicamente alcanzan el
+        punto de equilibrio entre los años 5 y 7. Un horizonte de evaluación de 5 años
+        es corto para este tipo de inversión, sobre todo en un escenario de crecimiento
+        conservador.
+  \item \textbf{Sensibilidad a los supuestos:} el resultado depende fuertemente de los
+        salarios (el mayor egreso) y del ritmo de captación de clientes. Una captación
+        algo más rápida o costos fijos aún más ajustados harían que el proyecto cruzara
+        a flujos positivos antes del año 5.
+\end{enumerate}
+
+\noindent\textbf{Recomendación:} Bajo los supuestos actuales y un horizonte de
+\textbf{5 años, el proyecto aún no es rentable} según el VAN (negativo) ni la TIR (no
+se alcanza retorno). Sin embargo, dado que el flujo prácticamente alcanza el equilibrio
+en el año 5 y la tendencia es claramente ascendente, \textbf{el proyecto es prometedor
+a mediano plazo}. Se recomienda:
+\begin{itemize}
+  \item[(a)] \textbf{Extender la evaluación a 7--8 años}, plazo realista para un SaaS
+        bootstrapped, donde el VAN probablemente se vuelva positivo dada la curva de
+        crecimiento.
+  \item[(b)] \textbf{Mantener la estructura de costos ajustada} (equipo pequeño,
+        infraestructura escalonada) durante los primeros años.
+  \item[(c)] \textbf{Buscar acelerar moderadamente la captación de clientes} para
+        adelantar el punto de equilibrio sin comprometer la calidad del servicio.
+\end{itemize}
+
+En conclusión, el proyecto \textbf{no se aprueba en un horizonte estricto de 5 años por
+VAN/TIR}, pero es una inversión \textbf{estratégicamente atractiva y de bajo monto
+inicial} (USD 83\,000) que merece reevaluarse con un horizonte más largo, considerando
+el fuerte crecimiento del mercado (CAGR de dos dígitos) y la demanda regional
+insatisfecha.

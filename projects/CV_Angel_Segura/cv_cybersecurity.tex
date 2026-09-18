@@ -1,0 +1,68 @@
+% =============================================================================
+%  CV — Angel Stward Segura Mendez — Cybersecurity Engineer
+%  Compile:  ./compile.sh CV_Angel_Segura   (then open cv_cybersecurity.pdf)
+%  or:       latexmk -pdf cv_cybersecurity.tex
+% =============================================================================
+\documentclass[10pt]{article}
+\input{cvstyle.tex}
+
+\begin{document}
+\cvheader{Cybersecurity Engineer}
+
+% --- SUMMARY -----------------------------------------------------------------
+\section{Professional Summary}
+Systems Engineering student and aspiring \textbf{Cybersecurity Engineer} with a builder's
+mindset: I understand systems deeply because I design, code, and deploy them. Practical
+foundation in Linux, networking, secure API design, authentication, and threat modeling, with
+active self-study in offensive and defensive security. Seeking a security-focused role (AppSec,
+Cloud Security, or SOC/Blue Team) to apply secure-by-design principles and earn certification.
+
+% --- SKILLS ------------------------------------------------------------------
+\section{Technical Skills}
+\cvskill{Security Domains}{Application security (OWASP Top 10), authentication \& authorization, threat modeling, secure SDLC}
+\cvskill{Offensive (learning)}{Network/web enumeration, Nmap, Burp Suite, vulnerability assessment, CTF practice}
+\cvskill{Defensive}{Linux hardening, log analysis, secure configuration, secrets management, principle of least privilege}
+\cvskill{Cloud \& Infra Security}{IAM fundamentals, container security (Docker), Firebase security rules}
+\cvskill{Languages \& Tools}{Python, Bash, SQL, JavaScript/TypeScript, Git/GitHub, Linux}
+\cvskill{Currently strengthening}{CompTIA Security+ / CySA+, TryHackMe \& Hack The Box paths, SIEM (Splunk/ELK), cloud security (AWS), penetration-testing methodology}
+
+% --- PROJECTS ----------------------------------------------------------------
+\section{Key Projects}
+
+\cventry{SecurePipe — Secure Pipeline Concept}{Personal project — Security design}{2025}{In development}
+\begin{itemize}
+  \item Designed a security-oriented project centered on protecting data/processing pipelines, including threat surface analysis and mitigation strategy.
+  \item Applied secure-by-design thinking to architecture, access control, and operational risk.
+\end{itemize}
+
+\cventry{Andromeda API — Secure REST API}{Personal project — FastAPI + Firebase}{2025}{github.com/SeguraStward}
+\begin{itemize}
+  \item Implemented authentication flows, input validation, and access control to protect API endpoints against common web vulnerabilities.
+  \item Managed configuration and secrets separately from code; applied least-privilege access to backend resources.
+\end{itemize}
+
+\cventry{Quality Assurance \& Test Automation}{Academic project (UNA) — NestJS, Prisma, Jest}{2025}{Costa Rica}
+\begin{itemize}
+  \item Wrote unit and module test suites validating business logic and input handling, reinforcing reliability and resistance to edge-case failures.
+  \item Produced professional testing evidence and documentation following structured QA practices.
+\end{itemize}
+
+% --- EDUCATION ---------------------------------------------------------------
+\section{Education}
+\cventry{B.Sc. in Information Systems Engineering}{Universidad Nacional (UNA), Costa Rica}{In progress}{Expected 2026--2027}
+\begin{itemize}
+  \item Relevant coursework: Operating Systems, Computer Networks, Databases, Software Engineering, Algorithms.
+\end{itemize}
+
+% --- CERTIFICATIONS ----------------------------------------------------------
+\section{Learning Roadmap \& Target Certifications}
+\begin{itemize}
+  \item \textbf{In progress / planned:} CompTIA Security+ $\rightarrow$ CySA+ / PenTest+; eJPT (eLearnSecurity Junior Penetration Tester); (ISC)\textsuperscript{2} CC; AWS Security fundamentals.
+  \item Active hands-on practice on TryHackMe / Hack The Box and Capture-The-Flag challenges.
+\end{itemize}
+
+% --- LANGUAGES ---------------------------------------------------------------
+\section{Languages}
+\cvskill{Spanish}{Native} \quad\textbullet\quad \textbf{English:} Professional working proficiency (B2)
+
+\end{document}

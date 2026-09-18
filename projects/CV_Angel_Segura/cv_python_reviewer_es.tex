@@ -1,0 +1,79 @@
+% =============================================================================
+%  CV — Angel Stward Segura Mendez — Desarrollador Python Junior / Revisor de C\'odigo
+%  Compilar:
+%    docker compose run --rm latex "cd projects/CV_Angel_Segura && latexmk -pdf cv_python_reviewer_es.tex"
+% =============================================================================
+\documentclass[10pt]{article}
+\input{cvstyle_es.tex}
+
+% Ritmo vertical un poco m\'as compacto para que este CV quepa en una p\'agina.
+\titlespacing*{\section}{0pt}{5pt}{3pt}
+\setlist[itemize]{topsep=0pt,itemsep=0pt}
+\geometry{top=0.6cm,bottom=0.6cm,headsep=0pt,footskip=3.6pt}
+
+\begin{document}
+\cvheader{Desarrollador Python Junior \textbullet\ Revisor y Mantenedor de C\'odigo}
+\small
+
+% --- RESUMEN -------------------------------------------------------------
+\section{Resumen Profesional}
+Estudiante de Ingenier\'ia en Sistemas de Informaci\'on y desarrollador Python detallista, que
+lee el c\'odigo con la misma atenci\'on con la que lo escribe. Base s\'olida en Estructuras de
+Datos y Algoritmos, flujos de trabajo con Git/GitHub, y principios de c\'odigo limpio
+(\textbf{SOLID}, \textbf{TDD}). C\'omodo revisando pull requests, detectando errores y malos
+dise\~nos, y redactando retroalimentaci\'on clara y accionable. Utilizo herramientas de IA
+(Claude Code, GitHub Copilot) de forma deliberada -- para verificar mi razonamiento, acelerar
+la investigaci\'on y detectar lo que una primera revisi\'on pasa por alto, nunca como
+sustituto de entender el c\'odigo. Busco un puesto de nivel inicial revisando y manteniendo
+c\'odigo Python.
+
+% --- HABILIDADES ---------------------------------------------------------
+\section{Habilidades T\'ecnicas}
+\cvskill{Lenguajes}{Python (principal), C++, Java, TypeScript/JavaScript (b\'asico)}
+\cvskill{Calidad y revisi\'on de c\'odigo}{PEP 8, type hints, docstrings, \texttt{black}, \texttt{ruff}/\texttt{flake8}, \texttt{mypy}, pre-commit hooks, lectura cr\'itica de diffs y pull requests}
+\cvskill{Dise\~no de software}{Principios SOLID, TDD (red-green-refactor), arquitectura limpia/en capas, patrones de dise\~no b\'asicos}
+\cvskill{Control de versiones}{Git (branching, rebase, resoluci\'on de conflictos de merge), GitHub (pull requests, issues, code review, GitHub Actions b\'asico)}
+\cvskill{Estructuras de Datos y Algoritmos}{Arreglos, listas enlazadas, \'arboles, grafos, hashing, ordenamiento/b\'usqueda, an\'alisis de complejidad -- practicado en \href{\MyLeetCodeURL}{LeetCode}}
+\cvskill{Testing}{pytest, unittest, Jest (Node.js), escribir pruebas antes de corregir errores}
+\cvskill{Bases de datos y herramientas}{SQL (PostgreSQL/MySQL), Firebase/NoSQL, Docker, Linux, Bash}
+\cvskill{Desarrollo asistido por IA}{Claude Code, GitHub Copilot, ChatGPT -- para apoyo en revisi\'on de c\'odigo, depuraci\'on y aprendizaje acelerado}
+\cvskill{Fortaleciendo actualmente}{Contribuciones a repositorios Python de c\'odigo abierto, pipelines de CI/CD (GitHub Actions), patrones de dise\~no avanzados, documentaci\'on con Sphinx}
+
+% --- PROYECTOS -------------------------------------------------------------
+\section{Proyectos Destacados}
+
+\cventry{Andromeda API}{Proyecto personal --- Python (FastAPI) + Firebase}{2025}{github.com/SeguraStward}
+\begin{itemize}
+  \item Dise\~n\'e y constru\'i una API REST en Python de nivel productivo, con endpoints validados, autenticaci\'on y una arquitectura en capas mantenible y f\'acil de revisar.
+  \item Mantuve un historial de commits limpio y us\'e branching de Git para aislar funcionalidades, replicando un flujo real de revisi\'on de c\'odigo.
+\end{itemize}
+
+\cventry{DocParser --- Extracci\'on de Datos de Documentos}{Proyecto personal --- Python}{2025}{github.com/SeguraStward}
+\begin{itemize}
+  \item Constru\'i un pipeline de parsing que extrae datos estructurados (p. ej., facturas) de documentos, aplicando validaci\'on y normalizaci\'on para un resultado confiable.
+  \item Refactoric\'e versiones tempranas para mejorar legibilidad y responsabilidad \'unica, aplicando principios SOLID a medida que el c\'odigo creci\'o.
+\end{itemize}
+
+\cventry{Clasificador de Spam}{Proyecto personal --- Python}{2024--2025}{github.com/SeguraStward}
+\begin{itemize}
+  \item Script de clasificaci\'on de texto con enfoque test-first: pruebas unitarias escritas antes de robustecer el c\'odigo, luego autorrevisado con linting y type hints.
+\end{itemize}
+
+% --- EDUCACI\'ON -------------------------------------------------------------
+\section{Educaci\'on}
+\cventry{Ingenier\'ia en Sistemas de Informaci\'on}{Universidad Nacional (UNA), Costa Rica}{En curso}{Graduaci\'on esperada 2026--2027}
+\begin{itemize}
+  \item Cursos relevantes: Estructuras de Datos y Algoritmos, Bases de Datos, Ingenier\'ia de Software, Sistemas Operativos, Estad\'istica.
+\end{itemize}
+
+% --- CERTIFICACIONES ---------------------------------------------------------
+\section{Plan de Aprendizaje y Certificaciones Objetivo}
+\begin{itemize}
+  \item \textbf{En curso / planificado:} PCEP/PCAP (Python Institute), pipelines de \texttt{pytest}/CI, an\'alisis est\'atico m\'as avanzado (\texttt{mypy} strict, \texttt{ruff}); pr\'actica semanal en LeetCode para mantener afiladas las Estructuras de Datos y Algoritmos.
+\end{itemize}
+
+% --- IDIOMAS -------------------------------------------------------------
+\section{Idiomas}
+\cvskill{Espa\~nol}{Nativo} \quad\textbullet\quad \textbf{Ingl\'es:} Nivel profesional de trabajo (B2), escrito y hablado
+
+\end{document}

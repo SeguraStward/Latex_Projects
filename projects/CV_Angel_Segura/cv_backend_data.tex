@@ -1,0 +1,68 @@
+% =============================================================================
+%  CV — Angel Stward Segura Mendez — Backend / Data Engineer
+%  Compile:  ./compile.sh CV_Angel_Segura   (then open cv_backend_data.pdf)
+%  or:       latexmk -pdf cv_backend_data.tex
+% =============================================================================
+\documentclass[10pt]{article}
+\input{cvstyle.tex}
+
+\begin{document}
+\cvheader{Backend / Data Engineer}
+
+% --- SUMMARY -----------------------------------------------------------------
+\section{Professional Summary}
+Systems Engineering student and aspiring \textbf{Backend / Data Engineer} who builds real,
+deployable services. Experienced with Python and TypeScript backends, REST API design,
+relational and NoSQL databases, and data-processing applications. Strong foundations in data
+structures, SQL, clean architecture, and a testing-first mindset. Seeking a remote/hybrid
+backend or data role to grow toward distributed systems and large-scale data pipelines.
+
+% --- SKILLS ------------------------------------------------------------------
+\section{Technical Skills}
+\cvskill{Backend}{Python (FastAPI), Node.js / NestJS, REST API design, authentication, clean/layered architecture}
+\cvskill{Databases}{SQL (PostgreSQL/MySQL), Prisma ORM, Firebase/NoSQL, schema design, query optimization (fundamentals)}
+\cvskill{Data}{pandas, NumPy, ETL fundamentals, document parsing \& structured data extraction}
+\cvskill{Quality}{Jest unit/integration testing, test-driven practices, code review, professional documentation}
+\cvskill{DevOps \& Tools}{Docker, Docker Compose, Git/GitHub, Linux, Bash}
+\cvskill{Currently strengthening}{Apache Spark, Airflow, Kafka, data warehousing (Snowflake/BigQuery), dbt, message queues, microservices at scale}
+
+% --- PROJECTS ----------------------------------------------------------------
+\section{Key Projects}
+
+\cventry{Andromeda API}{Personal project — FastAPI + Firebase}{2025}{github.com/SeguraStward}
+\begin{itemize}
+  \item Designed and built a production-style Python REST API with FastAPI and Firebase, with validated endpoints, authentication, and a maintainable, layered architecture.
+  \item Containerized the service with Docker for consistent, cloud-ready deployment.
+\end{itemize}
+
+\cventry{DocParser — Document Data Extraction}{Personal project — Python}{2025}{github.com/SeguraStward}
+\begin{itemize}
+  \item Built a parsing pipeline that extracts structured data (e.g., invoices) from documents, transforming unstructured input into clean, usable records.
+  \item Applied data-validation and normalization logic to ensure reliable downstream output.
+\end{itemize}
+
+\cventry{Quality Assurance \& Test Automation}{Academic project (UNA) — NestJS, Prisma, Jest}{2025}{Costa Rica}
+\begin{itemize}
+  \item Engineered unit and module test suites for a NestJS + Prisma backend, validating business logic, data access, and edge cases.
+  \item Delivered professional test evidence and documentation following structured QA standards.
+\end{itemize}
+
+% --- EDUCATION ---------------------------------------------------------------
+\section{Education}
+\cventry{B.Sc. in Information Systems Engineering}{Universidad Nacional (UNA), Costa Rica}{In progress}{Expected 2026--2027}
+\begin{itemize}
+  \item Relevant coursework: Data Structures \& Algorithms, Databases, Software Engineering, Operating Systems, Statistics.
+\end{itemize}
+
+% --- CERTIFICATIONS ----------------------------------------------------------
+\section{Learning Roadmap \& Target Certifications}
+\begin{itemize}
+  \item \textbf{In progress / planned:} AWS Certified Data Engineer / Solutions Architect Associate; Databricks / Apache Spark certification; PostgreSQL and data-modeling deep dives.
+  \item Building personal data pipelines (ingestion $\rightarrow$ transformation $\rightarrow$ warehouse) for hands-on practice.
+\end{itemize}
+
+% --- LANGUAGES ---------------------------------------------------------------
+\section{Languages}
+\cvskill{Spanish}{Native} \quad\textbullet\quad \textbf{English:} Professional working proficiency (B2)
+
+\end{document}

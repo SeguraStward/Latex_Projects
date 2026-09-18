@@ -1,0 +1,67 @@
+% =============================================================================
+%  CV — Angel Stward Segura Mendez — AI / Machine Learning Engineer
+%  Compile:  ./compile.sh CV_Angel_Segura   (then open cv_ai_ml_engineer.pdf)
+%  or:       latexmk -pdf cv_ai_ml_engineer.tex
+% =============================================================================
+\documentclass[10pt]{article}
+\input{cvstyle.tex}
+
+\begin{document}
+\cvheader{AI / Machine Learning Engineer}
+
+% --- SUMMARY -----------------------------------------------------------------
+\section{Professional Summary}
+Systems Engineering student and aspiring \textbf{Machine Learning Engineer} with hands-on
+experience building Python AI applications, training classification models, and serving
+predictions through REST APIs. Strong foundations in mathematics, data structures, and
+neural-network theory, with a habit of shipping real projects. Seeking a remote/hybrid ML
+role to grow toward production-grade model development and MLOps.
+
+% --- SKILLS ------------------------------------------------------------------
+\section{Technical Skills}
+\cvskill{Languages}{Python (primary), SQL, JavaScript/TypeScript, Bash}
+\cvskill{ML \& Data}{scikit-learn, pandas, NumPy, Matplotlib, feature engineering, model evaluation (precision/recall, F1, ROC-AUC)}
+\cvskill{Deep Learning}{PyTorch / TensorFlow (fundamentals), CNNs, backpropagation, gradient descent, neural-network architecture}
+\cvskill{ML Serving \& Apps}{FastAPI, REST APIs, Firebase, Docker, model deployment, prompt engineering / LLM APIs}
+\cvskill{Practices}{Git/GitHub, unit testing, clean code, Jupyter notebooks, data visualization}
+\cvskill{Currently strengthening}{MLOps (MLflow, model registries), feature stores, vector databases / RAG, distributed training, AWS SageMaker}
+
+% --- PROJECTS ----------------------------------------------------------------
+\section{Key Projects}
+
+\cventry{Spam Detection ML Service}{Personal project — Python, scikit-learn}{2025}{github.com/SeguraStward}
+\begin{itemize}
+  \item Built an end-to-end text-classification pipeline (data cleaning, TF-IDF vectorization, training and evaluation) and served it behind a Python service for real-time inference.
+  \item Compared multiple classifiers and tuned thresholds using precision/recall trade-offs to reduce false positives.
+\end{itemize}
+
+\cventry{Andromeda API}{Personal project — FastAPI + Firebase}{2025}{github.com/SeguraStward}
+\begin{itemize}
+  \item Built a Python REST API (FastAPI + Firebase) with validated endpoints suitable for serving model predictions, plus authentication and a maintainable architecture.
+\end{itemize}
+
+\cventry{Deep-Learning Visualization Engine}{Personal project — Python, Manim}{2024--2025}{Educational}
+\begin{itemize}
+  \item Authored animation scripts that visualize artificial neurons, CNN layers, loss functions, backpropagation, and gradient descent.
+  \item Translated core deep-learning math into clear visual explanations, demonstrating strong conceptual command of neural networks.
+\end{itemize}
+
+% --- EDUCATION ---------------------------------------------------------------
+\section{Education}
+\cventry{B.Sc. in Information Systems Engineering}{Universidad Nacional (UNA), Costa Rica}{In progress}{Expected 2026--2027}
+\begin{itemize}
+  \item Relevant coursework: Data Structures \& Algorithms, Databases, Software Engineering, Statistics, Discrete Mathematics.
+\end{itemize}
+
+% --- CERTIFICATIONS / LEARNING ----------------------------------------------
+\section{Learning Roadmap \& Target Certifications}
+\begin{itemize}
+  \item \textbf{In progress / planned:} DeepLearning.AI — Machine Learning \& Deep Learning Specializations; TensorFlow Developer Certificate; AWS Certified Machine Learning.
+  \item Continuous practice on Kaggle competitions and open-source ML contributions.
+\end{itemize}
+
+% --- LANGUAGES ---------------------------------------------------------------
+\section{Languages}
+\cvskill{Spanish}{Native} \quad\textbullet\quad \textbf{English:} Professional working proficiency (B2)
+
+\end{document}

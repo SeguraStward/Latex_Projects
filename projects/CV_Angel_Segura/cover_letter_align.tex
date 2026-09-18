@@ -1,0 +1,73 @@
+% =============================================================================
+%  COVER LETTER — Angel Stward Segura Mendez
+%  Target: Software Quality Assurance Intern — Align Technology (Belén, CRI)
+%  Tone: elegant, formal, courtly (medieval flourish) — kind and respectful.
+%  Compile:
+%    docker compose run --rm latex "cd projects/CV_Angel_Segura && latexmk -pdf cover_letter_align.tex"
+% =============================================================================
+\documentclass[11pt]{article}
+\input{cvstyle.tex}
+
+% Slightly more generous line spacing for a letter
+\linespread{1.12}\selectfont
+\setlength{\parskip}{6pt}
+
+\begin{document}
+
+% --- Letterhead (matches the CV) ---------------------------------------------
+{\color{cvprimary}\Huge\bfseries \MyName}\\[2pt]
+{\color{cvaccent}\large Software Quality Assurance Intern}\\[6pt]
+{\small\color{cvlight}%
+  \faMapMarker* \, \MyLocation \quad\textbullet\quad
+  \faPhone* \, \MyPhone \\[2pt]
+  \faEnvelope \, \href{mailto:\MyEmail}{\MyEmail} \quad\textbullet\quad
+  \faLinkedin \, \href{\MyLinkedInURL}{linkedin.com/in/\MyLinkedIn} \quad\textbullet\quad
+  \faGithub \, \href{\MyGitHubURL}{github.com/\MyGitHub}%
+}\\[-2pt]
+{\color{cvaccent}\rule{\linewidth}{1.2pt}}
+
+\vspace{10pt}
+{\color{cvlight}\small \today}
+
+\vspace{8pt}
+{\color{cvprimary}\bfseries To the Esteemed Hiring Team}\\
+{\itshape Operations Department --- Align Technology}\\
+{\color{cvlight}Belén, Costa Rica}
+
+\vspace{12pt}
+Honourable Members of the Operations Department,
+
+\vspace{4pt}
+It is with sincere respect and earnest enthusiasm that I write to offer myself for the
+position of \textbf{Software Quality Assurance Intern}. Few prospects could please me more
+than the chance to learn the craft of quality assurance at your side, and to lend my hands,
+my attention, and my goodwill to the noble pursuit of building web applications that are
+dependable, useful, and a delight to those who rely upon them.
+
+Though I come before you as a student still in the making, I do not come empty-handed. In
+my studies of Information Systems Engineering I have written and documented test cases for a
+web application, examined edge cases and invalid inputs in search of defects, and recorded
+my findings with care and clarity. What I may yet lack in years of experience, I shall
+gladly repay in diligence: I am eager to follow your test plans faithfully, to learn your
+methodologies and tools, and to prove myself genuinely useful in whatever task is set before
+me, however humble.
+
+I would add, in all candour, that I am a quick and willing learner who adapts readily to new
+demands. I make thoughtful use of advanced artificial-intelligence tools to work more
+effectively and accurately --- not as a substitute for understanding, but as an instrument
+to verify my reasoning, accelerate my learning, and deliver careful, well-documented results.
+It would be my privilege to place this same dedication in the service of your team.
+
+I am deeply grateful for the time and consideration you have given to these few lines, and I
+would welcome, with the utmost gladness, the opportunity to contribute to the quality and
+craftsmanship of your applications. Should you find me worthy of a conversation, I remain
+ready and willing at your command.
+
+\vspace{8pt}
+With profound respect and gratitude,
+
+\vspace{16pt}
+{\color{cvprimary}\bfseries \MyName}\\
+{\color{cvlight}\small Information Systems Engineering Student --- Universidad Nacional (UNA), Costa Rica}
+
+\end{document}
